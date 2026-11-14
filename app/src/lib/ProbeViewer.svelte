@@ -563,7 +563,7 @@
        projection here works in those units, and `local` already divides client
        pixels by the rendered width, so the scene simply scales. -->
   <svg bind:this={svgEl} viewBox="0 0 {SIZE} {SIZE}"
-       role="img" aria-label="Formation in 3D"
+       role="img" aria-label="三维阵型"
        onpointerdown={onBackgroundDown}
        onpointermove={onMove}
        onpointerup={onUp}
@@ -633,7 +633,7 @@
       <rect x={d.s.x - HIT_PX / 2} y={d.s.y - HIT_PX / 2} width={HIT_PX} height={HIT_PX}
             class="probe-grab"
             role="button" tabindex="-1"
-            aria-label={`probe ${d.i + 1}`}
+            aria-label={`探针 ${d.i + 1}`}
             onpointerdown={(e) => {
               if (e.button !== 0) return;
               e.stopPropagation();
@@ -648,7 +648,7 @@
         <polygon points={f.pts} fill={f.fill}
                  class="probe-face" class:live={planeLive(d.i, f.lock)}
                  role="button" tabindex="-1"
-                 aria-label={`drag probe ${d.i + 1} in plane`}
+                 aria-label={`在平面内拖动探针 ${d.i + 1}`}
                  onpointerdown={(e) => startPlane(e, d.i, f.lock)} />
       {/each}
     {/each}
@@ -665,7 +665,7 @@
            view can still be orbited from here. It only records what a double
            click would mean. -->
       <circle cx={origin.x} cy={origin.y} r="10" class="centre-grab"
-              role="button" tabindex="-1" aria-label="formation centre"
+              role="button" tabindex="-1" aria-label="阵型中心"
               onpointerdown={(e) => { if (e.button === 0) pressed = "centre"; }} />
     {/if}
 
@@ -682,7 +682,7 @@
                    cannot. -->
               <line x1={h.inner.x} y1={h.inner.y} x2={h.outer.x} y2={h.outer.y} class="grab"
                     role="button" tabindex="-1"
-                    aria-label={`drag probe ${g.n + 1} along ${"XYZ"[a.i]}`}
+                    aria-label={`拖动探针 ${g.n + 1} 沿轴 ${"XYZ"[a.i]}`}
                     onpointerdown={(e) => startAxis(e, g.n, a.i as 0 | 1 | 2)}
                     onpointerenter={() => (hoveredAxis = { n: g.n, axis: a.i })}
                     onpointerleave={() => {
@@ -706,31 +706,31 @@
   </svg>
 
   <div class="viewer-actions">
-    <Button size="sm" onclick={() => (cam = { ...cam, ...TOP_VIEW })}>Top</Button>
-    <Button size="sm" onclick={() => (cam = { ...cam, ...SIDE_VIEW })}>Side</Button>
-    <Button size="sm" onclick={fit}>Fit</Button>
+    <Button size="sm" onclick={() => (cam = { ...cam, ...TOP_VIEW })}>顶视</Button>
+    <Button size="sm" onclick={() => (cam = { ...cam, ...SIDE_VIEW })}>侧视</Button>
+    <Button size="sm" onclick={fit}>适应</Button>
     {#if scenes.length}
       <!-- controlClass, not class: ProbeViewer.spec reads `.scene-pick`'s
            selectedIndex, so the hook has to be on the select itself. -->
       <Field
         kind="select"
-        label="Scene"
+        label="场景"
         class="toggle"
         controlClass="scene-pick"
         bind:value={sceneIndex}
         options={[
-          { value: -1, label: "None" },
+          { value: -1, label: "无" },
           ...scenes.map((s, i) => ({ value: i, label: s.name })),
         ]} />
       {#if scene}
-        <Button size="sm" onclick={fitScene}>Fit scene</Button>
+        <Button size="sm" onclick={fitScene}>适应场景</Button>
       {/if}
     {/if}
     <!-- A toggle names what it turns ON. -->
-    <Field kind="checkbox" class="toggle" label="Show vectors" bind:value={vectors} />
+    <Field kind="checkbox" class="toggle" label="显示向量" bind:value={vectors} />
     <span class="meta">
-      Drag to orbit · Right-drag to pan · Wheel to zoom ·
-      Double-click a probe or the centre to orbit it, or empty space to flip the view
+      拖动旋转 · 右键拖动平移 · 滚轮缩放 ·
+      双击探针或中心可环绕它，双击空白处切换视图
     </span>
   </div>
 
@@ -744,11 +744,11 @@
   {#if rangeTarget}
     <div class="scene-ranges">
       <span class="range-label">
-        Range to {rangeTarget.label} — no better than the scene's own figures
+        到 {rangeTarget.label} 的距离 — 不比场景自身数据更精确
       </span>
       {#each targetRanges as r, i (i)}
         <Chip size="sm" tone={r.inside ? "ok" : undefined}>
-          {i + 1} · {km(r.m)} km{r.inside ? " · inside" : ""}
+          {i + 1} · {km(r.m)} km{r.inside ? " · 内部" : ""}
         </Chip>
       {/each}
     </div>

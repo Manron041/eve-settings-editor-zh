@@ -39,7 +39,7 @@ function mount(selected: number | null = null, probes = PROBES) {
 
 /** A probe's grab square, by its 1-based label. */
 const marker = (c: Element, n: number) =>
-  c.querySelector(`[aria-label="probe ${n}"]`) as SVGRectElement;
+  c.querySelector(`[aria-label="探针 ${n}"]`) as SVGRectElement;
 
 /** Double-click an element the way a browser produces one: two press/release
  * pairs on it, then the `dblclick`.
@@ -81,7 +81,7 @@ describe("double-click camera shortcuts", () => {
 
   test("double-clicking the centre marker returns the camera to the formation centre", async () => {
     const c = mount();
-    const centre = () => c.querySelector('[aria-label="formation centre"]') as SVGCircleElement;
+    const centre = () => c.querySelector('[aria-label="阵型中心"]') as SVGCircleElement;
     expect(centre()).not.toBeNull();
 
     await doubleClick(marker(c, 1)); // camera is now on the probe
@@ -125,7 +125,7 @@ describe("double-click camera shortcuts", () => {
     const probe = at(marker(c, 1));
     // Probe 1's OWN arrows. Every probe carries a set now, so an unqualified
     // query would measure a neighbour's arrows against this probe's centre.
-    const grabs = [...c.querySelectorAll('line.grab[aria-label^="drag probe 1 "]')];
+    const grabs = [...c.querySelectorAll('line.grab[aria-label^="拖动探针 1 "]')];
     expect(grabs.length).toBeGreaterThan(0);
 
     for (const g of grabs) {
@@ -228,10 +228,10 @@ describe("double-click camera shortcuts", () => {
       // Six arrow halves at most — fewer when an axis points near enough at
       // the camera that its arrows would be stubs on top of the cube, which is
       // the same edge-on case a drag refuses.
-      expect(c.querySelectorAll(`line.grab[aria-label^="drag probe ${n} "]`).length)
+      expect(c.querySelectorAll(`line.grab[aria-label^="拖动探针 ${n} "]`).length)
         .toBeGreaterThanOrEqual(4);
       // Three faces, always: the plane handles are the cube itself.
-      expect(c.querySelectorAll(`polygon[aria-label="drag probe ${n} in plane"]`).length).toBe(3);
+      expect(c.querySelectorAll(`polygon[aria-label="在平面内拖动探针 ${n}"]`).length).toBe(3);
     }
   });
 });
@@ -323,7 +323,7 @@ describe("scenes", () => {
     // camera distance and would show no change however the camera moved.
     const before = markX(c, 1);
 
-    const fit = [...c.querySelectorAll("button")].find((b) => b.textContent?.includes("Fit scene"));
+    const fit = [...c.querySelectorAll("button")].find((b) => b.textContent?.includes("适应场景"));
     expect(fit).toBeTruthy();
     await fireEvent.click(fit!);
 
@@ -368,7 +368,7 @@ describe("range to a scene object", () => {
     expect(label).toContain("Wormhole");
     expect(label).not.toContain("Beacon");
     // And the number is not passed off as measured truth.
-    expect(label).toContain("no better than the scene's own figures");
+    expect(label).toContain("不比场景自身数据更精确");
 
     expect(chips(c).length).toBe(PROBES.length);
     expect(chips(c)[0]).toMatch(/^1 · [\d.]+ km$/); // neither probe is inside
@@ -379,8 +379,8 @@ describe("range to a scene object", () => {
     // 2 is 2e10 m up and nowhere near it.
     const c = mountWithScene([[8e9, 2e9, 0], [0, 2e10, 0]]);
     await pick(c, 1);
-    expect(chips(c)[0]).toBe("1 · 0.0 km · inside");
-    expect(chips(c)[1]).not.toContain("inside");
+    expect(chips(c)[0]).toBe("1 · 0.0 km · 内部");
+    expect(chips(c)[1]).not.toContain("内部");
     // The chip carries the state as a tone as well as a word.
     expect([...c.querySelectorAll(".scene-ranges .chip")].map((e) => e.classList.contains("ok")))
       .toEqual([true, false]);
