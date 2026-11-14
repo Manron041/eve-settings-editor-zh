@@ -30,12 +30,12 @@ async function renderPresets(props: { charOpen?: boolean; userOpen?: boolean } =
 describe("which aspects the create form offers", () => {
   test("creating a layout preset needs the account file open", async () => {
     const { aspect } = await renderPresets({ userOpen: false });
-    await waitFor(() => expect(aspect("Window layout").disabled).toBe(true));
+    await waitFor(() => expect(aspect("窗口布局").disabled).toBe(true));
   });
 
   test("layout is available once the account file is open", async () => {
     const { aspect } = await renderPresets({ userOpen: true });
-    await waitFor(() => expect(aspect("Window layout").disabled).toBe(false));
+    await waitFor(() => expect(aspect("窗口布局").disabled).toBe(false));
   });
 
   // The export confirm guards sharing a full preset; capture is where the user

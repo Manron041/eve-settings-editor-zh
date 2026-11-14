@@ -673,7 +673,7 @@ describe("a batch copy that wrote the open document", () => {
     await menu(/复制设置/i);
     const box = await screen.findByRole("dialog", { name: "复制设置" });
     await fireEvent.click(within(box).getByRole("checkbox", { name: /core_char_951\.dat/ }));
-    await fireEvent.click(within(box).getByRole("checkbox", { name: /window layout/i }));
+    await fireEvent.click(within(box).getByRole("checkbox", { name: /窗口布局/i }));
     const copy = within(box).getByRole("button", { name: "复制" });
     await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
     await fireEvent.click(copy);

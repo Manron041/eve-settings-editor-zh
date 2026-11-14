@@ -109,33 +109,33 @@ const targetBox = (id: number) => targetRow(id).querySelector("input")! as HTMLI
 describe("aspect selection", () => {
   test("Everything clears the other aspects", async () => {
     await mount();
-    await fireEvent.click(aspect("Window layout"));
-    await fireEvent.click(aspect("Autofill (remembered text)"));
-    expect(aspect("Window layout").checked).toBe(true);
+    await fireEvent.click(aspect("窗口布局"));
+    await fireEvent.click(aspect("自动补全（记住的文本）"));
+    expect(aspect("窗口布局").checked).toBe(true);
 
-    await fireEvent.click(aspect("Everything (full clone of both files)"));
-    await waitFor(() => expect(aspect("Window layout").checked).toBe(false));
-    expect(aspect("Autofill (remembered text)").checked).toBe(false);
-    expect(aspect("Everything (full clone of both files)").checked).toBe(true);
+    await fireEvent.click(aspect("全部内容（两个文件的完整克隆）"));
+    await waitFor(() => expect(aspect("窗口布局").checked).toBe(false));
+    expect(aspect("自动补全（记住的文本）").checked).toBe(false);
+    expect(aspect("全部内容（两个文件的完整克隆）").checked).toBe(true);
   });
 
   test("picking another aspect clears Everything", async () => {
     await mount();
-    await fireEvent.click(aspect("Everything (full clone of both files)"));
-    await waitFor(() => expect(aspect("Window layout").disabled).toBe(true));
+    await fireEvent.click(aspect("全部内容（两个文件的完整克隆）"));
+    await waitFor(() => expect(aspect("窗口布局").disabled).toBe(true));
 
-    await fireEvent.click(aspect("Everything (full clone of both files)"));
-    await waitFor(() => expect(aspect("Window layout").disabled).toBe(false));
-    await fireEvent.click(aspect("Window layout"));
-    await waitFor(() => expect(aspect("Everything (full clone of both files)").checked).toBe(false));
+    await fireEvent.click(aspect("全部内容（两个文件的完整克隆）"));
+    await waitFor(() => expect(aspect("窗口布局").disabled).toBe(false));
+    await fireEvent.click(aspect("窗口布局"));
+    await waitFor(() => expect(aspect("全部内容（两个文件的完整克隆）").checked).toBe(false));
   });
 
   test("a character source offers Fleet, and ticking it sends aspects: [\"fleet\"] to setup_preview", async () => {
     await mount();
-    expect(aspect("Fleet (broadcast settings, watch-list colours, formation)")).toBeTruthy();
+    expect(aspect("舰队（广播设置、监视列表颜色、阵型）")).toBeTruthy();
 
     await fireEvent.click(targetBox(90000002));
-    await fireEvent.click(aspect("Fleet (broadcast settings, watch-list colours, formation)"));
+    await fireEvent.click(aspect("舰队（广播设置、监视列表颜色、阵型）"));
     await waitFor(() => expect(calls.of("setup_preview").length).toBeGreaterThan(0));
     const sent = calls.of("setup_preview").at(-1)!.args!;
     expect(sent.aspects).toEqual(["fleet"]);
@@ -147,7 +147,7 @@ describe("which characters can be written", () => {
     await mount();
     expect(targetBox(90000003).disabled).toBe(false);
 
-    await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
+    await fireEvent.click(aspect("总览（列、标签页、预设）"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
     // A paired one stays available.
     expect(targetBox(90000002).disabled).toBe(false);
@@ -159,7 +159,7 @@ describe("which characters can be written", () => {
     await mount();
     expect(targetBox(90000003).disabled).toBe(false);
 
-    await fireEvent.click(aspect("Window layout"));
+    await fireEvent.click(aspect("窗口布局"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
     // A paired one stays available.
     expect(targetBox(90000002).disabled).toBe(false);
@@ -172,13 +172,13 @@ describe("which characters can be written", () => {
 
     // While excluded the box reads unchecked, so the UI never claims a file is
     // about to be written that the backend would refuse.
-    await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
+    await fireEvent.click(aspect("总览（列、标签页、预设）"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
     expect(targetBox(90000003).checked).toBe(false);
 
     // The selection itself survives: changing back re-includes it without the
     // user having to tick it again.
-    await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
+    await fireEvent.click(aspect("总览（列、标签页、预设）"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(false));
     expect(targetBox(90000003).checked).toBe(true);
   });
@@ -189,7 +189,7 @@ describe("what actually gets written", () => {
     await mount();
     await fireEvent.click(targetBox(90000002));
     await fireEvent.click(targetBox(90000003));
-    await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
+    await fireEvent.click(aspect("总览（列、标签页、预设）"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
 
     const apply = screen.getByRole("button", { name: "复制" });
@@ -205,7 +205,7 @@ describe("what actually gets written", () => {
 
   test("select-all skips rows the current aspect excludes", async () => {
     await mount();
-    await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
+    await fireEvent.click(aspect("总览（列、标签页、预设）"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
 
     await fireEvent.click(screen.getByRole("button", { name: /^全选$/ }));
@@ -217,7 +217,7 @@ describe("what actually gets written", () => {
     calls.stub("setup_preview", { ...PLAN, char_writes: [], account_writes: [] });
     await mount();
     await fireEvent.click(targetBox(90000002));
-    await fireEvent.click(aspect("Window layout"));
+    await fireEvent.click(aspect("窗口布局"));
     await waitFor(() => expect(calls.of("setup_preview").length).toBeGreaterThan(0));
     expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(true);
   });
@@ -226,7 +226,7 @@ describe("what actually gets written", () => {
     calls.stub("setup_preview", { ...PLAN, source_error: "Decode failed" });
     await mount();
     await fireEvent.click(targetBox(90000002));
-    await fireEvent.click(aspect("Window layout"));
+    await fireEvent.click(aspect("窗口布局"));
     await waitFor(() => expect(calls.of("setup_preview").length).toBeGreaterThan(0));
     expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(true);
   });
@@ -251,10 +251,10 @@ test("a stale preview response cannot overwrite a newer one", async () => {
   await waitFor(() => expect(targetRow(90000002)).toBeTruthy());
 
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
   await waitFor(() => expect(pending.length).toBe(1));
 
-  await fireEvent.click(aspect("Autofill (remembered text)"));
+  await fireEvent.click(aspect("自动补全（记住的文本）"));
   await waitFor(() => expect(pending.length).toBe(2));
 
   // Resolve the NEWER request first, then let the stale one land.
@@ -272,13 +272,13 @@ test("a stale preview response cannot overwrite a newer one", async () => {
 test("changing the source clears the aspects and targets already picked", async () => {
   await mount();
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
   await waitFor(() => expect(targetBox(90000002).checked).toBe(true));
 
   const sourceSelect = document.querySelector("#src") as HTMLSelectElement;
   await fireEvent.change(sourceSelect, { target: { value: `${DIR}/core_char_90000002.dat` } });
 
-  await waitFor(() => expect(aspect("Window layout").checked).toBe(false));
+  await waitFor(() => expect(aspect("窗口布局").checked).toBe(false));
   const stillTicked = [...section("目标角色").querySelectorAll("input")].filter(
     (i) => (i as HTMLInputElement).checked,
   );
@@ -297,14 +297,14 @@ test("the account warning says a layout copy can reset fields to EVE's defaults"
   } as never);
   await mount();
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
   expect(await screen.findByText(/重置为该默认值/i)).toBeTruthy();
 
   // Autofill only ever overwrites, so the clause must not claim otherwise.
-  await fireEvent.click(aspect("Window layout"));
-  await fireEvent.click(aspect("Autofill (remembered text)"));
+  await fireEvent.click(aspect("窗口布局"));
+  await fireEvent.click(aspect("自动补全（记住的文本）"));
   await waitFor(() => expect(screen.queryByText(/重置为该默认值/i)).toBeNull());
-  expect(screen.getByText(/Autofill \(remembered text\) 已更改/)).toBeTruthy();
+  expect(screen.getByText(/自动补全（记住的文本） 已更改/)).toBeTruthy();
 });
 
 test("a cross-folder copy names the folder of each account write outside the picked one", async () => {
@@ -320,8 +320,8 @@ test("a cross-folder copy names the folder of each account write outside the pic
   } as never);
   await mount();
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Autofill (remembered text)"));
-  const warnings = await screen.findAllByText(/Autofill \(remembered text\) 已更改/);
+  await fireEvent.click(aspect("自动补全（记住的文本）"));
+  const warnings = await screen.findAllByText(/自动补全（记住的文本） 已更改/);
   expect(warnings).toHaveLength(2);
   expect(warnings.filter((w) => w.textContent!.includes(`位于 ${ZULU}`))).toHaveLength(1);
   expect(screen.getByText(/将写入 3 个文件/)).toBeTruthy();
@@ -337,7 +337,7 @@ test("warns when a target is the file currently open", async () => {
     target: { value: `${DIR}/core_char_90000002.dat` },
   });
   await fireEvent.click(targetBox(90000001));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
 
   // REWRITTEN: the warning names the document rather than saying "one target".
   // With the editor standing behind the sheet, the file it is talking about is
@@ -386,7 +386,7 @@ test("warns when the plan writes the open account file", async () => {
   // No target is the open CHARACTER file — only the planned account write
   // touches an open document.
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
 
   const warning = await screen.findByText(/该文件已在本面板后方的编辑器中打开/i);
   expect(warning.textContent).toMatch(/账号文件/i);
@@ -412,7 +412,7 @@ test("apply reports exactly the paths it wrote, and reports nothing when it thro
   });
   await waitFor(() => expect(targetRow(90000002)).toBeTruthy());
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
   const copy = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
   await fireEvent.click(copy);
@@ -440,7 +440,7 @@ test("the sheet stays open after a successful apply, showing the results", async
   });
   await waitFor(() => expect(targetRow(90000002)).toBeTruthy());
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
   const copy = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
   await fireEvent.click(copy);
@@ -571,10 +571,10 @@ test("a preset source offers only what it holds and sends dir verbatim", async (
   await fireEvent.change(presetSelect, { target: { value: `${DIR}/presets/ Layout only ` } });
 
   // This preset holds only Layout, so Overview must not be offered.
-  expect(() => aspect("Overview (columns, tabs, presets)")).toThrow();
+  expect(() => aspect("总览（列、标签页、预设）")).toThrow();
 
   await fireEvent.click(targetBox(90000002));
-  await fireEvent.click(aspect("Window layout"));
+  await fireEvent.click(aspect("窗口布局"));
 
   const apply = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(apply.hasAttribute("disabled")).toBe(false));

@@ -43,22 +43,22 @@ describe("FormationPicker", () => {
   test("with nothing ticked, confirm is disabled", async () => {
     open();
     // Everything is on, so the button offers the inverse.
-    await fireEvent.click(screen.getByText("None"));
+    await fireEvent.click(screen.getByText("无"));
     expect((screen.getByText("Import 0") as HTMLButtonElement).disabled).toBe(true);
   });
 
   test("select all re-ticks everything after a manual untick", async () => {
     open();
     await fireEvent.click(screen.getByLabelText("close"));
-    await fireEvent.click(screen.getByText("All"));
+    await fireEvent.click(screen.getByText("全选"));
     expect(screen.getByText("Import 3")).toBeTruthy();
   });
 
   test("a row shows its probe count and range, and says mixed when they differ", async () => {
     open();
-    expect(screen.getByText("2 probes · 0.5 AU")).toBeTruthy();
-    expect(screen.getByText("1 probe · 4 AU")).toBeTruthy();
-    expect(screen.getByText("2 probes · mixed")).toBeTruthy();
+    expect(screen.getByText("2 个探针 · 0.5 AU")).toBeTruthy();
+    expect(screen.getByText("1 个探针 · 4 AU")).toBeTruthy();
+    expect(screen.getByText("2 个探针 · 混合")).toBeTruthy();
   });
 
   test("clicking the backdrop cancels", async () => {
@@ -69,7 +69,7 @@ describe("FormationPicker", () => {
 
   test("clicking the meta text toggles the row, not just the checkbox", async () => {
     open();
-    await fireEvent.click(screen.getByText("2 probes · 0.5 AU"));
+    await fireEvent.click(screen.getByText("2 个探针 · 0.5 AU"));
     expect((screen.getByLabelText("close") as HTMLInputElement).checked).toBe(false);
   });
 });

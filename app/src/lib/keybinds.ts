@@ -69,7 +69,7 @@ const VK_LABELS: Record<number, string> = Object.fromEntries(
 /** [17, 81] -> "Ctrl+Q". An unknown code renders as VK<n> rather than
  *  disappearing, so a binding we cannot name is still visible. */
 export function keysToLabel(keys: number[] | null): string {
-  if (!keys || keys.length === 0) return "unbound";
+  if (!keys || keys.length === 0) return "未绑定";
   return keys.map((c) => MOD_LABEL[c] ?? VK_LABELS[c] ?? `VK${c}`).join("+");
 }
 

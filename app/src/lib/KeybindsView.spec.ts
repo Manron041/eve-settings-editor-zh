@@ -85,7 +85,7 @@ describe("EVE's default column", () => {
     render(KeybindsView, { userOpen: true, userId: 1, onUserDirty: noop });
 
     const exit = await rowOf("CmdExitStation");
-    expect(exit.querySelector(".default")!.textContent).toBe("unbound");
+    expect(exit.querySelector(".default")!.textContent).toBe("未绑定");
     expect(reset(exit).disabled).toBe(false);
 
     const reload = await rowOf("CmdReloadAmmo");

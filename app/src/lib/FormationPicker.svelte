@@ -24,7 +24,7 @@
    * case a single number would misreport (spec §2.3). */
   function rangeLabel(f: FormationSpec): string {
     const first = f.ranges[0] ?? 0;
-    return f.ranges.every((r) => r === first) ? `${formatUnit(first, "au")} AU` : "mixed";
+    return f.ranges.every((r) => r === first) ? `${formatUnit(first, "au")} AU` : "混合";
   }
 </script>
 
@@ -44,7 +44,7 @@
                  onchange={(e) => (picked[i] = e.currentTarget.checked)} />
           <span class="name">{f.name}</span>
           <span class="meta">
-            {f.probes.length} {f.probes.length === 1 ? "probe" : "probes"} · {rangeLabel(f)}
+            {f.probes.length} {f.probes.length === 1 ? "个探针" : "个探针"} · {rangeLabel(f)}
           </span>
         </label>
       </li>
@@ -53,14 +53,14 @@
 
   {#snippet footer()}
     <Button onclick={() => (picked = picked.map(() => !allOn))}>
-      {allOn ? "None" : "All"}
+      {allOn ? "无" : "全选"}
     </Button>
     <span class="spacer"></span>
-    <Button onclick={oncancel}>Cancel</Button>
+    <Button onclick={oncancel}>取消</Button>
     <Button
       variant="primary"
       disabled={chosen.length === 0}
-      disabledReason="Tick at least one formation"
+      disabledReason="至少勾选一个阵型"
       onclick={() => onconfirm(chosen)}>
       {confirmLabel} {chosen.length}
     </Button>

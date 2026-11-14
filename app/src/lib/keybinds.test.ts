@@ -47,7 +47,7 @@ import { keysToLabel, eventToKeys, MOD_CTRL, MOD_ALT, MOD_SHIFT } from "./keybin
 check("formats a bare key", keysToLabel([81]) === "Q");
 check("formats a modified key", keysToLabel([17, 81]) === "Ctrl+Q");
 check("formats the canonical three-modifier order", keysToLabel([17, 18, 16, 68]) === "Ctrl+Alt+Shift+D");
-check("formats unbound", keysToLabel(null) === "unbound");
+check("formats unbound", keysToLabel(null) === "未绑定");
 check("formats a function key", keysToLabel([112]) === "F1");
 check("an unknown code shows its number", keysToLabel([250]) === "VK250");
 
