@@ -46,7 +46,7 @@ function mount(over: Partial<Ctx> = {}) {
 test("all five migrated actions are here", async () => {
   calls.stub("launcher_proposals", { proposals: [], known: 0 });
   mount();
-  for (const name of [/账号/i, /copy settings/i, /刷新角色名称/i, /重新扫描配置/i, /about/i]) {
+  for (const name of [/账号/i, /复制设置/i, /刷新角色名称/i, /重新扫描配置/i, /关于/i]) {
     expect(await screen.findByRole("menuitem", { name })).toBeTruthy();
   }
 });
@@ -59,7 +59,7 @@ test("each navigation item reports its choice", async () => {
     showBatch: () => (hit = "batch"),
     showAbout: () => (hit = "about"),
   });
-  await fireEvent.click(await screen.findByRole("menuitem", { name: /copy settings/i }));
+  await fireEvent.click(await screen.findByRole("menuitem", { name: /复制设置/i }));
   expect(hit).toBe("batch");
 });
 
@@ -71,7 +71,7 @@ test("each navigation item reports its choice", async () => {
 test("a row with an accelerator prints it", async () => {
   calls.stub("launcher_proposals", { proposals: [], known: 0 });
   mount();
-  const save = await screen.findByRole("menuitem", { name: /save/i });
+  const save = await screen.findByRole("menuitem", { name: /保存/i });
   expect(save.textContent).toContain(accel("S"));
 });
 
@@ -83,9 +83,9 @@ test("Save is present and disabled with its reason when nothing has changed", as
   calls.stub("launcher_proposals", { proposals: [], known: 0 });
   resetSubject();
   mount();
-  const save = (await screen.findByRole("menuitem", { name: /save/i })) as HTMLButtonElement;
+  const save = (await screen.findByRole("menuitem", { name: /保存/i })) as HTMLButtonElement;
   expect(save.disabled).toBe(true);
-  expect(save.title).toBe("Open a character first");
+  expect(save.title).toBe("请先打开角色");
 });
 
 /**

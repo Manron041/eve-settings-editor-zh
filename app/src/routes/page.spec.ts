@@ -596,7 +596,7 @@ describe("sheets", () => {
 
   test("the close button closes the sheet", async () => {
     await openChar();
-    await menu(/copy settings/i);
+    await menu(/复制设置/i);
     await waitFor(() => screen.getByRole("dialog", { name: "Copy settings" }));
     await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "Copy settings" })).toBeNull());
@@ -670,7 +670,7 @@ describe("a batch copy that wrote the open document", () => {
     // After the open, which clears the flag it sets.
     subject.dirty.char = dirty;
 
-    await menu(/copy settings/i);
+    await menu(/复制设置/i);
     const box = await screen.findByRole("dialog", { name: "Copy settings" });
     await fireEvent.click(within(box).getByRole("checkbox", { name: /core_char_951\.dat/ }));
     await fireEvent.click(within(box).getByRole("checkbox", { name: /window layout/i }));
@@ -731,7 +731,7 @@ describe("opening the subject switcher", () => {
   test("the subject button opens it, and it is the only button that does", async () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     expect(panel()).toBeNull();
-    expect(screen.queryByRole("button", { name: /search or run a command/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /搜索或运行命令/i })).toBeNull();
 
     await fireEvent.click(screen.getByRole("button", { name: /未打开角色/ }));
     await waitFor(() => expect(panel()).toBeTruthy());

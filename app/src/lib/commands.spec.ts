@@ -93,10 +93,10 @@ describe("registry invariants", () => {
 describe("what each predicate actually answers", () => {
   test("Save says which of its two reasons applies", () => {
     resetSubject();
-    expect(byId("file.save")!.enabled()).toBe("Open a character first");
+    expect(byId("file.save")!.enabled()).toBe("请先打开角色");
 
     subject.slots.char = { status: "parse_failed", path: "/x", message: "", offset: 0, hex_preview: "" };
-    expect(byId("file.save")!.enabled()).toBe("Nothing has changed");
+    expect(byId("file.save")!.enabled()).toBe("没有任何改动");
     resetSubject();
   });
 
@@ -120,13 +120,13 @@ describe("ranking", () => {
   });
 
   test("a command's own name beats a command that merely shares its group", () => {
-    const save = score("save", "Save", "File");
-    const history = score("save", "Show file history", "backups restore File");
+    const save = score("保存", "保存", "File");
+    const history = score("保存", "显示文件历史", "备份 恢复 File");
     expect(save).toBeGreaterThan(history);
   });
 
   test("an unmatched character is not a match at all", () => {
-    expect(score("zzz", "Save", "File")).toBe(-Infinity);
+    expect(score("zzz", "保存", "File")).toBe(-Infinity);
     expect(rank(COMMANDS, (c) => score("zzzz", c.label, haystack(c)))).toEqual([]);
   });
 

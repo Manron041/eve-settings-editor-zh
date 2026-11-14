@@ -82,7 +82,7 @@ const anyOpen = () => subject.slots.char !== null || subject.slots.user !== null
 
 const goCommand = (v: View, n: number): Command => ({
   id: `go.${v}`,
-  label: `Go to ${VIEWS.find((x) => x.id === v)!.label}`,
+  label: `前往${VIEWS.find((x) => x.id === v)!.label}`,
   group: "Go",
   accel: accel(String(n)),
   // The SAME predicate the tab strip and the switcher ask, so a tab that is
@@ -96,50 +96,50 @@ export const COMMANDS: Command[] = [
   // ---- File ---------------------------------------------------------------
   {
     id: "file.open",
-    label: "Open file…",
+    label: "打开文件…",
     group: "File",
     accel: accel("O"),
-    keywords: "browse disk",
+    keywords: "浏览 磁盘",
     enabled: () => true,
     homes: [{ at: "control", where: "the file list's Open file… button" }, { at: "empty-state", where: "the launch screen" }],
     run: (ctx) => ctx.pickFile(),
   },
   {
     id: "file.save",
-    label: "Save",
+    label: "保存",
     group: "File",
     accel: accel("S"),
     enabled: () =>
       subject.canSave
         ? true
         : !anyOpen()
-          ? "Open a character first"
-          : "Nothing has changed",
+          ? "请先打开角色"
+          : "没有任何改动",
     homes: [{ at: "control", where: "the save cluster" }],
     run: (ctx) => ctx.save(),
   },
   {
     id: "file.discard",
-    label: "Discard changes",
+    label: "放弃更改",
     group: "File",
-    keywords: "revert reload",
-    enabled: () => (subject.dirty.char || subject.dirty.user ? true : "Nothing has changed"),
+    keywords: "还原 重新载入",
+    enabled: () => (subject.dirty.char || subject.dirty.user ? true : "没有任何改动"),
     homes: [{ at: "control", where: "the save disclosure" }],
     run: (ctx) => ctx.discard(),
   },
   {
     id: "file.history",
-    label: "Show file history",
+    label: "显示文件历史",
     group: "File",
     accel: accel("H"),
-    keywords: "backups restore",
-    enabled: () => (anyOpen() ? true : "Open a character first"),
+    keywords: "备份 恢复",
+    enabled: () => (anyOpen() ? true : "请先打开角色"),
     homes: [{ at: "control", where: "the History button" }],
     run: (ctx) => ctx.showHistory(),
   },
   {
     id: "file.about",
-    label: "About EVE Settings Editor",
+    label: "关于 EVE Settings Editor",
     group: "File",
     enabled: () => true,
     homes: [{ at: "app-menu" }],
@@ -152,16 +152,16 @@ export const COMMANDS: Command[] = [
     id: "go.accounts",
     label: "账号",
     group: "Go",
-    keywords: "pair unpair link character launcher",
+    keywords: "配对 解除配对 关联 角色 启动器",
     enabled: () => true,
     homes: [{ at: "app-menu" }],
     run: (ctx) => ctx.showAccounts(),
   },
   {
     id: "go.copySettings",
-    label: "Copy settings…",
+    label: "复制设置…",
     group: "Go",
-    keywords: "batch clone apply many",
+    keywords: "批量 克隆 应用多个",
     enabled: () => true,
     homes: [{ at: "app-menu" }],
     run: (ctx) => ctx.showBatch(),
@@ -170,7 +170,7 @@ export const COMMANDS: Command[] = [
   // ---- Search -------------------------------------------------------------
   {
     id: "palette.open",
-    label: "Search or run a command",
+    label: "搜索或运行命令",
     group: "Search",
     accel: accel("K"),
     enabled: () => true,
@@ -179,10 +179,10 @@ export const COMMANDS: Command[] = [
   },
   {
     id: "view.find",
-    label: "Find in this view",
+    label: "在此视图中查找",
     group: "Search",
     accel: accel("F"),
-    keywords: "filter search",
+    keywords: "筛选 搜索",
     enabled: () => true,
     homes: [{ at: "control", where: "each view's own search field" }],
     run: (ctx) => ctx.findInView(),
@@ -191,14 +191,14 @@ export const COMMANDS: Command[] = [
   // ---- Accounts -----------------------------------------------------------
   {
     id: "accounts.pair",
-    label: "Pair this character with an account…",
+    label: "将此角色与账号配对…",
     group: "Accounts",
-    keywords: "link associate",
+    keywords: "关联 绑定",
     enabled: () =>
       subject.charId === null
-        ? "Open a character first"
+        ? "请先打开角色"
         : subject.userId !== null
-          ? "This character is already paired"
+          ? "该角色已配对"
           : true,
     homes: [
       { at: "control", where: "the Accounts sheet" },
@@ -209,19 +209,19 @@ export const COMMANDS: Command[] = [
   // ---- Help ---------------------------------------------------------------
   {
     id: "help.shortcuts",
-    label: "Keyboard shortcuts",
+    label: "键盘快捷键",
     group: "Help",
     accel: accel("/"),
-    keywords: "keys accelerators bindings",
+    keywords: "按键 快捷键 绑定",
     enabled: () => true,
     homes: [{ at: "app-menu" }],
     run: (ctx) => ctx.showShortcuts(),
   },
   {
     id: "help.aiAccess",
-    label: "AI access…",
+    label: "AI 访问…",
     group: "Help",
-    keywords: "mcp claude assistant ai",
+    keywords: "mcp claude 助手 ai",
     enabled: () => true,
     homes: [{ at: "app-menu" }],
     run: (ctx) => ctx.showAiAccess(),
