@@ -23,6 +23,28 @@ export const GROUP_ORDER = [
   "Character Movement",
 ];
 
+const GROUP_LABELS: Record<string, string> = {
+  Window: "窗口",
+  Combat: "战斗",
+  General: "通用",
+  Navigation: "导航",
+  Modules: "模块",
+  Drones: "无人机",
+  Fighters: "战斗机",
+  "Character Creation": "角色创建",
+  // 命令分组
+  File: "文件",
+  Go: "前往",
+  Search: "搜索",
+  Accounts: "账号",
+  Help: "帮助",
+};
+
+/** Display name for a group key. Unknown keys fall through unchanged. */
+export function groupLabel(group: string): string {
+  return GROUP_LABELS[group] ?? group;
+}
+
 /** "CmdActivateHighPowerSlot1" -> "Activate High Power Slot 1". A command the
  *  catalog does not know (a client update added it) degrades to a readable
  *  de-camelcased name rather than a blank row. */

@@ -40,7 +40,7 @@ describe("Toast", () => {
 
     expect(screen.getByText("Could not write the file")).toBeTruthy();
 
-    await act(() => fireEvent.click(screen.getByRole("button", { name: "Dismiss" })));
+    await act(() => fireEvent.click(screen.getByRole("button", { name: "关闭" })));
     expect(screen.queryByText("Could not write the file")).toBeNull();
   });
 

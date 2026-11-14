@@ -79,7 +79,7 @@
   {oncontextmenu}>
   <!-- aria-hidden: the grip is a texture, and the drag it affords is not
        keyboard-operable anyway. Announcing it would only add noise. -->
-  {#if draggable}<span class="grip" title="Drag to reorder" aria-hidden="true">⠿</span>{/if}
+  {#if draggable}<span class="grip" title="拖动以重新排序" aria-hidden="true">⠿</span>{/if}
   {#if leading}{@render leading()}{/if}
   {#if onclick}
     <button

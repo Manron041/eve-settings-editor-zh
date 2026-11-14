@@ -35,7 +35,7 @@ describe("InlineMessage", () => {
     const ondismiss = vi.fn();
     render(InlineMessage, { dismissible: true, ondismiss, children: text("Go away") });
 
-    await fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
+    await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
 
     expect(ondismiss).toHaveBeenCalledTimes(1);
   });

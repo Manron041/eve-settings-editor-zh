@@ -597,8 +597,8 @@ describe("sheets", () => {
   test("the close button closes the sheet", async () => {
     await openChar();
     await menu(/复制设置/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "复制设置" }));
-    await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
+    const sheet = await screen.findByRole("dialog", { name: "复制设置" });
+    await fireEvent.click(within(sheet).getByRole("button", { name: "关闭" }));
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "复制设置" })).toBeNull());
   });
 

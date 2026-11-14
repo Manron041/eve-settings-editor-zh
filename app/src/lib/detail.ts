@@ -511,9 +511,9 @@ export function chatParts(panel: ChatPanel | undefined, rect: { w: number; h: nu
       // silently drops a negative height, so the band would vanish with no
       // signal — clamp to 0 instead so it stays visible as "no room".
       h: Math.max(0, rect.h - input),
-      label: "Members",
+      label: "成员",
     },
-    { kind: "band", x: 0, y: rect.h - input, w: rect.w, h: input, label: "Input" },
+    { kind: "band", x: 0, y: rect.h - input, w: rect.w, h: input, label: "输入" },
   ];
 }
 

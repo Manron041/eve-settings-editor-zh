@@ -7,6 +7,7 @@
   // Every accelerator here is rendered through `accel()`, never written out, so
   // the table is correct on macOS for free.
   import { COMMANDS } from "./commands";
+  import { groupLabel } from "./keybinds";
   import { accel, MOD } from "./keys";
   import Sheet from "./ui/Sheet.svelte";
 
@@ -43,7 +44,7 @@
         <tr>
           <td class="keys"><kbd>{c.accel}</kbd></td>
           <td>{c.label}</td>
-          <td class="where">{c.group}</td>
+          <td class="where">{groupLabel(c.group)}</td>
         </tr>
       {/each}
       {#each LOCAL as l (l.keys + l.does)}

@@ -13,6 +13,7 @@
   // Characters and presets keep their substring filter and their alphabetical
   // order, which is how a name is found.
   import { COMMANDS, haystack, type Command, type Ctx } from "./commands";
+  import { groupLabel } from "./keybinds";
   import { rank, score } from "./fuzzy";
   import { subject, accountAliasOf } from "./subject.svelte";
   import { resolvedName } from "./filesort.svelte";
@@ -149,7 +150,7 @@
             disabledReason={why === true ? undefined : why}
             title={why === true ? undefined : why}>
             {c.label}
-            <Chip size="sm">{c.group}</Chip>
+            <Chip size="sm">{groupLabel(c.group)}</Chip>
             {#snippet trailing()}
               {#if c.accel}<span class="file">{c.accel}</span>{/if}
             {/snippet}

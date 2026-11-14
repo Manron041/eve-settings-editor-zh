@@ -95,7 +95,7 @@
     {@render children()}
   </div>
   {#if dismissible}
-    <Button variant="ghost" size="sm" iconOnly title="Dismiss" onclick={ondismiss}>×</Button>
+    <Button variant="ghost" size="sm" iconOnly title="关闭" onclick={ondismiss}>×</Button>
   {/if}
 </div>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { api, errMessage, errText, type Keybinds, type KeybindEntry } from "./api";
-  import { labelFor, groupFor, GROUP_ORDER, defaultFor, keysToLabel, eventToKeys } from "./keybinds";
+  import { labelFor, groupFor, groupLabel, GROUP_ORDER, defaultFor, keysToLabel, eventToKeys } from "./keybinds";
   import Button from "./ui/Button.svelte";
   import Chip from "./ui/Chip.svelte";
   import EmptyState from "./ui/EmptyState.svelte";
@@ -149,7 +149,7 @@
     <span class="meta">点击某个绑定，然后按下你想要的组合键。</span>
   </div>
   {#each grouped as [group, entries] (group)}
-    <h3>{group}</h3>
+    <h3>{groupLabel(group)}</h3>
     <table class="binds">
       <!-- Fixed widths so nothing appearing inside a cell (the theft notice)
            can reflow the Default and reset columns mid-interaction. -->
