@@ -207,12 +207,12 @@ describe("the status bar", () => {
     mount();
     await waitFor(() => expect(calls.of("window_layout").length).toBe(1));
 
-    const box = (await screen.findByLabelText("Filter windows")) as HTMLInputElement;
+    const box = (await screen.findByLabelText("Filter 窗口")) as HTMLInputElement;
     await fireEvent.input(box, { target: { value: "market" } });
-    const chip = await screen.findByText(/of 2 windows/);
+    const chip = await screen.findByText(/2 个窗口/);
 
     // Back to the DEFAULT, which hides clutter — not to nothing.
-    await fireEvent.click(within(chip.parentElement as HTMLElement).getByRole("button", { name: "Show every window again" }));
+    await fireEvent.click(within(chip.parentElement as HTMLElement).getByRole("button", { name: "重新显示所有窗口" }));
     expect(box.value).toBe("");
   });
 
@@ -221,9 +221,9 @@ describe("the status bar", () => {
     calls.stub("window_layout", layout(win("overview"), win("market")));
     mount();
 
-    const chip = await screen.findByText("1 overridden");
-    await fireEvent.click(within(chip.parentElement as HTMLElement).getByRole("button", { name: "Clear the clutter overrides" }));
-    await waitFor(() => expect(screen.queryByText("1 overridden")).toBeNull());
+    const chip = await screen.findByText("1 项已覆盖");
+    await fireEvent.click(within(chip.parentElement as HTMLElement).getByRole("button", { name: "清除杂项覆盖" }));
+    await waitFor(() => expect(screen.queryByText("1 项已覆盖")).toBeNull());
   });
 
   test("no overrides, no chip", async () => {
@@ -231,7 +231,7 @@ describe("the status bar", () => {
     calls.stub("window_layout", layout(win("overview")));
     mount();
     await waitFor(() => expect(calls.of("window_layout").length).toBe(1));
-    expect(screen.queryByText(/overridden/)).toBeNull();
+    expect(screen.queryByText(/已覆盖/)).toBeNull();
   });
 
   // Instruction, not status: it moved to the pane that has to say something
@@ -239,7 +239,7 @@ describe("the status bar", () => {
   test("the drag hint is in the inspector, not under the canvas", async () => {
     calls.stub("window_layout", layout(win("overview")));
     mount({ selectedId: null });
-    const hint = await screen.findByText(/Shift-drag onto another window to stack/);
+    const hint = await screen.findByText(/Shift 拖到另一个窗口上可堆叠/);
     expect(hint.closest(".inspector")).toBeTruthy();
   });
 
@@ -247,7 +247,7 @@ describe("the status bar", () => {
     calls.stub("window_layout", layout(win("overview")));
     mount({ selectedId: null, readOnly: true });
     await waitFor(() => expect(calls.of("window_layout").length).toBe(1));
-    expect(screen.queryByText(/Shift-drag onto another window to stack/)).toBeNull();
+    expect(screen.queryByText(/Shift 拖到另一个窗口上可堆叠/)).toBeNull();
   });
 });
 
@@ -383,7 +383,7 @@ describe("the shell grid contract", () => {
     calls.stub("window_layout", layout(win("overview")));
     const onCollapseInspector = vi.fn();
     mount({ onCollapseInspector });
-    await fireEvent.click(await screen.findByRole("button", { name: "Hide properties" }));
+    await fireEvent.click(await screen.findByRole("button", { name: "隐藏属性" }));
     expect(onCollapseInspector).toHaveBeenCalled();
   });
 });

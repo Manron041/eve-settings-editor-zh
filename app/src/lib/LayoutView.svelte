@@ -169,7 +169,7 @@
       // Replaces the canvas rather than covering it. A dismissed modal used to
       // leave an empty canvas with no explanation, which is the worst of both:
       // the error was blocking AND unrecoverable.
-      loadError = `The window layout couldn't be read — ${errText(e)}`;
+      loadError = `窗口布局读取失败 — ${errText(e)}`;
     }
     // Furniture is a bonus view: an account file open on its own, or a document
     // with no HUD keys, must not take the canvas down with it.
@@ -255,7 +255,7 @@
     try {
       await runMutations(ms, true);
     } catch (e) {
-      barError = { text: `That window wasn't moved — ${errText(e)}`, detail: errMessage(e) };
+      barError = { text: `该窗口移动失败 — ${errText(e)}`, detail: errMessage(e) };
     }
     await load(); // refresh paths/values from the authoritative document
   }
@@ -334,7 +334,7 @@
       if (selectedId && !stored.windows.some((w) => w.id === selectedId)) selectedId = null;
       return true;
     } catch (e) {
-      stackError = { text: `The stack wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      stackError = { text: `堆叠修改失败 — ${errText(e)}`, detail: errMessage(e) };
       return false;
     }
   }
@@ -354,7 +354,7 @@
     const n = layout?.windows.filter(isOrphanFrame).length ?? 0;
     if (n === 0) return;
     if (await runStack(api.stackDeleteOrphans())) {
-      toast(`Deleted ${n} empty stack frame${n === 1 ? "" : "s"}. Save to write it to disk.`, {
+      toast(`已删除 ${n} 个空堆叠框${n === 1 ? "" : "s"}。保存以写入磁盘。`, {
         action: undoAction(),
       });
     }
@@ -371,11 +371,11 @@
       if (r.account.outcome === "cleaned") onDirty("user");
       if (selectedId === w.id) selectedId = null;
       const label = w.name ?? w.label;
-      toast(`${leaveToast(label, r.account, (id) => names[id]?.name ?? String(id))} Save to write it to disk.`, {
+      toast(`${leaveToast(label, r.account, (id) => names[id]?.name ?? String(id))} 保存以写入磁盘。`, {
         action: undoAction(),
       });
     } catch (e) {
-      stackError = { text: `The channel wasn't left — ${errText(e)}`, detail: errMessage(e) };
+      stackError = { text: `离开频道失败 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -387,7 +387,7 @@
       const e = hud.entries.find((x) => x.name === name);
       onDirty(e?.scope === "account" ? "user" : "char");
     } catch (e) {
-      hudError = { name, text: `That value wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      hudError = { name, text: `该数值修改失败 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -399,7 +399,7 @@
       columns = await api.setOverviewWidth(tabIndex, column, width);
       onDirty("char");
     } catch (e) {
-      widthError = { text: `That width wasn't stored — ${errText(e)}`, detail: errMessage(e) };
+      widthError = { text: `宽度保存失败 — ${errText(e)}`, detail: errMessage(e) };
       columns = await api.overviewColumns().catch(() => columns);
     }
   }
@@ -410,7 +410,7 @@
       chats = await api.setChatSplits(ids, userlistWidth, inputHeight);
       onDirty("user");
     } catch (e) {
-      chatError = { text: `That chat panel wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      chatError = { text: `聊天面板修改失败 — ${errText(e)}`, detail: errMessage(e) };
       // A refused value (a typed negative, the reachable case) must not stay
       // on screen as if it had been stored — re-read what is actually there.
       chats = await api.chatPanels().catch(() => chats);
@@ -432,7 +432,7 @@
       neocom = await p;
       onDirty("char");
     } catch (e) {
-      neocomError = { text: `The neocom wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      neocomError = { text: `Neocom 修改失败 — ${errText(e)}`, detail: errMessage(e) };
     } finally {
       neocomBusy = false;
     }
@@ -923,10 +923,10 @@
 
 {#if loadError !== null}
   <div class="work">
-    <EmptyState variant="error" title="This layout can't be shown" description={loadError} />
+    <EmptyState variant="error" title="无法显示此布局" description={loadError} />
   </div>
 {:else if layout === null}
-  <div class="work"><EmptyState title="Loading layout…" /></div>
+  <div class="work"><EmptyState title="正在加载布局…" /></div>
 {:else}
   <div class="layout-view">
     <div class="canvas-wrap work" bind:clientWidth={containerWidth}>
@@ -936,7 +936,7 @@
            redraws the picture; the list in the inspector follows along. -->
       <div class="toolbar">
         <SearchField
-          nouns="windows"
+          nouns="窗口"
           shortcut={accel("F")}
           bind:element={filterInput}
           bind:value={filter.text} />
@@ -947,28 +947,28 @@
         <Field
           kind="checkbox"
           class="toggle"
-          label="Open only"
+          label="仅已打开"
           bind:value={filter.openOnly}
-          title="Shows only the windows EVE reopens when the character logs in. EVE reads its openWindows flag for a fixed set of windows (market, mail, wallet, scanners, inventories…) and opens the overview, Selected Item, drones, the station lobby and your chat channels itself; any other window stays closed whatever the flag says, so it is left out here and off the canvas." />
+          title="仅显示角色登录时 EVE 会重新打开的窗口。EVE 会读取其 openWindows 标记来决定一组固定窗口（市场、邮件、钱包、扫描器、库存……），并自行打开总览、选定项目、无人机、空间站大厅和你的聊天频道；其他任何窗口无论标记如何都保持关闭，因此这里不列出，画布上也不绘制。" />
         <Field
           kind="checkbox"
           class="toggle"
-          label="Hide clutter"
+          label="隐藏杂项"
           bind:value={filter.hideClutter}
-          title="Hides windows EVE spawns per conversation, item or dialog — chat invitations, chats you have left, channel settings, mail messages, info popups, per-container windows. Standing channels, chats you are still in and parent windows stay." />
+          title="隐藏 EVE 按会话、物品或对话生成的窗口——聊天邀请、已离开的聊天、频道设置、邮件消息、信息弹窗、按容器打开的窗口。常用频道、你仍在其中的聊天和父级窗口会保留。" />
         <div
           class="envs"
           role="radiogroup"
-          aria-label="Environment"
-          title="Shows only the windows that exist in one environment. Station and player structure are one “Docked” view — EVE stores a single position per window, so this filters the picture, it does not switch layouts. A window the editor does not recognise shows in both.">
-          {#each [["all", "All"], ["docked", "Docked"], ["space", "In space"]] as const as [value, label]}
+          aria-label="环境"
+          title="仅显示存在于某一环境中的窗口。空间站和玩家建筑同属一个“已停靠”视图——EVE 为每个窗口只存储一个位置，因此这只是筛选画面，并不切换布局。编辑器无法识别的窗口在两种环境中都会显示。">
+          {#each [["all", "全部"], ["docked", "已停靠"], ["space", "在太空"]] as const as [value, label]}
             <Field kind="radio" class="toggle" name="env" radioValue={value} {label} bind:value={filter.env} />
           {/each}
         </div>
         <Field
           kind="checkbox"
           class="toggle"
-          label="Detail"
+          label="详情"
           value={detailOn()}
           onchange={(e) => setDetail((e.currentTarget as HTMLInputElement).checked)} />
       </div>
@@ -1015,7 +1015,7 @@
             {#if f.kind === "target" && targetMarkerCorner}
               <!-- svelte-ignore a11y_no_static_element_interactions -->
               <span class="anchor-dot {targetMarkerCorner}"
-                title="The stored anchor — drag the list by this. The list grows from here toward the middle of the screen."
+                title="存储的锚点——按住此标记拖动列表。列表从这里向屏幕中央延伸。"
                 onpointerdown={(e) => startFurniture(f, e, true)}></span>
             {/if}
             <span class="furniture-label">{f.label}</span>
@@ -1030,7 +1030,7 @@
                the fanned ids in a tooltip. Stacks already show this via their
                own tab strip, hence `!unit.stack`. -->
           {@const foldTitle = !unit.stack && unit.fanTargets.length > 1
-            ? `Moves and resizes together with: ${unit.fanTargets.map((w) => w.id).join(", ")}`
+            ? `与以下窗口一起移动和调整大小：${unit.fanTargets.map((w) => w.id).join(", ")}`
             : undefined}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <div
@@ -1081,27 +1081,27 @@
       {/if}
       <div class="statusbar">
         <span class="facts">
-          <span class="ref">reference {layout.reference_w}×{layout.reference_h}</span>
+          <span class="ref">参考分辨率 {layout.reference_w}×{layout.reference_h}</span>
         </span>
         <span class="narrowing">
           {#if filterIsActive(filter)}
             <Chip tone="warn" size="sm">
-              {shownCount} of {totalCount} windows
+              {shownCount}/{totalCount} 个窗口
               <!-- Back to the DEFAULT, not to nothing: dismissing undoes what
                    the user narrowed, and hiding clutter is the view they
                    started from rather than something they chose. Showing every
                    window is one click away on the toggle itself. -->
               {#snippet actions()}
-                <Button variant="ghost" size="sm" iconOnly title="Show every window again"
+                <Button variant="ghost" size="sm" iconOnly title="重新显示所有窗口"
                   onclick={() => (filter = { ...DEFAULT_FILTER })}>✕</Button>
               {/snippet}
             </Chip>
           {/if}
           {#if overrideCount(documentWindowIds) > 0}
             <Chip tone="warn" size="sm">
-              {overrideCount(documentWindowIds)} overridden
+              {overrideCount(documentWindowIds)} 项已覆盖
               {#snippet actions()}
-                <Button variant="ghost" size="sm" iconOnly title="Clear the clutter overrides"
+                <Button variant="ghost" size="sm" iconOnly title="清除杂项覆盖"
                   onclick={() => clearClutterOverrides(documentWindowIds)}>✕</Button>
               {/snippet}
             </Chip>
@@ -1111,7 +1111,7 @@
     </div>
     <aside class="inspector">
       <div class="inspector-head">
-        <Button variant="ghost" size="sm" iconOnly title="Hide properties"
+        <Button variant="ghost" size="sm" iconOnly title="隐藏属性"
           onclick={() => onCollapseInspector?.()}>&raquo;</Button>
       </div>
       <!-- "What can I do here", where the pane has to say something anyway.
@@ -1120,8 +1120,8 @@
            read-only file, which is the gate the old line already carried. -->
       {#if selectedId === null && !readOnly}
         <EmptyState
-          title="Nothing selected"
-          description="Click a window on the canvas to edit it. Shift-drag onto another window to stack · drag a tab to reorder or pull out." />
+          title="未选中任何项"
+          description="点击画布上的窗口进行编辑。按住 Shift 拖到另一个窗口上可堆叠 · 拖动标签页可重新排序或拖出。" />
       {/if}
       {#if hud}
         <HudPanel

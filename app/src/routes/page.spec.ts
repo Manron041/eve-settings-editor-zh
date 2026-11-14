@@ -378,7 +378,7 @@ test("Ctrl+F focuses the window filter on Layout", async () => {
   await openFile("core_char_950.dat");
   await waitFor(() => expect(screen.getByRole("tab", { name: "布局" }).getAttribute("aria-selected")).toBe("true"));
 
-  const box = await screen.findByLabelText("Filter windows");
+  const box = await screen.findByLabelText("Filter 窗口");
   await fireEvent.keyDown(window, { key: "f", ctrlKey: true });
   await waitFor(() => expect(document.activeElement).toBe(box));
 });
