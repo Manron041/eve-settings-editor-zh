@@ -77,7 +77,7 @@ describe("loading", () => {
     mount();
     // The id appears in both the window list and the canvas rect, so this is
     // getAll — see test/README.md on scoping repeated labels.
-    await waitFor(() => expect(screen.getAllByText(/overview/i).length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.getAllByText("总览").length).toBeGreaterThan(0));
   });
 });
 

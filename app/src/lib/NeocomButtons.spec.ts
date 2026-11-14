@@ -23,7 +23,7 @@ describe("NeocomButtons", () => {
   test("lists the buttons in bar order, under friendly labels", () => {
     render(NeocomButtons, props(bar([btn(0, "chat"), btn(1, "mail"), btn(2, "wallet")])));
     const rows = screen.getAllByTitle(/\.png$/);
-    expect(rows.map((e) => e.textContent)).toEqual(["Chat", "EVE Mail", "Wallet"]);
+    expect(rows.map((e) => e.textContent)).toEqual(["聊天", "EVE 邮件", "钱包"]);
     // The raw id stays reachable, because it is what the file actually says.
     expect(rows.map((e) => e.getAttribute("title"))).toEqual(
       ["chat — chat.png", "mail — mail.png", "wallet — wallet.png"],
@@ -39,23 +39,23 @@ describe("NeocomButtons", () => {
 
   test("the end rows cannot move past the ends", () => {
     render(NeocomButtons, props(bar([btn(0, "chat"), btn(1, "mail")])));
-    expect((screen.getByLabelText("上移 Chat") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("下移 EVE Mail") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("下移 Chat") as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByLabelText("上移 聊天") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 EVE 邮件") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 聊天") as HTMLButtonElement).disabled).toBe(false);
   });
 
   test("moving a button sends the whole permutation", async () => {
     const p = props(bar([btn(0, "chat"), btn(1, "mail"), btn(2, "wallet")]));
     render(NeocomButtons, p);
-    screen.getByLabelText("上移 Wallet").click();
+    screen.getByLabelText("上移 钱包").click();
     expect(p.onReorder).toHaveBeenCalledWith([0, 2, 1]);
   });
 
   test("the add list excludes what is already on the bar", () => {
     render(NeocomButtons, props(bar([btn(0, "chat")], [btn(0, "chat"), btn(1, "mail")])));
     const options = screen.getAllByRole("option").map((o) => o.textContent);
-    expect(options).toContain("EVE Mail");
-    expect(options).not.toContain("Chat");
+    expect(options).toContain("EVE 邮件");
+    expect(options).not.toContain("聊天");
   });
 
   test("reset is disabled when the character has no original", () => {
@@ -68,9 +68,9 @@ describe("NeocomButtons", () => {
     // reaches the backend and comes back as a dialog instead of being visibly
     // unavailable.
     render(NeocomButtons, props(bar([btn(0, "chat"), btn(1, "mail")], [btn(0, "wallet")]), true));
-    expect((screen.getByLabelText("上移 EVE Mail") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("下移 Chat") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("移除 Chat") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("上移 EVE 邮件") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 聊天") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("移除 聊天") as HTMLButtonElement).disabled).toBe(true);
     expect((screen.getByLabelText("添加 Neocom 按钮") as HTMLSelectElement).disabled).toBe(true);
     expect((screen.getByText("添加") as HTMLButtonElement).disabled).toBe(true);
     expect((screen.getByText("恢复为原始") as HTMLButtonElement).disabled).toBe(true);

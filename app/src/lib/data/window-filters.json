@@ -1,19 +1,19 @@
 {
   "param": {
-    "chatchannel": "Chat",
-    "ChannelSettingsDlg": "Chat settings",
-    "ChatInvitation": "Chat invitation",
-    "mail_readingWnd": "Mail message",
-    "contactmanagement": "Contacts",
-    "groupInfoWnd": "Info",
-    "ShipCargo": "Ship cargo",
-    "ShipDroneBay": "Drone bay",
-    "StructureShipHangar": "Ship hangar",
-    "containerWnd": "Container",
-    "containerContentWindow": "Container",
-    "overview": "Overview",
-    "assembleWindow": "Assemble",
-    "bookmarkLocationWindow": "Save Location"
+    "chatchannel": "聊天",
+    "ChannelSettingsDlg": "聊天设置",
+    "ChatInvitation": "聊天邀请",
+    "mail_readingWnd": "邮件消息",
+    "contactmanagement": "联系人",
+    "groupInfoWnd": "分组信息",
+    "ShipCargo": "货舱",
+    "ShipDroneBay": "无人机舱",
+    "StructureShipHangar": "舰船机库",
+    "containerWnd": "容器",
+    "containerContentWindow": "容器",
+    "overview": "总览",
+    "assembleWindow": "组装",
+    "bookmarkLocationWindow": "保存位置"
   },
   "clutter_families": [
     "ChatInvitation",

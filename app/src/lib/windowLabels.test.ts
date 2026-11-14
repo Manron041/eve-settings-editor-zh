@@ -7,7 +7,7 @@ import { check } from "./test/check.ts";
 {
   const n = describe("('corpassets', 1000000000003L)");
   check("tuple id families on its first element", n.family === "corpassets");
-  check("tuple id gets a curated label", n.label === "Corp assets");
+  check("tuple id gets a curated label", n.label === "军团资产");
   check("tuple id keeps the remainder as detail", n.detail === "1000000000003L");
 
   const nested = describe("('myPlaces', (12345, None))");
@@ -21,7 +21,7 @@ import { check } from "./test/check.ts";
 // --- rule 2: all-digit ids are minted stack containers ----------------------
 {
   const n = describe("76");
-  check("numeric id is a window stack", n.label === "Window stack");
+  check("numeric id is a window stack", n.label === "窗口堆叠");
   check("numeric id keeps the number as detail", n.detail === "76");
   check("numeric ids share one family", n.family === "stack");
 }
@@ -29,7 +29,7 @@ import { check } from "./test/check.ts";
 // --- rule 3: parameterized families, longest prefix wins --------------------
 {
   const chat = describe("chatchannel_local");
-  check("chatchannel_ is a Chat", chat.label === "Chat");
+  check("chatchannel_ is a Chat", chat.label === "聊天");
   check("chat detail is the channel", chat.detail === "local");
   check("chat family is the prefix", chat.family === "chatchannel");
 
@@ -41,18 +41,18 @@ import { check } from "./test/check.ts";
 
   // Longest prefix wins: `mail` is curated, `mail_readingWnd` is a family.
   const mail = describe("mail_readingWnd_300000001");
-  check("longest prefix wins over a shorter curated id", mail.label === "Mail message");
+  check("longest prefix wins over a shorter curated id", mail.label === "邮件消息");
   check("an all-opaque suffix is kept verbatim", mail.detail === "300000001");
   check("mail message family is the long prefix", mail.family === "mail_readingWnd");
 }
 
 // --- rule 4: curated singletons --------------------------------------------
 {
-  check("curated exact id", describe("market").label === "Market");
+  check("curated exact id", describe("market").label === "市场");
   check("curated id has no detail", describe("market").detail === "");
   check("curated id families on itself", describe("market").family === "market");
-  check("bare mail is still EVE Mail", describe("mail").label === "EVE Mail");
-  check("a curated id that is also a prefix", describe("overview").label === "Overview");
+  check("bare mail is still EVE Mail", describe("mail").label === "EVE 邮件");
+  check("a curated id that is also a prefix", describe("overview").label === "总览");
   check("overview_1 goes through the family rule", describe("overview_1").detail === "1");
 }
 
@@ -158,8 +158,8 @@ import { check } from "./test/check.ts";
 // own elements (canvas rects, stack tabs, <option> text). Must agree with
 // what the list renders as separate spans, since both go through describe().
 {
-  check("displayName joins label and detail with a middot", displayName("chatchannel_local") === "Chat · local");
-  check("displayName is just the label when there is no detail", displayName("market") === "Market");
+  check("displayName joins label and detail with a middot", displayName("chatchannel_local") === "聊天 · local");
+  check("displayName is just the label when there is no detail", displayName("market") === "市场");
 }
 
 // --- displayNameOf: the nameOf equivalent of displayName -------------------
@@ -171,9 +171,9 @@ import { check } from "./test/check.ts";
   check("displayNameOf joins the real name and the derived detail", displayNameOf(named) === "Alliance HQ · private");
 
   const unnamed = { id: "chatchannel_private_0000000000002eee", name: null };
-  check("displayNameOf falls back to the derived label and detail", displayNameOf(unnamed) === "Chat · private");
+  check("displayNameOf falls back to the derived label and detail", displayNameOf(unnamed) === "聊天 · private");
 
-  check("displayNameOf is just the label when there is no detail", displayNameOf({ id: "market" }) === "Market");
+  check("displayNameOf is just the label when there is no detail", displayNameOf({ id: "market" }) === "市场");
 }
 
 // --- groupByFamily ---------------------------------------------------------
@@ -188,7 +188,7 @@ import { check } from "./test/check.ts";
   check("groups preserve first-seen order", groups.map((g) => g.family).join(",") === "market,chatchannel,overview");
   const chat = groups.find((g) => g.family === "chatchannel")!;
   check("a family collects all its members", chat.items.length === 2);
-  check("a group is labelled by its family", chat.label === "Chat");
+  check("a group is labelled by its family", chat.label === "聊天");
   check("singleton families are groups of one", groups[0].items.length === 1);
   check("empty input yields no groups", groupByFamily([]).length === 0);
 }
@@ -201,13 +201,13 @@ import { check } from "./test/check.ts";
   check("nameOf keeps the derived family", real.family === "chatchannel");
 
   const derived = nameOf({ id: "market", name: null });
-  check("nameOf falls back to describe when there is no name", derived.label === "Market");
+  check("nameOf falls back to describe when there is no name", derived.label === "市场");
 
   const missing = nameOf({ id: "market" });
-  check("an absent name field is the same as null", missing.label === "Market");
+  check("an absent name field is the same as null", missing.label === "市场");
 
   const blank = nameOf({ id: "market", name: "" });
-  check("an empty name is not a name", blank.label === "Market");
+  check("an empty name is not a name", blank.label === "市场");
 }
 
 // --- stackLabel: EVE's own stack label wins, "we have nothing" is null -----
@@ -224,9 +224,9 @@ import { check } from "./test/check.ts";
 
 // --- neocomLabel: curated, shared with the window table, else raw ----------
 {
-  check("a neocom-only id gets its curated label", neocomLabel("job_board") === "Job Board");
-  check("an id formatting alone would get wrong is curated", neocomLabel("accessgroups") === "Access Groups");
-  check("a neocom id shared with a window reuses the window label", neocomLabel("mail") === "EVE Mail");
+  check("a neocom-only id gets its curated label", neocomLabel("job_board") === "工业任务板");
+  check("an id formatting alone would get wrong is curated", neocomLabel("accessgroups") === "访问列表");
+  check("a neocom id shared with a window reuses the window label", neocomLabel("mail") === "EVE 邮件");
   // The failure direction that matters: an id nobody has curated shows raw, so
   // it stays checkable against the file instead of becoming a plausible lie.
   check("an uncurated id falls back to the raw id", neocomLabel("someFutureBtn") === "someFutureBtn");
