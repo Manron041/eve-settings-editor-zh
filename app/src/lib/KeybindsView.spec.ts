@@ -5,7 +5,7 @@ import KeybindsView from "$lib/KeybindsView.svelte";
 import { calls } from "$lib/test/setup";
 import type { Keybinds } from "$lib/api";
 
-const TAKER = "CmdActivateHighPowerSlot4"; // catalog label: "Activate High Power Slot 4"
+const TAKER = "CmdActivateHighPowerSlot4"; // catalog label: "激活高能量槽位 4"
 const VICTIM = "CmdActivateHighPowerSlot5";
 
 const BINDS: Keybinds = {
@@ -38,7 +38,7 @@ describe("the 'taken by' note", () => {
     // silently destroys the information it was showing.
     await steal();
     const note = await screen.findByText(/已被.*占用/);
-    expect(note.getAttribute("title")).toBe("Activate High Power Slot 4");
+    expect(note.getAttribute("title")).toBe("激活高能量槽位 4");
   });
 });
 

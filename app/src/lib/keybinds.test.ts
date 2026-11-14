@@ -5,13 +5,13 @@ import names from "./data/command-names.json" with { type: "json" };
 
 import { check, eq } from "./test/check.ts";
 
-check("resolves a client-provided label", labelFor("CmdActivateHighPowerSlot1") === "Activate High Power Slot 1");
-check("resolves a fleet broadcast label", labelFor("CmdFleetBroadcast_HealArmor") === "Broadcast: Need Armor");
+check("resolves a client-provided label", labelFor("CmdActivateHighPowerSlot1") === "激活高能量槽位 1");
+check("resolves a fleet broadcast label", labelFor("CmdFleetBroadcast_HealArmor") === "广播：需要装甲");
 // Once hand-corrected against the live client (2026-07-27); the client's own
 // label data now gives the same answers, which is what vouches for it.
-check("the client names it Local Locations", labelFor("ToggleCurrentSystemLocationWnd") === "Local Locations");
-check("portrait labels are 1-based, not 0-based", labelFor("CmdPickPortrait0") === "Pick Portrait 1");
-check("the last portrait is 4", labelFor("CmdPickPortrait3") === "Pick Portrait 4");
+check("the client names it Local Locations", labelFor("ToggleCurrentSystemLocationWnd") === "本地位置");
+check("portrait labels are 1-based, not 0-based", labelFor("CmdPickPortrait0") === "选择头像 1");
+check("the last portrait is 4", labelFor("CmdPickPortrait3") === "选择头像 4");
 check("an unknown command de-camelcases", labelFor("CmdSomeFutureThing") === "Some Future Thing");
 check("an unknown Open command de-camelcases", labelFor("OpenFutureWindow") === "Open Future Window");
 
@@ -19,7 +19,7 @@ check("modules group", groupFor("CmdActivateHighPowerSlot1") === "Modules");
 check("groups are the in-game tabs", groupFor("OpenFitting") === "Window");
 check("the client's catch-all tab is General", groupFor("CmdZoomIn") === "General");
 check("unknown falls back to General", groupFor("CmdSomeFutureThing") === "General");
-check("the Agency has its in-game name", labelFor("OpenAgencyNew") === "The Agency");
+check("the Agency has its in-game name", labelFor("OpenAgencyNew") === "代理人");
 check("every group used is in GROUP_ORDER", GROUP_ORDER.includes(groupFor("CmdActivateHighPowerSlot1")));
 
 // Spot checks against the live client's keybinding screen.

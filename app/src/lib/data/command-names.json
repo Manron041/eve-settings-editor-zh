@@ -1,1169 +1,1169 @@
 {
   "CmdAbortUndock": {
     "group": "General",
-    "label": "Abort Undock"
+    "label": "取消离站"
   },
   "CmdAccelerate": {
     "group": "Navigation",
-    "label": "Accelerate"
+    "label": "加速"
   },
   "CmdActivateHighPowerSlot1": {
     "group": "Modules",
-    "label": "Activate High Power Slot 1"
+    "label": "激活高能量槽位 1"
   },
   "CmdActivateHighPowerSlot2": {
     "group": "Modules",
-    "label": "Activate High Power Slot 2"
+    "label": "激活高能量槽位 2"
   },
   "CmdActivateHighPowerSlot3": {
     "group": "Modules",
-    "label": "Activate High Power Slot 3"
+    "label": "激活高能量槽位 3"
   },
   "CmdActivateHighPowerSlot4": {
     "group": "Modules",
-    "label": "Activate High Power Slot 4"
+    "label": "激活高能量槽位 4"
   },
   "CmdActivateHighPowerSlot5": {
     "group": "Modules",
-    "label": "Activate High Power Slot 5"
+    "label": "激活高能量槽位 5"
   },
   "CmdActivateHighPowerSlot6": {
     "group": "Modules",
-    "label": "Activate High Power Slot 6"
+    "label": "激活高能量槽位 6"
   },
   "CmdActivateHighPowerSlot7": {
     "group": "Modules",
-    "label": "Activate High Power Slot 7"
+    "label": "激活高能量槽位 7"
   },
   "CmdActivateHighPowerSlot8": {
     "group": "Modules",
-    "label": "Activate High Power Slot 8"
+    "label": "激活高能量槽位 8"
   },
   "CmdActivateLowPowerSlot1": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 1"
+    "label": "激活低能量槽位 1"
   },
   "CmdActivateLowPowerSlot2": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 2"
+    "label": "激活低能量槽位 2"
   },
   "CmdActivateLowPowerSlot3": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 3"
+    "label": "激活低能量槽位 3"
   },
   "CmdActivateLowPowerSlot4": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 4"
+    "label": "激活低能量槽位 4"
   },
   "CmdActivateLowPowerSlot5": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 5"
+    "label": "激活低能量槽位 5"
   },
   "CmdActivateLowPowerSlot6": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 6"
+    "label": "激活低能量槽位 6"
   },
   "CmdActivateLowPowerSlot7": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 7"
+    "label": "激活低能量槽位 7"
   },
   "CmdActivateLowPowerSlot8": {
     "group": "Modules",
-    "label": "Activate Low Power Slot 8"
+    "label": "激活低能量槽位 8"
   },
   "CmdActivateMediumPowerSlot1": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 1"
+    "label": "激活中能量槽位 1"
   },
   "CmdActivateMediumPowerSlot2": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 2"
+    "label": "激活中能量槽位 2"
   },
   "CmdActivateMediumPowerSlot3": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 3"
+    "label": "激活中能量槽位 3"
   },
   "CmdActivateMediumPowerSlot4": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 4"
+    "label": "激活中能量槽位 4"
   },
   "CmdActivateMediumPowerSlot5": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 5"
+    "label": "激活中能量槽位 5"
   },
   "CmdActivateMediumPowerSlot6": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 6"
+    "label": "激活中能量槽位 6"
   },
   "CmdActivateMediumPowerSlot7": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 7"
+    "label": "激活中能量槽位 7"
   },
   "CmdActivateMediumPowerSlot8": {
     "group": "Modules",
-    "label": "Activate Medium Power Slot 8"
+    "label": "激活中能量槽位 8"
   },
   "CmdAlignToItem": {
     "group": "Combat",
-    "label": "Align to"
+    "label": "对齐"
   },
   "CmdApproachItem": {
     "group": "Combat",
-    "label": "Approach"
+    "label": "接近"
   },
   "CmdBack": {
     "group": "General",
-    "label": "Back"
+    "label": "返回"
   },
   "CmdClearFleetBroadcastIcons": {
     "group": "Navigation",
-    "label": "Clear Broadcast Icons in Watch List"
+    "label": "清除监视列表中的广播图标"
   },
   "CmdCloseActiveWindow": {
     "group": "Window",
-    "label": "Close Active Window"
+    "label": "关闭活动窗口"
   },
   "CmdCloseAllWindows": {
     "group": "Window",
-    "label": "Close All Windows"
+    "label": "关闭所有窗口"
   },
   "CmdCompressAllOreInCurrentship": {
     "group": "General",
-    "label": "Compress All Ore In Current Ship"
+    "label": "压缩当前舰船矿石"
   },
   "CmdCreateBookmark": {
     "group": "Navigation",
-    "label": "Save Location..."
+    "label": "保存位置..."
   },
   "CmdCycleFleetBroadcastScope": {
     "group": "Navigation",
-    "label": "Broadcast: Cycle Fleet Broadcast Recipients"
+    "label": "广播：循环舰队广播接收者"
   },
   "CmdDecelerate": {
     "group": "Navigation",
-    "label": "Decelerate"
+    "label": "减速"
   },
   "CmdDecreaseProbeScanRange": {
     "group": "Combat",
-    "label": "Decrease Probe Scan Range"
+    "label": "减小探针扫描范围"
   },
   "CmdDecreaseSpaceMouseAcceleration": {
     "group": "Navigation",
-    "label": "SpaceMouse: Acceleration Decrease"
+    "label": "SpaceMouse：减小加速度"
   },
   "CmdDecreaseSpaceMouseSpeed": {
     "group": "Navigation",
-    "label": "SpaceMouse: Speed Decrease"
+    "label": "SpaceMouse：降低速度"
   },
   "CmdDeselectAllFighters": {
     "group": "Fighters",
-    "label": "Deselect All Fighters"
+    "label": "取消选择所有战斗机"
   },
   "CmdDockOrJumpOrActivateGate": {
     "group": "Combat",
-    "label": "Dock/Jump/Activate gate"
+    "label": "停靠/跳跃/启动星门"
   },
   "CmdDronesEngage": {
     "group": "Drones",
-    "label": "All Drones: Engage"
+    "label": "所有无人机：交战"
   },
   "CmdDronesReturnAndOrbit": {
     "group": "Drones",
-    "label": "All Drones: Return and Orbit"
+    "label": "所有无人机：返回并环绕"
   },
   "CmdDronesReturnToBay": {
     "group": "Drones",
-    "label": "All Drones: Return to Drone Bay"
+    "label": "所有无人机：返回无人机舱"
   },
   "CmdEnterHangar": {
     "group": "General",
-    "label": "Enter Ship Hangar"
+    "label": "进入舰船机库"
   },
   "CmdEnterStructure": {
     "group": "General",
-    "label": "View Outside Structure"
+    "label": "查看建筑外部"
   },
   "CmdExitStation": {
     "group": "General",
-    "label": "Exit Station"
+    "label": "离开空间站"
   },
   "CmdFleetBroadcast_EnemySpotted": {
     "group": "Navigation",
-    "label": "Broadcast: Spotted an Enemy"
+    "label": "广播：发现敌人"
   },
   "CmdFleetBroadcast_HealArmor": {
     "group": "Navigation",
-    "label": "Broadcast: Need Armor"
+    "label": "广播：需要装甲"
   },
   "CmdFleetBroadcast_HealCapacitor": {
     "group": "Navigation",
-    "label": "Broadcast: Need Capacitor"
+    "label": "广播：需要能量"
   },
   "CmdFleetBroadcast_HealShield": {
     "group": "Navigation",
-    "label": "Broadcast: Need Shield"
+    "label": "广播：需要护盾"
   },
   "CmdFleetBroadcast_HoldPosition": {
     "group": "Navigation",
-    "label": "Broadcast: Request That the Fleet Hold Position"
+    "label": "广播：请求舰队原地待命"
   },
   "CmdFleetBroadcast_InPosition": {
     "group": "Navigation",
-    "label": "Broadcast: In Position at"
+    "label": "广播：已抵达位置"
   },
   "CmdFleetBroadcast_JumpBeacon": {
     "group": "Navigation",
-    "label": "Broadcast: Jump to Beacon"
+    "label": "广播：跳向信标"
   },
   "CmdFleetBroadcast_Location": {
     "group": "Navigation",
-    "label": "Broadcast: At Location"
+    "label": "广播：位于位置"
   },
   "CmdFleetBroadcast_NeedBackup": {
     "group": "Navigation",
-    "label": "Broadcast: Need Backup"
+    "label": "广播：需要支援"
   },
   "CmdFleetGroup": {
     "group": "Navigation",
-    "label": "Fleet Regroup"
+    "label": "舰队重组"
   },
   "CmdFlightControlsDown": {
     "group": "Navigation",
-    "label": "Pitch Down"
+    "label": "低头"
   },
   "CmdFlightControlsLeft": {
     "group": "Navigation",
-    "label": "Turn Left"
+    "label": "左转"
   },
   "CmdFlightControlsRight": {
     "group": "Navigation",
-    "label": "Turn Right"
+    "label": "右转"
   },
   "CmdFlightControlsUp": {
     "group": "Navigation",
-    "label": "Pitch Up"
+    "label": "抬头"
   },
   "CmdForceFadeFromBlack": {
     "group": "Window",
-    "label": "Force fade from black"
+    "label": "强制从黑屏淡出"
   },
   "CmdForward": {
     "group": "General",
-    "label": "Forward"
+    "label": "前进"
   },
   "CmdGetLocationMenuForNavigation": {
     "group": "Combat",
-    "label": "Open Location Menu"
+    "label": "打开位置菜单"
   },
   "CmdGetUiPointer": {
     "group": "Window",
-    "label": "Show User Interface Pointer Overlay"
+    "label": "显示界面指针叠加层"
   },
   "CmdHideCursor": {
     "group": "General",
-    "label": "Hide Mouse Cursor"
+    "label": "隐藏鼠标光标"
   },
   "CmdHideUI": {
     "group": "General",
-    "label": "Toggle User Interface Visibility"
+    "label": "切换界面可见性"
   },
   "CmdIncreaseProbeScanRange": {
     "group": "Combat",
-    "label": "Increase Probe Scan Range"
+    "label": "增大探针扫描范围"
   },
   "CmdIncreaseSpaceMouseAcceleration": {
     "group": "Navigation",
-    "label": "SpaceMouse: Acceleration Increase"
+    "label": "SpaceMouse：增大加速度"
   },
   "CmdIncreaseSpaceMouseSpeed": {
     "group": "Navigation",
-    "label": "SpaceMouse: Speed Increase"
+    "label": "SpaceMouse：提高速度"
   },
   "CmdKeepItemAtRange": {
     "group": "Combat",
-    "label": "Keep at Range"
+    "label": "保持距离"
   },
   "CmdLaunchAllFighters": {
     "group": "Fighters",
-    "label": "Launch All Fighters"
+    "label": "释放所有战斗机"
   },
   "CmdLaunchFavoriteDrones": {
     "group": "Drones",
-    "label": "Launch Drones"
+    "label": "释放无人机"
   },
   "CmdLaunchSelectedFighters": {
     "group": "Fighters",
-    "label": "Launch Selected Fighters"
+    "label": "释放选中的战斗机"
   },
   "CmdLockTargetItem": {
     "group": "Combat",
-    "label": "Lock target"
+    "label": "锁定目标"
   },
   "CmdLogOff": {
     "group": "General",
-    "label": "Log off"
+    "label": "登出"
   },
   "CmdMinimizeActiveWindow": {
     "group": "Window",
-    "label": "Minimize Active Window"
+    "label": "最小化活动窗口"
   },
   "CmdMiningScan": {
     "group": "Modules",
-    "label": "Mining Surveyor"
+    "label": "采矿勘测器"
   },
   "CmdNextStackedWindow": {
     "group": "General",
-    "label": "Next stacked window"
+    "label": "下一个堆叠窗口"
   },
   "CmdNextTab": {
     "group": "General",
-    "label": "Next Tab"
+    "label": "下一个标签页"
   },
   "CmdOpenBroadcastRadialMenu": {
     "group": "General",
-    "label": "Broadcast Radial Menu"
+    "label": "广播径向菜单"
   },
   "CmdOpenNewMessage": {
     "group": "Window",
-    "label": "Open New Message"
+    "label": "打开新邮件"
   },
   "CmdOpenRadialMenu": {
     "group": "General",
-    "label": "Radial Menu"
+    "label": "径向菜单"
   },
   "CmdOpenSelectedCargoContainer": {
     "group": "General",
-    "label": "Open Selected Cargo Container"
+    "label": "打开选中的货柜"
   },
   "CmdOrbitItem": {
     "group": "Combat",
-    "label": "Orbit"
+    "label": "环绕"
   },
   "CmdOverloadHighPowerRack": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Rack"
+    "label": "切换高能量槽组超载"
   },
   "CmdOverloadHighPowerSlot1": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 1"
+    "label": "切换高能量槽位 1 超载"
   },
   "CmdOverloadHighPowerSlot2": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 2"
+    "label": "切换高能量槽位 2 超载"
   },
   "CmdOverloadHighPowerSlot3": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 3"
+    "label": "切换高能量槽位 3 超载"
   },
   "CmdOverloadHighPowerSlot4": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 4"
+    "label": "切换高能量槽位 4 超载"
   },
   "CmdOverloadHighPowerSlot5": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 5"
+    "label": "切换高能量槽位 5 超载"
   },
   "CmdOverloadHighPowerSlot6": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 6"
+    "label": "切换高能量槽位 6 超载"
   },
   "CmdOverloadHighPowerSlot7": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 7"
+    "label": "切换高能量槽位 7 超载"
   },
   "CmdOverloadHighPowerSlot8": {
     "group": "Modules",
-    "label": "Toggle Overload on High Power Slot 8"
+    "label": "切换高能量槽位 8 超载"
   },
   "CmdOverloadLowPowerRack": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Rack"
+    "label": "切换低能量槽组超载"
   },
   "CmdOverloadLowPowerSlot1": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 1"
+    "label": "切换低能量槽位 1 超载"
   },
   "CmdOverloadLowPowerSlot2": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 2"
+    "label": "切换低能量槽位 2 超载"
   },
   "CmdOverloadLowPowerSlot3": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 3"
+    "label": "切换低能量槽位 3 超载"
   },
   "CmdOverloadLowPowerSlot4": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 4"
+    "label": "切换低能量槽位 4 超载"
   },
   "CmdOverloadLowPowerSlot5": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 5"
+    "label": "切换低能量槽位 5 超载"
   },
   "CmdOverloadLowPowerSlot6": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 6"
+    "label": "切换低能量槽位 6 超载"
   },
   "CmdOverloadLowPowerSlot7": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 7"
+    "label": "切换低能量槽位 7 超载"
   },
   "CmdOverloadLowPowerSlot8": {
     "group": "Modules",
-    "label": "Toggle Overload on Low Power Slot 8"
+    "label": "切换低能量槽位 8 超载"
   },
   "CmdOverloadMediumPowerRack": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Rack"
+    "label": "切换中能量槽组超载"
   },
   "CmdOverloadMediumPowerSlot1": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 1"
+    "label": "切换中能量槽位 1 超载"
   },
   "CmdOverloadMediumPowerSlot2": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 2"
+    "label": "切换中能量槽位 2 超载"
   },
   "CmdOverloadMediumPowerSlot3": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 3"
+    "label": "切换中能量槽位 3 超载"
   },
   "CmdOverloadMediumPowerSlot4": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 4"
+    "label": "切换中能量槽位 4 超载"
   },
   "CmdOverloadMediumPowerSlot5": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 5"
+    "label": "切换中能量槽位 5 超载"
   },
   "CmdOverloadMediumPowerSlot6": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 6"
+    "label": "切换中能量槽位 6 超载"
   },
   "CmdOverloadMediumPowerSlot7": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 7"
+    "label": "切换中能量槽位 7 超载"
   },
   "CmdOverloadMediumPowerSlot8": {
     "group": "Modules",
-    "label": "Toggle Overload on Medium Power Slot 8"
+    "label": "切换中能量槽位 8 超载"
   },
   "CmdPickPortrait0": {
     "group": "Character Creation",
-    "label": "Pick Portrait 1"
+    "label": "选择头像 1"
   },
   "CmdPickPortrait1": {
     "group": "Character Creation",
-    "label": "Pick Portrait 2"
+    "label": "选择头像 2"
   },
   "CmdPickPortrait2": {
     "group": "Character Creation",
-    "label": "Pick Portrait 3"
+    "label": "选择头像 3"
   },
   "CmdPickPortrait3": {
     "group": "Character Creation",
-    "label": "Pick Portrait 4"
+    "label": "选择头像 4"
   },
   "CmdPrevStackedWindow": {
     "group": "General",
-    "label": "Previous stacked window"
+    "label": "上一个堆叠窗口"
   },
   "CmdPrevTab": {
     "group": "General",
-    "label": "Previous Tab"
+    "label": "上一个标签页"
   },
   "CmdQuitGame": {
     "group": "General",
-    "label": "Quit Game"
+    "label": "退出游戏"
   },
   "CmdRecallAllFightersToTubes": {
     "group": "Fighters",
-    "label": "Recall All Fighters"
+    "label": "回收所有战斗机"
   },
   "CmdRecallSelectedFightersToTubes": {
     "group": "Fighters",
-    "label": "Recall Selected Fighters"
+    "label": "回收选中的战斗机"
   },
   "CmdReconnectToDrones": {
     "group": "Drones",
-    "label": "Reconnect To Lost Drones"
+    "label": "重新连接丢失的无人机"
   },
   "CmdRefreshDirectionalScan": {
     "group": "Combat",
-    "label": "Directional Scan"
+    "label": "定向扫描"
   },
   "CmdRefreshProbeScan": {
     "group": "Combat",
-    "label": "Refresh Probe Scan"
+    "label": "刷新探针扫描"
   },
   "CmdReloadAmmo": {
     "group": "Modules",
-    "label": "Reload Ammo"
+    "label": "重新装填弹药"
   },
   "CmdResetMonitor": {
     "group": "General",
-    "label": "Reset Monitor"
+    "label": "重置监视器"
   },
   "CmdSelectAllFighters": {
     "group": "Fighters",
-    "label": "Select All Fighters"
+    "label": "选择所有战斗机"
   },
   "CmdSelectNextTarget": {
     "group": "Navigation",
-    "label": "Select next target"
+    "label": "选择下一个目标"
   },
   "CmdSelectPrevTarget": {
     "group": "Navigation",
-    "label": "Select previous target"
+    "label": "选择上一个目标"
   },
   "CmdSelectTargetItem": {
     "group": "Combat",
-    "label": "Select"
+    "label": "选择"
   },
   "CmdSendBroadcast_AlignToItemID": {
     "group": "Navigation",
-    "label": "Broadcast: Align to"
+    "label": "广播：对齐"
   },
   "CmdSendBroadcast_HealTarget": {
     "group": "Navigation",
-    "label": "Broadcast: Repair Target (Selected)"
+    "label": "广播：修理目标（已选中）"
   },
   "CmdSendBroadcast_JumpToItemID": {
     "group": "Navigation",
-    "label": "Broadcast: Jump to"
+    "label": "广播：跳跃至"
   },
   "CmdSendBroadcast_Target": {
     "group": "Navigation",
-    "label": "Broadcast: Target (Selected)"
+    "label": "广播：目标（已选中）"
   },
   "CmdSendBroadcast_WarpToItemID": {
     "group": "Navigation",
-    "label": "Broadcast: Warp to"
+    "label": "广播：跃迁至"
   },
   "CmdSetCameraOrbit": {
     "group": "Navigation",
-    "label": "Activate Orbit Camera"
+    "label": "激活环绕镜头"
   },
   "CmdSetCameraPOV": {
     "group": "Navigation",
-    "label": "Activate First Person Camera"
+    "label": "激活第一人称镜头"
   },
   "CmdSetCameraTactical": {
     "group": "Navigation",
-    "label": "Activate Tactical Camera"
+    "label": "激活战术镜头"
   },
   "CmdSetChatChannelFocus": {
     "group": "Window",
-    "label": "Set Chat Channel Focus"
+    "label": "聚焦聊天频道"
   },
   "CmdSetDefenceStance": {
     "group": "Combat",
-    "label": "Activate Defense Mode"
+    "label": "激活防御模式"
   },
   "CmdSetOverviewFocus": {
     "group": "Window",
-    "label": "Set Overview Focus"
+    "label": "聚焦总览"
   },
   "CmdSetSearchBarFocus": {
     "group": "General",
-    "label": "Set Search Bar Focus"
+    "label": "聚焦搜索栏"
   },
   "CmdSetShipFullSpeed": {
     "group": "Navigation",
-    "label": "Set Full Speed"
+    "label": "设定全速"
   },
   "CmdSetSniperStance": {
     "group": "Combat",
-    "label": "Activate Sharpshooter Mode"
+    "label": "激活神射手模式"
   },
   "CmdSetSpeedStance": {
     "group": "Combat",
-    "label": "Activate Propulsion Mode"
+    "label": "激活推进模式"
   },
   "CmdShowItemInfo": {
     "group": "Combat",
-    "label": "Show info"
+    "label": "显示信息"
   },
   "CmdStopShip": {
     "group": "Navigation",
-    "label": "Stop Ship"
+    "label": "停止舰船"
   },
   "CmdTagItem_1": {
     "group": "Combat",
-    "label": "Tag item as: 1"
+    "label": "标记物品为：1"
   },
   "CmdTagItem_123": {
     "group": "Combat",
-    "label": "Tag item from sequence: 1, 2 or 3"
+    "label": "按顺序标记物品：1、2 或 3"
   },
   "CmdTagItem_123456789": {
     "group": "Combat",
-    "label": "Tag item from sequence: 1 through 9"
+    "label": "按顺序标记物品：1 至 9"
   },
   "CmdTagItem_2": {
     "group": "Combat",
-    "label": "Tag item as: 2"
+    "label": "标记物品为：2"
   },
   "CmdTagItem_3": {
     "group": "Combat",
-    "label": "Tag item as: 3"
+    "label": "标记物品为：3"
   },
   "CmdTagItem_A": {
     "group": "Combat",
-    "label": "Tag item as: A"
+    "label": "标记物品为：A"
   },
   "CmdTagItem_ABC": {
     "group": "Combat",
-    "label": "Tag item from sequence: A, B or C"
+    "label": "按顺序标记物品：A、B 或 C"
   },
   "CmdTagItem_ABCDEFGHI": {
     "group": "Combat",
-    "label": "Tag item from sequence: A through I"
+    "label": "按顺序标记物品：A 至 I"
   },
   "CmdTagItem_B": {
     "group": "Combat",
-    "label": "Tag item as: B"
+    "label": "标记物品为：B"
   },
   "CmdTagItem_C": {
     "group": "Combat",
-    "label": "Tag item as: C"
+    "label": "标记物品为：C"
   },
   "CmdTagItem_None": {
     "group": "Combat",
-    "label": "Untag item"
+    "label": "取消标记物品"
   },
   "CmdTagItem_X": {
     "group": "Combat",
-    "label": "Tag item as: X"
+    "label": "标记物品为：X"
   },
   "CmdTagItem_XYZ": {
     "group": "Combat",
-    "label": "Tag item from sequence: X, Y or Z"
+    "label": "按顺序标记物品：X、Y 或 Z"
   },
   "CmdTagItem_Y": {
     "group": "Combat",
-    "label": "Tag item as: Y"
+    "label": "标记物品为：Y"
   },
   "CmdTagItem_Z": {
     "group": "Combat",
-    "label": "Tag item as: Z"
+    "label": "标记物品为：Z"
   },
   "CmdToggle3DView": {
     "group": "General",
-    "label": "Toggle 3D view"
+    "label": "切换 3D 视图"
   },
   "CmdToggleAggressivePassive": {
     "group": "Drones",
-    "label": "Drone Settings: Toggle Aggressive/Passive"
+    "label": "无人机设置：切换主动/被动"
   },
   "CmdToggleAirCareerProgram": {
     "group": "Window",
-    "label": "AIR Career Program"
+    "label": "AIR 职业计划"
   },
   "CmdToggleAudio": {
     "group": "General",
-    "label": "Toggle Audio"
+    "label": "切换音频"
   },
   "CmdToggleAutoTracking": {
     "group": "Combat",
-    "label": "Toggle Auto Tracking"
+    "label": "切换自动追踪"
   },
   "CmdToggleAutopilot": {
     "group": "Navigation",
-    "label": "Toggle Autopilot"
+    "label": "切换自动驾驶"
   },
   "CmdToggleCameraTracking": {
     "group": "Combat",
-    "label": "Track"
+    "label": "追踪"
   },
   "CmdToggleCollapseAllWindows": {
     "group": "Window",
-    "label": "Toggle collapse all windows"
+    "label": "切换折叠所有窗口"
   },
   "CmdToggleDroneFocusFire": {
     "group": "Drones",
-    "label": "Drone Settings: Toggle Focus Fire"
+    "label": "无人机设置：切换集中火力"
   },
   "CmdToggleEffectTurrets": {
     "group": "General",
-    "label": "Toggle turret effects"
+    "label": "切换炮塔特效"
   },
   "CmdToggleEffects": {
     "group": "General",
-    "label": "Toggle effects"
+    "label": "切换特效"
   },
   "CmdToggleLookAtItem": {
     "group": "Combat",
-    "label": "Look at"
+    "label": "注视"
   },
   "CmdToggleMap": {
     "group": "Window",
-    "label": "Map"
+    "label": "地图"
   },
   "CmdToggleMinimizeMaximizeAllWindows": {
     "group": "Window",
-    "label": "Minimize/Maximize All Windows"
+    "label": "最小化/最大化所有窗口"
   },
   "CmdToggleSensorOverlay": {
     "group": "Navigation",
-    "label": "Toggle sensor overlay"
+    "label": "切换传感器覆盖层"
   },
   "CmdToggleShipSelection": {
     "group": "Fighters",
-    "label": "Toggle Ship Selection"
+    "label": "切换舰船选择"
   },
   "CmdToggleShipTree": {
     "group": "Window",
-    "label": "Ship Tree"
+    "label": "舰船树"
   },
   "CmdToggleShowAllBrackets": {
     "group": "Navigation",
-    "label": "Toggle show all brackets"
+    "label": "切换显示所有标记"
   },
   "CmdToggleShowNoBrackets": {
     "group": "Navigation",
-    "label": "Toggle show no brackets"
+    "label": "切换不显示标记"
   },
   "CmdToggleShowSpecialBrackets": {
     "group": "Navigation",
-    "label": "Toggle Special Bracket Display"
+    "label": "切换特殊标记显示"
   },
   "CmdToggleSolarSystemMap": {
     "group": "Window",
-    "label": "Solar System Map"
+    "label": "太阳系地图"
   },
   "CmdToggleSystemMenu": {
     "group": "General",
-    "label": "Settings"
+    "label": "设置"
   },
   "CmdToggleTacticalOverlay": {
     "group": "Navigation",
-    "label": "Toggle tactical overlay"
+    "label": "切换战术覆盖层"
   },
   "CmdToggleTargetItem": {
     "group": "Combat",
-    "label": "Toggle lock target"
+    "label": "切换锁定目标"
   },
   "CmdToggleTubeSelection_0": {
     "group": "Fighters",
-    "label": "Toggle Selection of Tube 1"
+    "label": "切换发射管 1 的选择"
   },
   "CmdToggleTubeSelection_1": {
     "group": "Fighters",
-    "label": "Toggle Selection of Tube 2"
+    "label": "切换发射管 2 的选择"
   },
   "CmdToggleTubeSelection_2": {
     "group": "Fighters",
-    "label": "Toggle Selection of Tube 3"
+    "label": "切换发射管 3 的选择"
   },
   "CmdToggleTubeSelection_3": {
     "group": "Fighters",
-    "label": "Toggle Selection of Tube 4"
+    "label": "切换发射管 4 的选择"
   },
   "CmdToggleTubeSelection_4": {
     "group": "Fighters",
-    "label": "Toggle Selection of Tube 5"
+    "label": "切换发射管 5 的选择"
   },
   "CmdUnlockTargetItem": {
     "group": "Combat",
-    "label": "Unlock target"
+    "label": "解锁目标"
   },
   "CmdUnlockTargetItems": {
     "group": "Combat",
-    "label": "Unlock all targets"
+    "label": "解锁所有目标"
   },
   "CmdWarpToItem": {
     "group": "Combat",
-    "label": "Warp to"
+    "label": "跃迁至"
   },
   "CmdZoomIn": {
     "group": "General",
-    "label": "Zoom In"
+    "label": "放大"
   },
   "CmdZoomOut": {
     "group": "General",
-    "label": "Zoom Out"
+    "label": "缩小"
   },
   "OpenAccessGroupsWindow": {
     "group": "Window",
-    "label": "Access Lists"
+    "label": "访问列表"
   },
   "OpenAchievementsWindow": {
     "group": "Window",
-    "label": "Achievements"
+    "label": "成就"
   },
   "OpenAgencyNew": {
     "group": "Window",
-    "label": "The Agency"
+    "label": "代理人"
   },
   "OpenAmmoHoldOfActiveShip": {
     "group": "Window",
-    "label": "Open Ammo Hold"
+    "label": "打开弹药舱"
   },
   "OpenAssets": {
     "group": "Window",
-    "label": "Personal Assets"
+    "label": "个人资产"
   },
   "OpenAuraGuidance": {
     "group": "Window"
   },
   "OpenBountyOffice": {
     "group": "Window",
-    "label": "Bounty Office"
+    "label": "赏金办公室"
   },
   "OpenCalculator": {
     "group": "Window",
-    "label": "Calculator"
+    "label": "计算器"
   },
   "OpenCalendar": {
     "group": "Window",
-    "label": "Calendar"
+    "label": "日历"
   },
   "OpenCapitalNavigation": {
     "group": "Window",
-    "label": "Jump Navigation"
+    "label": "跳跃导航"
   },
   "OpenCargoHoldOfActiveShip": {
     "group": "Window",
-    "label": "Holds & Bays"
+    "label": "货舱与舱室"
   },
   "OpenChannels": {
     "group": "Window",
-    "label": "Chat Channels"
+    "label": "聊天频道"
   },
   "OpenCharacterCustomization": {
     "group": "Window",
-    "label": "Character Customization"
+    "label": "角色自定义"
   },
   "OpenCharactersheet": {
     "group": "Window",
-    "label": "Character Sheet"
+    "label": "角色信息"
   },
   "OpenCombatAnomaliesInAgency": {
     "group": "Window",
-    "label": "The Agency"
+    "label": "代理人"
   },
   "OpenCompare": {
     "group": "Window",
-    "label": "Compare Tool"
+    "label": "比较工具"
   },
   "OpenConfigMenu": {
     "group": "Window",
-    "label": "Open Config Menu"
+    "label": "打开配置菜单"
   },
   "OpenContextualOffersWindow": {
     "group": "Window",
-    "label": "New Offer"
+    "label": "新优惠"
   },
   "OpenContracts": {
     "group": "Window",
-    "label": "Contracts"
+    "label": "合同"
   },
   "OpenCorpDeliveries": {
     "group": "Window",
-    "label": "Open Corporation Deliveries"
+    "label": "打开军团交付"
   },
   "OpenCorpHangar": {
     "group": "Window",
-    "label": "Open Corporate Hangar"
+    "label": "打开军团机库"
   },
   "OpenCorporationItemDeliveries": {
     "group": "Window",
-    "label": "Open Capsuleer Deliveries"
+    "label": "打开飞行员交付"
   },
   "OpenCorporationPanel": {
     "group": "Window",
-    "label": "Corporation"
+    "label": "军团"
   },
   "OpenDirectionalScanner": {
     "group": "Window",
-    "label": "Directional Scanner"
+    "label": "定向扫描器"
   },
   "OpenDroneBayOfActiveShip": {
     "group": "Window",
-    "label": "Open Drone Bay Of Active Ship"
+    "label": "打开当前舰船无人机舱"
   },
   "OpenEncounterSurveillanceSystemInAgency": {
     "group": "Window",
-    "label": "The Agency - Encounter Surveillance System"
+    "label": "代理人 - 遭遇监控系统"
   },
   "OpenEveMenu": {
     "group": "Window",
-    "label": "Neocom Menu"
+    "label": "Neocom 菜单"
   },
   "OpenFighterBayOfActiveShip": {
     "group": "Window",
-    "label": "Open Fighter Bay Of Active Ship"
+    "label": "打开当前舰船战斗机机库"
   },
   "OpenFitting": {
     "group": "Window",
-    "label": "Fitting"
+    "label": "装配"
   },
   "OpenFittingMgmt": {
     "group": "Window",
-    "label": "Fitting Management"
+    "label": "装配管理"
   },
   "OpenFleet": {
     "group": "Window",
-    "label": "Fleet"
+    "label": "舰队"
   },
   "OpenFleetHangarOfActiveShip": {
     "group": "Window",
-    "label": "Open Fleet Hangar"
+    "label": "打开舰队机库"
   },
   "OpenFleetWatchlist": {
     "group": "Window",
-    "label": "Watch List"
+    "label": "监视列表"
   },
   "OpenFpsMonitor": {
     "group": "Window",
-    "label": "Open FPS Monitor"
+    "label": "打开 FPS 监视器"
   },
   "OpenFrigateEscapeBay": {
     "group": "Window",
-    "label": "Open Frigate Escape Bay"
+    "label": "打开护卫舰逃生舱"
   },
   "OpenFuelBayOfActiveShip": {
     "group": "Window",
-    "label": "Open Fuel Bay Of Active Ship"
+    "label": "打开当前舰船燃料舱"
   },
   "OpenFwEnlistment": {
     "group": "Window",
-    "label": "Factional Warfare Enlistment"
+    "label": "阵营战争入伍"
   },
   "OpenGeneralMiningHoldOfActiveShip": {
     "group": "Window",
-    "label": "Open General Mining Hold Of Active Ship"
+    "label": "打开当前舰船通用采矿舱"
   },
   "OpenHangarFloor": {
     "group": "Window",
-    "label": "Open Item Hangar"
+    "label": "打开物品机库"
   },
   "OpenHelp": {
     "group": "Window",
-    "label": "EVE Help"
+    "label": "EVE 帮助"
   },
   "OpenIndustry": {
     "group": "Window",
-    "label": "Industry"
+    "label": "工业"
   },
   "OpenInfrastructureBayOfActiveShip": {
     "group": "Window",
-    "label": "Open Infrastructure Hold"
+    "label": "打开基础设施舱"
   },
   "OpenInsurance": {
     "group": "Window",
-    "label": "Ship Insurance"
+    "label": "舰船保险"
   },
   "OpenInsurgencyDashboard": {
     "group": "Window",
-    "label": "Insurgencies"
+    "label": "叛乱"
   },
   "OpenInventory": {
     "group": "Window",
-    "label": "Inventory"
+    "label": "物品栏"
   },
   "OpenJobBoardWindow": {
     "group": "Window",
-    "label": "Opportunities"
+    "label": "机遇"
   },
   "OpenLedger": {
     "group": "Window",
-    "label": "Mining Ledger"
+    "label": "采矿账本"
   },
   "OpenLocations": {
     "group": "Window",
-    "label": "Locations"
+    "label": "位置"
   },
   "OpenLog": {
     "group": "Window",
-    "label": "Log and Messages"
+    "label": "日志与消息"
   },
   "OpenLoginRewardWindow": {
     "group": "Window",
-    "label": "Daily Login Campaigns"
+    "label": "每日登录奖励"
   },
   "OpenLpstore": {
     "group": "Window",
-    "label": "Loyalty Point Store"
+    "label": "忠诚点数商店"
   },
   "OpenMail": {
     "group": "Window",
-    "label": "Mail"
+    "label": "邮件"
   },
   "OpenManageRoute": {
     "group": "Window",
-    "label": "Manage autopilot route"
+    "label": "管理自动驾驶路线"
   },
   "OpenMapBrowser": {
     "group": "Window",
-    "label": "Map Browser"
+    "label": "地图浏览器"
   },
   "OpenMarket": {
     "group": "Window",
-    "label": "Regional Market"
+    "label": "区域市场"
   },
   "OpenMarketOrders": {
     "group": "Window",
-    "label": "Market Orders"
+    "label": "市场订单"
   },
   "OpenMedical": {
     "group": "Window",
-    "label": "Clone Bay"
+    "label": "克隆舱"
   },
   "OpenMilitia": {
     "group": "Window",
-    "label": "Factional Warfare"
+    "label": "阵营战争"
   },
   "OpenMineralHoldOfActiveShip": {
     "group": "Window",
-    "label": "Open Mineral Hold Of Active Ship"
+    "label": "打开当前舰船矿物舱"
   },
   "OpenMiningScanResultsWindow": {
     "group": "Window",
-    "label": "Mining Survey Results"
+    "label": "采矿勘测结果"
   },
   "OpenMonitor": {
     "group": "General",
-    "label": "Open Monitor"
+    "label": "打开监视器"
   },
   "OpenMoonMining": {
     "group": "Window",
-    "label": "Control Tower Manager"
+    "label": "控制塔管理器"
   },
   "OpenMoonScan": {
     "group": "Window",
-    "label": "Moon Probe and Analysis"
+    "label": "月球探针与分析"
   },
   "OpenMultibuy": {
     "group": "Window",
-    "label": "Multibuy"
+    "label": "批量购买"
   },
   "OpenMyMercenaryDens": {
     "group": "Window",
-    "label": "My Mercenary Dens"
+    "label": "我的佣兵巢穴"
   },
   "OpenNotepad": {
     "group": "Window",
-    "label": "Notepad"
+    "label": "记事本"
   },
   "OpenOmegaUpsellWindow": {
     "group": "Window",
-    "label": "Omega Subscription"
+    "label": "Omega 订阅"
   },
   "OpenOverviewSettings": {
     "group": "Window",
-    "label": "Overview Settings"
+    "label": "总览设置"
   },
   "OpenPVPFilamentEventWindow": {
     "group": "Window",
-    "label": "The Proving Grounds"
+    "label": "试炼场"
   },
   "OpenPaintToolWindow": {
     "group": "Window",
-    "label": "Structure SKINR"
+    "label": "建筑 SKINR"
   },
   "OpenPeopleAndPlaces": {
     "group": "Window",
-    "label": "Contacts"
+    "label": "联系人"
   },
   "OpenPlanetaryCommoditiesHoldOfActiveShip": {
     "group": "Window",
-    "label": "Open Planetary Commodities Hold Of Active Ship"
+    "label": "打开当前舰船行星物产舱"
   },
   "OpenPlanets": {
     "group": "Window",
-    "label": "Planetary Industry"
+    "label": "行星开发"
   },
   "OpenPlexVault": {
     "group": "Window",
-    "label": "PLEX Vault"
+    "label": "PLEX 保险库"
   },
   "OpenPointerWnd": {
     "group": "Window",
-    "label": "Pointer Window"
+    "label": "指针窗口"
   },
   "OpenRaffleWindow": {
     "group": "Window",
-    "label": "HyperNet Relay"
+    "label": "超级网络中继"
   },
   "OpenRelevantFWWindow": {
     "group": "Window",
-    "label": "Factional Warfare"
+    "label": "阵营战争"
   },
   "OpenRepairshop": {
     "group": "Window",
-    "label": "Repairshop"
+    "label": "修理厂"
   },
   "OpenReprocessingPlant": {
     "group": "Window",
-    "label": "Reprocessing Plant"
+    "label": "精炼厂"
   },
   "OpenSeason": {
     "group": "Window",
-    "label": "Events"
+    "label": "活动"
   },
   "OpenSecurityOffice": {
     "group": "Window",
-    "label": "Security Office"
+    "label": "治安办公室"
   },
   "OpenShipConfig": {
     "group": "Window",
-    "label": "Ship Config"
+    "label": "舰船配置"
   },
   "OpenShipHangar": {
     "group": "Window",
-    "label": "Open Ship Hangar"
+    "label": "打开舰船机库"
   },
   "OpenShipMaintenanceOfBayActiveShip": {
     "group": "Window",
-    "label": "Open Ship Maintenance Bay"
+    "label": "打开舰船维护舱"
   },
   "OpenShipSKINRWindow": {
     "group": "Window",
-    "label": "Ship SKINR"
+    "label": "舰船 SKINR"
   },
   "OpenSkillsWindow": {
     "group": "Window",
-    "label": "Skills"
+    "label": "技能"
   },
   "OpenStructureBrowser": {
     "group": "Window",
-    "label": "Structure Browser"
+    "label": "建筑浏览器"
   },
   "OpenWallet": {
     "group": "Window",
-    "label": "Wallet"
+    "label": "钱包"
   },
   "PrintScreen": {
     "group": "General",
-    "label": "Print screen"
+    "label": "截屏"
   },
   "ToggleAurumStore": {
     "group": "Window",
-    "label": "Open Noble Exchange"
+    "label": "打开贵族交易所"
   },
   "ToggleCurrentSystemLocationWnd": {
     "group": "Window",
-    "label": "Local Locations"
+    "label": "本地位置"
   },
   "ToggleProbeScanner": {
     "group": "Window",
-    "label": "Probe Scanner"
+    "label": "探针扫描器"
   },
   "ToggleProjectDiscovery": {
     "group": "Window",
-    "label": "Project Discovery"
+    "label": "发现计划"
   },
   "ToggleRedeemItems": {
     "group": "Window",
-    "label": "Redeem Items"
+    "label": "兑换物品"
   },
   "ToggleTheatersOfWarWindow": {
     "group": "Window",
-    "label": "Theaters of War"
+    "label": "战区"
   },
   "WinCmdToggleWindowed": {
     "group": "General",
-    "label": "Toggle Windowed"
+    "label": "切换窗口模式"
   }
 }
