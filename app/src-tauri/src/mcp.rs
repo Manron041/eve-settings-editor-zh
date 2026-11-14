@@ -3542,7 +3542,7 @@ mod tests {
         assert_eq!(v["available"], true);
         let e = v["entries"].as_array().unwrap();
         let high = e.iter().find(|x| x["command"] == "CmdActivateHighPowerSlot1").unwrap();
-        assert_eq!(high["label"], "Activate High Power Slot 1");
+        assert_eq!(high["label"], "激活高能量槽位 1");
         assert_eq!(high["group"], "Modules");
         assert_eq!(high["combo"], "Q");
         assert_eq!(high["keys"], json!([81]));
