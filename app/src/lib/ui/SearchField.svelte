@@ -37,10 +37,10 @@
   // finishes as you type. And the accelerator is NOT baked into the string: it
   // renders as a <kbd> below, so the five boxes stop advertising it three
   // different ways and macOS stops being told to press Ctrl.
-  const placeholder = $derived(verb === "search" ? `Search ${nouns}` : `Filter ${nouns}`);
+  const placeholder = $derived(verb === "search" ? `搜索 ${nouns}` : `筛选 ${nouns}`);
 
   const meta = $derived(
-    count === undefined ? "" : total === undefined ? `${count}` : `${count} of ${total}`,
+    count === undefined ? "" : total === undefined ? `${count}` : `${count} / ${total}`,
   );
 
   function clear() {
@@ -68,7 +68,7 @@
   {#if shortcut && value === ""}<kbd>{shortcut}</kbd>{/if}
   <!-- Absent rather than dimmed when empty, matching today's {#if searching} guard. -->
   {#if value !== ""}
-    <Button variant="ghost" size="sm" iconOnly title="Clear" onclick={clear}>×</Button>
+    <Button variant="ghost" size="sm" iconOnly title="清除" onclick={clear}>×</Button>
   {/if}
 </div>
 

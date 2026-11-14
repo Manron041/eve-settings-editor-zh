@@ -304,7 +304,7 @@
           <!-- controlClass, not class: the spec reads `.group-filter`'s value,
                so the hook has to land on the input. -->
           <SearchField
-            nouns="groups"
+            nouns="分组"
             shortcut={accel("F")}
             controlClass="group-filter"
             bind:element={filterBox}

@@ -378,7 +378,7 @@ test("Ctrl+F focuses the window filter on Layout", async () => {
   await openFile("core_char_950.dat");
   await waitFor(() => expect(screen.getByRole("tab", { name: "布局" }).getAttribute("aria-selected")).toBe("true"));
 
-  const box = await screen.findByLabelText("Filter 窗口");
+  const box = await screen.findByLabelText("筛选 窗口");
   await fireEvent.keyDown(window, { key: "f", ctrlKey: true });
   await waitFor(() => expect(document.activeElement).toBe(box));
 });
@@ -418,7 +418,7 @@ test("Ctrl+F on Overview switches to Filters and focuses the group filter", asyn
   expect(screen.getByRole("tab", { name: "列" }).getAttribute("aria-selected")).toBe("true");
   expect(filters.getAttribute("aria-selected")).toBe("false");
 
-  const box = await screen.findByLabelText("Filter groups");
+  const box = await screen.findByLabelText("筛选 分组");
   await fireEvent.keyDown(window, { key: "f", ctrlKey: true });
   await waitFor(() => expect(filters.getAttribute("aria-selected")).toBe("true"));
   await waitFor(() => expect(document.activeElement).toBe(box));
@@ -726,7 +726,7 @@ describe("the launch empty state", () => {
 // at the far right of the bar opened a popup at the far left. One door now, and
 // the shortcut is written on it.
 describe("opening the subject switcher", () => {
-  const panel = () => screen.queryByPlaceholderText(/Search 角色、预设和命令/);
+  const panel = () => screen.queryByPlaceholderText(/搜索 角色、预设和命令/);
 
   test("the subject button opens it, and it is the only button that does", async () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);

@@ -207,7 +207,7 @@ describe("the status bar", () => {
     mount();
     await waitFor(() => expect(calls.of("window_layout").length).toBe(1));
 
-    const box = (await screen.findByLabelText("Filter 窗口")) as HTMLInputElement;
+    const box = (await screen.findByLabelText("筛选 窗口")) as HTMLInputElement;
     await fireEvent.input(box, { target: { value: "market" } });
     const chip = await screen.findByText(/2 个窗口/);
 
