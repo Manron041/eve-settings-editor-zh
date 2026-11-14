@@ -20,7 +20,7 @@ async function renderPresets(props: { charOpen?: boolean; userOpen?: boolean } =
     openPresetName: null,
     ...props,
   });
-  await fireEvent.click(screen.getByRole("button", { name: /new preset from this character/i }));
+  await fireEvent.click(screen.getByRole("button", { name: /从此角色新建预设/i }));
   return {
     aspect: (label: string) =>
       [...screen.getAllByRole("checkbox")].find((c) => c.closest("label")?.textContent?.includes(label))! as HTMLInputElement,

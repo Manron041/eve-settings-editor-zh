@@ -122,7 +122,7 @@
     {#if container || node.removable}
       <div class="acts">
         {#if container}
-          <Button size="sm" onclick={() => onInsertRequest(node)}>Add entry…</Button>
+          <Button size="sm" onclick={() => onInsertRequest(node)}>添加条目…</Button>
         {/if}
         {#if node.removable}
           <Button size="sm" variant="danger" onclick={() => onRemove(node.path)}>Remove entry</Button>

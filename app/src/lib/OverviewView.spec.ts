@@ -51,9 +51,9 @@ const list = () => document.querySelector(".tablist") as HTMLElement;
 const row = (name: string) => within(list()).getByText(name).closest(".row") as HTMLElement;
 const findRow = (name: string) => waitFor(() => row(name));
 /** Open the inline rename editor on the nth row and hand back its input. */
-async function renameEditor(nth = 0, label = "Piece 1 text") {
+async function renameEditor(nth = 0, label = "第 1 段文本") {
   await fireEvent.click(screen.getAllByRole("button", { name: "More actions" })[nth]);
-  await fireEvent.click(screen.getByRole("menuitem", { name: "Rename tab…" }));
+  await fireEvent.click(screen.getByRole("menuitem", { name: "重命名标签页…" }));
   return screen.getByLabelText(label) as HTMLInputElement;
 }
 
@@ -81,7 +81,7 @@ describe("gating on the account file", () => {
   // route out rather than an empty editor.
   test("an unpaired character is offered the pairing flow", async () => {
     const { onShowAccounts } = mount({ userOpen: false, charId: 9 });
-    const button = await screen.findByRole("button", { name: /pair/i });
+    const button = await screen.findByRole("button", { name: /配对此角色/ });
     await fireEvent.click(button);
     expect(onShowAccounts).toHaveBeenCalled();
     calls.never("overview_columns");
@@ -89,7 +89,7 @@ describe("gating on the account file", () => {
 
   test("with no file open at all, nothing is read", async () => {
     mount({ userOpen: false, charId: null });
-    expect(screen.getByText(/open a character or an account file/i)).toBeTruthy();
+    expect(screen.getByText(/打开角色或账户文件/)).toBeTruthy();
     calls.never("overview_columns");
   });
 
@@ -108,16 +108,16 @@ describe("gating on the account file", () => {
   test("an account with no tabs says so", async () => {
     calls.stub("overview_columns", columns());
     mount();
-    expect(await screen.findByText(/no overview tabs/i)).toBeTruthy();
+    expect(await screen.findByText(/没有总览标签页/)).toBeTruthy();
   });
 
   test("an account with no tabs can create its first one", async () => {
     calls.stub("overview_columns", columns());
     calls.stub("tab_create", columns(tab(0, "Main")));
     const { onUserDirty } = mount();
-    await screen.findByText(/no overview tabs/i);
-    await fireEvent.click(screen.getByRole("button", { name: "+ Tab" }));
-    const box = screen.getByLabelText("Tab name") as HTMLInputElement;
+    await screen.findByText(/没有总览标签页/);
+    await fireEvent.click(screen.getByRole("button", { name: "+ 标签页" }));
+    const box = screen.getByLabelText("标签页名称") as HTMLInputElement;
     await fireEvent.input(box, { target: { value: "Main" } });
     await fireEvent.keyDown(box, { key: "Enter" });
     await findRow("Main");
@@ -131,12 +131,12 @@ describe("gating on the account file", () => {
     calls.stub("overview_columns", { ...columns(), presets: [], no_container: true });
     calls.stub("overview_create", { ...columns(), presets: [] });
     const { onUserDirty } = mount();
-    await screen.findByText(/no overview settings/i);
-    expect(screen.queryByRole("button", { name: "Overview actions" })).toBeNull();
-    await fireEvent.click(screen.getByRole("button", { name: "Create overview settings" }));
+    await screen.findByText(/没有总览设置/);
+    expect(screen.queryByRole("button", { name: "总览操作" })).toBeNull();
+    await fireEvent.click(screen.getByRole("button", { name: "创建总览设置" }));
     expect(calls.of("overview_create").length).toBe(1);
-    expect(await screen.findByText(/no overview tabs/i)).toBeTruthy();
-    expect(screen.queryByText(/no overview settings/i)).toBeNull();
+    expect(await screen.findByText(/没有总览标签页/)).toBeTruthy();
+    expect(screen.queryByText(/没有总览设置/)).toBeNull();
     expect(onUserDirty).toHaveBeenCalled();
   });
 
@@ -144,8 +144,8 @@ describe("gating on the account file", () => {
     calls.stub("overview_columns", { ...columns(), no_container: true });
     calls.stub("overview_create", () => { throw { code: "no_overview", message: "This file has no overview settings." }; });
     const { onUserDirty } = mount();
-    await fireEvent.click(await screen.findByRole("button", { name: "Create overview settings" }));
-    expect(await screen.findByText(/weren't created/i)).toBeTruthy();
+    await fireEvent.click(await screen.findByRole("button", { name: "创建总览设置" }));
+    expect(await screen.findByText(/未能创建/)).toBeTruthy();
     expect(onUserDirty).not.toHaveBeenCalled();
   });
 });
@@ -215,8 +215,8 @@ describe("tab name markup", () => {
     await findRow("main");
 
     await renameEditor();
-    await fireEvent.click(screen.getByLabelText("Piece 2 bold"));
-    await fireEvent.keyDown(screen.getByLabelText("Piece 2 text"), { key: "Enter" });
+    await fireEvent.click(screen.getByLabelText("第 2 段粗体"));
+    await fireEvent.keyDown(screen.getByLabelText("第 2 段文本"), { key: "Enter" });
 
     expect(calls.only("tab_rename_pieces").args).toEqual({
       tabIdx: 0,
@@ -247,11 +247,11 @@ describe("tab name markup", () => {
     mount();
     await findRow("main");
 
-    let box = await renameEditor(0, "Tab name markup");
+    let box = await renameEditor(0, "标签页名称标记");
     await fireEvent.keyDown(box, { key: "Enter" });
     calls.never("tab_rename");
 
-    box = await renameEditor(0, "Tab name markup");
+    box = await renameEditor(0, "标签页名称标记");
     await fireEvent.input(box, { target: { value: "<uppercase>fleet</uppercase>" } });
     await fireEvent.keyDown(box, { key: "Enter" });
     expect(calls.only("tab_rename").args).toEqual({ tabIdx: 0, name: "<uppercase>fleet</uppercase>" });
@@ -332,8 +332,8 @@ describe("the width-swap warning", () => {
   test("fires once with a character open", async () => {
     await reorder(true);
     await waitFor(() => expect(toasts.length).toBe(1));
-    expect(toasts[0].message).toMatch(/moved with the tabs, for every character/i);
-    expect(toasts[0].message).toMatch(/logged in at the time keeps the old order/i);
+    expect(toasts[0].message).toMatch(/列宽随标签页移动，保存后对此账户的所有角色生效/);
+    expect(toasts[0].message).toMatch(/当时已登录的角色仍保持旧顺序/);
   });
 
   test("says nothing with no character open", async () => {
@@ -357,33 +357,33 @@ describe("removing a window that is not the last", () => {
     calls.stub("overview_window_remove", two);
     mount(over);
     await findRow("Mining");
-    await fireEvent.click(screen.getByRole("button", { name: `${windowName} actions` }));
-    await fireEvent.click(screen.getByRole("menuitem", { name: "Remove this window" }));
+    await fireEvent.click(screen.getByRole("button", { name: `${windowName} 操作` }));
+    await fireEvent.click(screen.getByRole("menuitem", { name: "移除此窗口" }));
     await waitFor(() => expect(calls.of("overview_window_remove").length).toBe(1));
   }
 
   test("names the other characters whose positions did not move", async () => {
-    await remove("Overview 2", { sharedNames: ["Pilot Two"] });
+    await remove("总览 2", { sharedNames: ["Pilot Two"] });
     await waitFor(() => expect(toasts.length).toBe(2));
-    expect(toasts[1].message).toMatch(/Overview 3 and later are now one number lower/);
-    expect(toasts[1].message).toMatch(/Pilot Two still has the old window positions/);
+    expect(toasts[1].message).toMatch(/总览 3 及之后的窗口编号都减 1/);
+    expect(toasts[1].message).toMatch(/Pilot Two 仍使用旧的窗口位置/);
   });
 
   test("says every character is off when no character file is open", async () => {
-    await remove("Overview 1", { charOpen: false, sharedNames: [] });
+    await remove("总览 1", { charOpen: false, sharedNames: [] });
     await waitFor(() => expect(toasts.length).toBe(2));
-    expect(toasts[1].message).toMatch(/Every character on this account still has the old window positions/);
+    expect(toasts[1].message).toMatch(/此账户上的每个角色 仍使用旧的窗口位置/);
   });
 
   test("says nothing extra when the open character is the only one", async () => {
-    await remove("Overview 2", { sharedNames: [] });
+    await remove("总览 2", { sharedNames: [] });
     await waitFor(() => expect(toasts.length).toBe(1));
   });
 
   test("says nothing extra for the last window", async () => {
-    await remove("Overview 3", { sharedNames: ["Pilot Two"] });
+    await remove("总览 3", { sharedNames: ["Pilot Two"] });
     await waitFor(() => expect(toasts.length).toBe(1));
-    expect(toasts[0].message).toMatch(/Removed Overview 3/);
+    expect(toasts[0].message).toMatch(/已移除总览 3/);
   });
 });
 
@@ -394,22 +394,22 @@ describe("the view menu", () => {
     calls.stub("overview_columns", data);
     const spies = mount();
     await findRow("PvP");
-    await fireEvent.click(screen.getByRole("button", { name: "Overview actions" }));
+    await fireEvent.click(screen.getByRole("button", { name: "总览操作" }));
     return spies;
   }
 
   test("offers both pack commands and the window set-up", async () => {
     await openMenu();
-    expect(screen.getByRole("menuitem", { name: "Import overview pack…" })).toBeTruthy();
-    expect(screen.getByRole("menuitem", { name: "Export overview pack…" })).toBeTruthy();
-    expect(screen.getByRole("menuitem", { name: "Assign tabs to windows" })).toBeTruthy();
+    expect(screen.getByRole("menuitem", { name: "导入总览包…" })).toBeTruthy();
+    expect(screen.getByRole("menuitem", { name: "导出总览包…" })).toBeTruthy();
+    expect(screen.getByRole("menuitem", { name: "分配标签页到窗口" })).toBeTruthy();
   });
 
   test("set-up is present but disabled once the account has windows", async () => {
     await openMenu(inWindows([tab(0, "PvP")], [{ index: 0, tab_indices: [0] }]));
-    const item = screen.getByRole("menuitem", { name: "Assign tabs to windows" }) as HTMLButtonElement;
+    const item = screen.getByRole("menuitem", { name: "分配标签页到窗口" }) as HTMLButtonElement;
     expect(item.disabled).toBe(true);
-    expect(item.title).toMatch(/already assigns tabs to windows/i);
+    expect(item.title).toMatch(/已按窗口分配标签页/);
   });
 });
 
@@ -469,8 +469,8 @@ test("+ Window dirties both slots and hands the new window up", async () => {
   const { onUserDirty, onCharDirty, onWindowAdded } = mount();
   await findRow("PvP");
 
-  await fireEvent.click(screen.getByRole("button", { name: "+ Window" }));
-  const box = screen.getByLabelText("First tab name") as HTMLInputElement;
+  await fireEvent.click(screen.getByRole("button", { name: "+ 窗口" }));
+  const box = screen.getByLabelText("首个标签页名称") as HTMLInputElement;
   await fireEvent.input(box, { target: { value: "Combat" } });
   await fireEvent.keyDown(box, { key: "Enter" });
 
@@ -499,7 +499,7 @@ describe("deleting a tab", () => {
     const spies = mount();
     await findRow("PvP");
     await fireEvent.click(screen.getAllByRole("button", { name: "More actions" })[0]);
-    await fireEvent.click(screen.getByRole("menuitem", { name: "Delete tab" }));
+    await fireEvent.click(screen.getByRole("menuitem", { name: "删除标签页" }));
     return spies;
   }
 
@@ -515,8 +515,8 @@ describe("deleting a tab", () => {
     await waitFor(() => expect(toasts.length).toBeGreaterThan(0));
     const m = toasts[toasts.length - 1].message;
     expect(m).toContain("PvP");
-    expect(m).toMatch(/save to write it to disk/i);
-    expect(m).not.toMatch(/can'?t be undone/i);
+    expect(m).toMatch(/保存以写入磁盘/);
+    expect(m).not.toMatch(/无法撤销|不能撤销/);
   });
 
   /** Both slots, because the backend carries the surviving tabs' per-tab column
@@ -538,10 +538,10 @@ describe("deleting a tab", () => {
     mount();
     await findRow("PvP");
     await fireEvent.click(screen.getAllByRole("button", { name: "More actions" })[0]);
-    await fireEvent.click(screen.getByRole("menuitem", { name: "Delete tab" }));
+    await fireEvent.click(screen.getByRole("menuitem", { name: "删除标签页" }));
 
     const msg = await screen.findByRole("alert");
-    expect(msg.textContent).toContain("That tab wasn't deleted");
+    expect(msg.textContent).toContain("标签页未能删除");
     expect(msg.textContent).toContain("The account file is read-only.");
     // The bracketed machine code is relegated to `title=`, never the sentence.
     expect(msg.textContent).not.toContain("read_only");

@@ -82,7 +82,7 @@
     <Button
       variant="ghost"
       iconOnly
-      title="Menu"
+      title="菜单"
       onpointerdown={(e: PointerEvent) => e.stopPropagation()}
       onclick={() => (menuOpen = !menuOpen)}>☰</Button>
   </span>
@@ -94,7 +94,7 @@
       title="Switch character ({accel('K')})"
       onpointerdown={(e: PointerEvent) => e.stopPropagation()}
       onclick={() => (switcherOpen = !switcherOpen)}>
-      <span class="name">{subject.subjectName ?? "No character open"}</span>
+      <span class="name">{subject.subjectName ?? "未打开角色"}</span>
       {#if aliasSuffix}<span class="alias">{aliasSuffix}</span>{/if}
       <span aria-hidden="true">▾</span>
       <!-- On the control it opens, so the shortcut is found by looking rather
@@ -105,13 +105,13 @@
   </span>
 
   {#if readOnly}
-    <Chip tone="danger" size="sm" title="{readOnly.fileName}: {readOnly.reason}">read-only</Chip>
+    <Chip tone="danger" size="sm" title="{readOnly.fileName}: {readOnly.reason}">只读</Chip>
   {/if}
   {#if subject.preset !== null}
     <Chip tone="info" size="sm">preset</Chip>
   {/if}
   {#if aiConnected}
-    <Chip tone="info" size="sm" title="AI assistant connected">AI</Chip>
+    <Chip tone="info" size="sm" title="AI 助手已连接">AI</Chip>
   {/if}
 
   <span class="spacer"></span>
@@ -132,7 +132,7 @@
     <Button
       title="Backups of every open file"
       onpointerdown={(e: PointerEvent) => e.stopPropagation()}
-      onclick={() => (historyOpen = !historyOpen)}>History ▾</Button>
+      onclick={() => (historyOpen = !historyOpen)}>历史 ▾</Button>
   </span>
 </header>
 

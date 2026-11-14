@@ -22,14 +22,14 @@ export type View = "layout" | "overview" | "autofill" | "keybinds" | "probes" | 
  * normal way to look at settings rather than as the way out.
  */
 export const VIEWS: { id: View; label: string }[] = [
-  { id: "layout", label: "Layout" },
-  { id: "overview", label: "Overview" },
-  { id: "autofill", label: "Autofill" },
-  { id: "keybinds", label: "Keybinds" },
-  { id: "probes", label: "Probes" },
-  { id: "fleet", label: "Fleet" },
-  { id: "racks", label: "Racks" },
-  { id: "raw", label: "Raw" },
+  { id: "layout", label: "布局" },
+  { id: "overview", label: "总览" },
+  { id: "autofill", label: "自动补全" },
+  { id: "keybinds", label: "快捷键" },
+  { id: "probes", label: "探针" },
+  { id: "fleet", label: "舰队" },
+  { id: "racks", label: "槽位架" },
+  { id: "raw", label: "原始" },
 ];
 
 /** `null` when the view is reachable, else the actionable reason it is not. */
@@ -39,10 +39,10 @@ export function viewAvailable(v: View): string | null {
   if (v === "layout") {
     if (subject.layoutAvailable) return null;
     return subject.slots.char === null && subject.slots.user === null
-      ? "Open a character to edit its window layout."
-      : "This file has no saved window layout.";
+      ? "打开角色以编辑其窗口布局。"
+      : "此文件没有保存的窗口布局。";
   }
-  return anySubject ? null : "Open a character or an account file.";
+  return anySubject ? null : "打开角色或账号文件。";
 }
 
 /** The first reachable view in row order. Raw is always reachable, so this

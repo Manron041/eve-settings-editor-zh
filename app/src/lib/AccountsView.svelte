@@ -70,7 +70,7 @@
     }),
   );
 
-  const nameOf = (id: number) => names[id]?.name ?? `char ${id}`;
+  const nameOf = (id: number) => names[id]?.name ?? `角色 ${id}`;
 
   // Capture progress and the launcher's proposals both live in
   // `accounts.svelte.ts` now, because this panel is a DISMISSABLE sheet: the
@@ -110,13 +110,13 @@
     // are not "already paired", so they keep the original sentence — which is
     // true as written: the logs say nothing about THESE accounts.
     if (n === 0 || launcherState.proposals.length > 0)
-      return "Your EVE launcher logs say nothing about these accounts. Calibrate an account to pair a character by hand.";
+      return "你的 EVE 启动器日志没提到这些账号。校准一个账号即可手动配对角色。";
     return n === 1
-      ? "The one character your EVE launcher names is already paired."
-      : `All ${n} characters your EVE launcher names are already paired.`;
+      ? "你的 EVE 启动器日志提到的那个角色已配对了。"
+      : `你的 EVE 启动器日志提到的全部 ${n} 个角色都已配对。`;
   });
 
-  const accountLabel = (userId: number) => aliasFor(userId) ?? `account ${userId}`;
+  const accountLabel = (userId: number) => aliasFor(userId) ?? `账号 ${userId}`;
 
   /**
    * The sentence that names what `Accept all` will pair.
@@ -138,19 +138,19 @@
     // sentence has already named eight.
     const list =
       n.length > 8
-        ? `${n.slice(0, 8).join(", ")} and ${n.length - 8} more`
+        ? `${n.slice(0, 8).join(", ")}，还有 ${n.length - 8} 个`
         : n.length === 1
           ? n[0]
-          : `${n.slice(0, -1).join(", ")} and ${n[n.length - 1]}`;
-    return `Your launcher log pairs ${list}.`;
+          : `${n.slice(0, -1).join(", ")} 和 ${n[n.length - 1]}`;
+    return `启动器日志将 ${list} 配对。`;
   });
 
   // Name the character and the account rather than echoing a bare cap message —
   // "Account already has 3 characters" does not say WHICH account, and the user
   // has to know that to fix it.
   const rejectionText = (r: Rejected) =>
-    `${nameOf(r.char_id)} wasn't paired with ${accountLabel(r.user_id)} — ` +
-    `${r.reason.charAt(0).toLowerCase()}${r.reason.slice(1)}. Unpair one there and try again.`;
+    `${nameOf(r.char_id)} 未能与 ${accountLabel(r.user_id)} 配对 — ` +
+    `${r.reason.charAt(0).toLowerCase()}${r.reason.slice(1)}。请在那个账号上取消一个配对后重试。`;
 
   async function acceptAll() {
     error = null;
@@ -214,7 +214,7 @@
         // the account by alias rather than by its bare id, for the reason
         // `rejectionText` already gives: a raw `core_user` number does not tell
         // the user which account they just paired.
-        await endCapture(`Paired ${nameOf(charId)} with ${accountLabel(userId)}.`);
+        await endCapture(`已将 ${nameOf(charId)} 与 ${accountLabel(userId)} 配对。`);
       } catch (e) {
         // NOT an ending: the cap was hit, the wizard stays open, and the next
         // press must diff against the same baseline.
@@ -226,14 +226,14 @@
     // that is still sitting in the backend. None of them ends the capture.
     if (r.changed_users.length === 0) {
       captureState.note =
-        "The account file didn't change. Make an account-wide change (so core_user is written), fully log out, then click Done again.";
+        "账号文件没有变化。做一处账号级改动（让 core_user 被写入），完全退出登录，然后再次点击「完成」。";
     } else if (r.changed_users.length > 1) {
-      captureState.note = `Several account files changed (${r.changed_users.join(", ")}). Log out of just one account and retry.`;
+      captureState.note = `多个账号文件发生变化（${r.changed_users.join(", ")}）。请只退出其中一个账号后重试。`;
     } else if (r.changed_chars.length > 1) {
       captureState.note =
-        "Several character files changed — log in as just one character, change something, log out, and retry.";
+        "多个角色文件发生变化 — 请只用一个角色登录，做一处改动，退出后重试。";
     } else {
-      captureState.note = "No matching character file changed — log in as one character, change something, log out, and retry.";
+      captureState.note = "没有匹配的角色文件发生变化 — 请用一个角色登录，做一处改动，退出后重试。";
     }
     await loadRoster();
   }
@@ -267,7 +267,7 @@
 </script>
 
 <Sheet
-  title="Accounts"
+  title="账号"
   titled
   placement="work"
   onclose={onClose}
@@ -277,9 +277,9 @@
        NOT, because a count is not an answer to "which characters am I about to
        assign?" — it moves into the body with the names (§4.8). -->
   {#snippet actions()}
-    <Button onclick={() => loadRoster()}>Refresh accounts</Button>
+    <Button onclick={() => loadRoster()}>刷新账号</Button>
     <Button onclick={startCapture} disabled={captureState.active}
-            disabledReason="A calibration is already in progress">Calibrate an account…</Button>
+            disabledReason="校准已在进行中">校准账号…</Button>
   {/snippet}
 
   <!-- One wrapper so this file's scoped rules still have an element of its own
@@ -290,14 +290,14 @@
     <!-- A plain Panel, not `role="dialog"`: inside a sheet that would be a
          dialog within a dialog. -->
     <Panel class="capture" as="div">
-      <h3>Calibrate an account</h3>
-      <p>1. Launch EVE and log in as the character whose account you want to identify.</p>
-      <p>2. Change an account-wide setting (e.g. toggle Camera Shake under Settings → Display &amp; Graphics) so the account file is written.</p>
-      <p>3. Fully log out / close the client, then click Done.</p>
-      <p class="capture-note">You can close this panel and come back — the calibration keeps running.</p>
+      <h3>校准账号</h3>
+      <p>1. 启动 EVE，并用你想识别其账号的那个角色登录。</p>
+      <p>2. 修改一处账号级设置（例如在 设置 → 显示与图形 下切换镜头震动），使账号文件被写入。</p>
+      <p>3. 完全退出登录或关闭客户端，然后点击「完成」。</p>
+      <p class="capture-note">你可以关闭本面板后再回来 — 校准会继续运行。</p>
       <div class="capture-actions">
-        <Button variant="primary" onclick={finishCapture}>Done</Button>
-        <Button onclick={() => endCapture()}>Cancel</Button>
+        <Button variant="primary" onclick={finishCapture}>完成</Button>
+        <Button onclick={() => endCapture()}>取消</Button>
       </div>
     </Panel>
   {/if}
@@ -316,7 +316,7 @@
     <InlineMessage variant="info" class="accept-all">
       {acceptAllSentence}
       <Button variant="primary" onclick={acceptAll}>
-        {allPairs.length === 1 ? "Accept" : "Accept all"}
+        {allPairs.length === 1 ? "接受" : "接受全部"}
       </Button>
     </InlineMessage>
   {/if}
@@ -328,8 +328,8 @@
 
   {#if accounts.length === 0}
     <EmptyState
-      title="No accounts here yet"
-      description="Open a profile file, or calibrate an account to identify one." />
+      title="这里尚无账号"
+      description="打开一个配置档文件，或校准一个账号来识别它。" />
   {/if}
 
   <ul class="cards">
@@ -341,7 +341,7 @@
         <Field
           kind="text"
           class="alias"
-          ariaLabel="Account alias"
+          ariaLabel="账号别名"
           value={acct.alias ?? ""}
           placeholder={`core_user_${acct.user_id}`}
           onblur={(e: FocusEvent & { currentTarget: HTMLInputElement }) =>
@@ -356,7 +356,7 @@
                 {nameOf(charId)}
                 {#snippet actions()}
                   <Button variant="ghost" size="sm" iconOnly
-                          title="Unpair {nameOf(charId)} from this account"
+                          title="从此账号取消配对 {nameOf(charId)}"
                           onclick={() => unpair(charId)}>
                     ✕
                   </Button>
@@ -371,7 +371,7 @@
                      it: dashed border, --info tone, and no opacity at all. It
                      used to be a settled chip minus 15% opacity, which is
                      exactly why it was reported as not visible enough. -->
-                <Chip state="proposed" title="From your launcher log">
+                <Chip state="proposed" title="来自你的启动器日志">
                   {nameOf(gid)}
                   {#snippet actions()}
                     <!-- Not symmetric, and they should stop looking it: Accept
@@ -380,10 +380,10 @@
                          weight is part of why the ghost read as decoration
                          rather than as a question. The accessible name is
                          unchanged, and the visible text is a prefix of it. -->
-                    <Button variant="primary" size="sm" title="Accept {nameOf(gid)}"
-                            aria-label="Accept {nameOf(gid)}"
-                            onclick={() => onConfirm(gid, acct.user_id)}>Accept</Button>
-                    <Button variant="ghost" size="sm" iconOnly title="Dismiss {nameOf(gid)}"
+                    <Button variant="primary" size="sm" title="接受 {nameOf(gid)}"
+                            aria-label="接受 {nameOf(gid)}"
+                            onclick={() => onConfirm(gid, acct.user_id)}>接受</Button>
+                    <Button variant="ghost" size="sm" iconOnly title="忽略 {nameOf(gid)}"
                             onclick={() => (launcherState.dismissed = [...launcherState.dismissed, gid])}>✕</Button>
                   {/snippet}
                 </Chip>
@@ -391,7 +391,7 @@
                 <Field
                   kind="select"
                   class="add-char"
-                  ariaLabel="Add a character to this account"
+                  ariaLabel="为此账号添加角色"
                   bind:value={addPick[acct.user_id]}
                   onchange={() => {
                     const v = Number(addPick[acct.user_id]);
@@ -399,7 +399,7 @@
                     addPick[acct.user_id] = "";
                   }}
                   options={[
-                    { value: "", label: "Add a character" },
+                    { value: "", label: "添加角色" },
                     ...sortedUnassigned.map((uid) => ({ value: String(uid), label: nameOf(uid) })),
                   ]} />
               {/if}
@@ -409,19 +409,19 @@
         <!-- Only when a ghost actually got a slot: with the card full, every
              ghost is overflow and each carries its own line already. -->
         {#if ghosts.length > 0 && free > 0}
-          <InlineMessage class="from-launcher">From your launcher log.</InlineMessage>
+          <InlineMessage class="from-launcher">来自你的启动器日志。</InlineMessage>
         {/if}
         {#each ghosts.slice(free) as gid (gid)}
           <InlineMessage class="from-launcher">
-            Your launcher log also puts {nameOf(gid)} here, but this account is full.
-            <Button size="sm" onclick={() => onConfirm(gid, acct.user_id)}>Accept anyway</Button>
+            你的启动器日志还把 {nameOf(gid)} 放在这里，但此账号已满。
+            <Button size="sm" onclick={() => onConfirm(gid, acct.user_id)}>仍然接受</Button>
           </InlineMessage>
         {/each}
         <!-- A conflict is --warn, not --info: it reports a disagreement with
              what is stored, and one of the two has to lose. -->
         {#each card?.conflicts ?? [] as c (c.charId)}
           <InlineMessage variant="warn" class="conflict">
-            Your launcher log puts {nameOf(c.charId)} on {accountLabel(c.target)}.
+            你的启动器日志把 {nameOf(c.charId)} 放在 {accountLabel(c.target)} 上。
             <!-- The visible label answers the question on its own. "Move it"
                  needed the sentence above it to parse, and the aria-labels that
                  propped it up disagreed with the visible text — an accessible
@@ -429,9 +429,9 @@
                  "Mine" is not a word this app uses for anything; what the button
                  actually answers is WHICH account holds this character. -->
             <Button size="sm"
-                    onclick={() => onConfirm(c.charId, c.target)}>Move to {accountLabel(c.target)}</Button>
+                    onclick={() => onConfirm(c.charId, c.target)}>移动到 {accountLabel(c.target)}</Button>
             <Button size="sm"
-                    onclick={() => (launcherState.dismissed = [...launcherState.dismissed, c.charId])}>Keep here</Button>
+                    onclick={() => (launcherState.dismissed = [...launcherState.dismissed, c.charId])}>保留在此</Button>
           </InlineMessage>
         {/each}
       </li>
@@ -440,7 +440,7 @@
 
   {#if unassigned.length > 0}
     <div class="unassigned">
-      <h3>Characters not on any account</h3>
+      <h3>未分配到任何账号的角色</h3>
       <ul>
         {#each sortedUnassigned as uid (uid)}
           <li>{nameOf(uid)}</li>

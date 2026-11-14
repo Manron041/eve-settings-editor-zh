@@ -38,8 +38,8 @@
   );
 </script>
 
-<Popover {anchor} placement="bottom-end" {onclose} ariaLabel="History" class="history">
-  <p class="section">History</p>
+<Popover {anchor} placement="bottom-end" {onclose} ariaLabel="历史" class="history">
+  <p class="section">历史</p>
   {#if groups.length === 0}
     <EmptyState title="Nothing open." description="Backups are listed per open file." />
   {:else}

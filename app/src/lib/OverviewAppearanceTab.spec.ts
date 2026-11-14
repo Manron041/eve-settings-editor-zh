@@ -49,7 +49,7 @@ const swatches = () =>
 
 /** Switch to the Colortag sub-tab. */
 async function colortag() {
-  const tab = [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === "Colortag");
+  const tab = [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === "色标");
   if (!tab) throw new Error("no Colortag sub-tab");
   await fireEvent.click(tab);
   // The strip is a roving tabindex; the click is what selects.
@@ -59,8 +59,8 @@ async function colortag() {
 // It takes no tab: the pane says so rather than ignoring the selection silently.
 test("says Appearance is account-wide", () => {
   mount();
-  expect(document.querySelector("h4")?.textContent).toBe("Appearance");
-  expect(document.body.textContent).toMatch(/account-wide: applies to every tab/i);
+  expect(document.querySelector("h4")?.textContent).toBe("外观");
+  expect(document.body.textContent).toMatch(/账号范围：适用于每个标签页/i);
 });
 
 describe("the colortag surface", () => {
@@ -89,7 +89,7 @@ describe("the colortag surface", () => {
   test("Reset clears the flag entry, not the background entry", async () => {
     mount();
     await colortag();
-    const reset = [...document.querySelectorAll("button")].filter((b) => b.textContent?.trim() === "Reset");
+    const reset = [...document.querySelectorAll("button")].filter((b) => b.textContent?.trim() === "重置");
     // Only state 48 has a stored colortag colour, so only its row offers Reset.
     expect(reset.length).toBe(1);
     await fireEvent.click(reset[0]);

@@ -39,15 +39,15 @@ describe("NeocomButtons", () => {
 
   test("the end rows cannot move past the ends", () => {
     render(NeocomButtons, props(bar([btn(0, "chat"), btn(1, "mail")])));
-    expect((screen.getByLabelText("Move Chat up") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Move EVE Mail down") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Move Chat down") as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByLabelText("上移 Chat") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 EVE Mail") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 Chat") as HTMLButtonElement).disabled).toBe(false);
   });
 
   test("moving a button sends the whole permutation", async () => {
     const p = props(bar([btn(0, "chat"), btn(1, "mail"), btn(2, "wallet")]));
     render(NeocomButtons, p);
-    screen.getByLabelText("Move Wallet up").click();
+    screen.getByLabelText("上移 Wallet").click();
     expect(p.onReorder).toHaveBeenCalledWith([0, 2, 1]);
   });
 
@@ -60,7 +60,7 @@ describe("NeocomButtons", () => {
 
   test("reset is disabled when the character has no original", () => {
     render(NeocomButtons, props(bar([btn(0, "chat")], [])));
-    expect((screen.getByText("Reset to original") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByText("恢复为原始") as HTMLButtonElement).disabled).toBe(true);
   });
 
   test("read-only disables every control", () => {
@@ -68,12 +68,12 @@ describe("NeocomButtons", () => {
     // reaches the backend and comes back as a dialog instead of being visibly
     // unavailable.
     render(NeocomButtons, props(bar([btn(0, "chat"), btn(1, "mail")], [btn(0, "wallet")]), true));
-    expect((screen.getByLabelText("Move EVE Mail up") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Move Chat down") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Remove Chat") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Add a neocom button") as HTMLSelectElement).disabled).toBe(true);
-    expect((screen.getByText("Add") as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByText("Reset to original") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("上移 EVE Mail") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("下移 Chat") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("移除 Chat") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText("添加 Neocom 按钮") as HTMLSelectElement).disabled).toBe(true);
+    expect((screen.getByText("添加") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByText("恢复为原始") as HTMLButtonElement).disabled).toBe(true);
   });
 
   test("a failed add keeps the choice in the dropdown", async () => {
@@ -81,9 +81,9 @@ describe("NeocomButtons", () => {
     // addable — and the pick must still be there to retry.
     const p = props(bar([btn(0, "chat")], [btn(0, "chat"), btn(1, "mail")]));
     render(NeocomButtons, p);
-    const select = screen.getByLabelText("Add a neocom button") as HTMLSelectElement;
+    const select = screen.getByLabelText("添加 Neocom 按钮") as HTMLSelectElement;
     await fireEvent.change(select, { target: { value: "mail" } });
-    await fireEvent.click(screen.getByText("Add")); // fireEvent, so the state flush lands
+    await fireEvent.click(screen.getByText("添加")); // fireEvent, so the state flush lands
     expect(p.onAdd).toHaveBeenCalledWith("mail", 1, "mail.png");
     await waitFor(() => expect(select.value).toBe("mail"));
   });
@@ -91,9 +91,9 @@ describe("NeocomButtons", () => {
   test("a successful add clears the dropdown", async () => {
     const p = props(bar([btn(0, "chat")], [btn(0, "chat"), btn(1, "mail")]));
     const { rerender } = render(NeocomButtons, p);
-    const select = screen.getByLabelText("Add a neocom button") as HTMLSelectElement;
+    const select = screen.getByLabelText("添加 Neocom 按钮") as HTMLSelectElement;
     await fireEvent.change(select, { target: { value: "mail" } });
-    await fireEvent.click(screen.getByText("Add"));
+    await fireEvent.click(screen.getByText("添加"));
     // What a successful add looks like from here: mail is on the bar now, so it
     // is no longer addable.
     await rerender({ ...p, bar: bar([btn(0, "chat"), btn(1, "mail")], [btn(0, "chat"), btn(1, "mail")]) });
@@ -104,10 +104,10 @@ describe("NeocomButtons", () => {
     toasts.length = 0;
     const p = props(bar([btn(0, "chat")], [btn(0, "wallet")]));
     render(NeocomButtons, p);
-    screen.getByText("Reset to original").click();
+    screen.getByText("恢复为原始").click();
     await waitFor(() => expect(p.onReset).toHaveBeenCalled());
     expect(toasts.map((t) => t.message)).toContain(
-      "Neocom reset to the client's original buttons.",
+      "Neocom 已恢复为客户端原始按钮。",
     );
   });
 

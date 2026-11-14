@@ -280,8 +280,8 @@ export function resetSubject(): void {
  */
 export function noCharactersHint(): string {
   return subject.hideNonStandard
-    ? "No character files with EVE's own names in these profiles. Untick “Hide non-standard files”, or use “Open file…”."
-    : "These profiles hold no character files. Use “Open file…” to open an account file directly.";
+    ? "这些配置档中没有 EVE 原生命名的角色文件。取消勾选“隐藏非标准文件”，或用“打开文件…”。"
+    : "这些配置档中没有角色文件。用“打开文件…”直接打开账号文件。";
 }
 
 /** Every character id across ALL discovered profiles — the set whose names are
@@ -562,7 +562,7 @@ export async function saveFile(force = false): Promise<void> {
     };
   }
   if (saved.length) {
-    const also = moved ? ` Moved tab widths for ${moved} other character${moved === 1 ? "" : "s"} too.` : "";
-    toast(`Saved ${saved.join(" and ")}.${also}`, { variant: "success" });
+    const also = moved ? `另外还移动了 ${moved} 名其他角色的标签页宽度。` : "";
+    toast(`已保存 ${saved.join(" 和 ")}。${also}`, { variant: "success" });
   }
 }

@@ -37,7 +37,7 @@ function mount(onRestored: (slot: Slot, o: OpenOutcome) => void = () => {}) {
 }
 
 const groups = async () => {
-  const box = await screen.findByRole("dialog", { name: "History" });
+  const box = await screen.findByRole("dialog", { name: "历史" });
   return within(box).getAllByRole("heading");
 };
 
@@ -91,7 +91,7 @@ test("each group's Restore targets that group's slot", async () => {
   let landed: Slot | null = null;
   mount((slot) => (landed = slot));
 
-  const box = await screen.findByRole("dialog", { name: "History" });
+  const box = await screen.findByRole("dialog", { name: "历史" });
   const restore = await within(box).findByRole("button", { name: "Restore" });
   await fireEvent.click(restore);
 
@@ -127,7 +127,7 @@ test("a file with many backups shows only its most recent, so both groups fit", 
   );
   mount();
 
-  const box = await screen.findByRole("dialog", { name: "History" });
+  const box = await screen.findByRole("dialog", { name: "历史" });
   // Five of thirteen, and the rest behind a control that names how many.
   await waitFor(() => expect(within(box).getAllByRole("button", { name: "Restore" })).toHaveLength(6));
   expect(within(box).getByRole("button", { name: "8 older" })).toBeTruthy();
@@ -160,7 +160,7 @@ test("a click inside a modal above it does not close the popover", async () => {
   render(HistoryPopover, {
     props: { anchor: document.body, onclose: () => (closed = true), onRestored: () => {} },
   });
-  await screen.findByRole("dialog", { name: "History" });
+  await screen.findByRole("dialog", { name: "历史" });
 
   // A modal layer over the top, as ConfirmDialog's Sheet renders it.
   const modal = document.createElement("div");

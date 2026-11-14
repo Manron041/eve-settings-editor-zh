@@ -19,12 +19,12 @@
 
   // EVE's own Appearance labels, in EVE's own order.
   const BOOL_LABELS: [string, string][] = [
-    ["useSmallColorTags", "Use small colortags"],
-    ["useSmallText", "Use small font"],
-    ["applyToStructures", "Also apply to structures"],
-    ["applyToOtherObjects", "Also apply to other objects in space"],
-    ["overviewBroadcastsToTop", "Show fleet broadcasts at the top"],
-    ["hideCorpTicker", "Hide corporation ticker"],
+    ["useSmallColorTags", "使用小色标"],
+    ["useSmallText", "使用小字号"],
+    ["applyToStructures", "同样应用于建筑"],
+    ["applyToOtherObjects", "同样应用于太空中的其他物体"],
+    ["overviewBroadcastsToTop", "在顶部显示舰队广播"],
+    ["hideCorpTicker", "隐藏军团简称"],
   ];
 
   let surface = $state<"Background" | "Colortag">("Background");
@@ -79,7 +79,7 @@
     try { onChanged(await fn()); onUserDirty(); }
     catch (e) {
       error = {
-        text: `That appearance setting wasn't changed — ${errText(e)}`,
+        text: `该外观设置未能修改 — ${errText(e)}`,
         detail: errMessage(e),
       };
     }
@@ -132,14 +132,14 @@
 
 {#if appearance}
   <!-- The tab list beside this keeps a row highlighted; this pane ignores it. -->
-  <div class="pane-head"><PanelHeader title="Appearance" subtitle="Account-wide: applies to every tab" level={4} /></div>
+  <div class="pane-head"><PanelHeader title="外观" subtitle="账号范围：适用于每个标签页" level={4} /></div>
   {#if error}
     <InlineMessage variant="error" detail={error.detail}>{error.text}</InlineMessage>
   {/if}
   <div class="bools">
     {#each BOOL_LABELS as [key, label] (key)}
       {#if key === "applyToStructures"}
-        <p class="apply-note">The Colortag and Background settings apply to ships and drones by default.</p>
+        <p class="apply-note">色标和背景设置默认应用于舰船与无人机。</p>
       {/if}
       <Field
         kind="checkbox"
@@ -156,16 +156,15 @@
   <Tabs
     variant="underline"
     class="surfaces"
-    ariaLabel="Appearance surface"
+    ariaLabel="外观面板"
     tabs={[
-      { id: "Colortag", label: "Colortag" },
-      { id: "Background", label: "Background" },
+      { id: "Colortag", label: "色标" },
+      { id: "Background", label: "背景" },
     ]}
     bind:value={surface} />
 
   {#if surfaceUnset}
-    <p class="meta">This account has never customised its {surface} states, so these are EVE's
-      defaults and aren't saved yet. Your first change here writes them to the file.</p>
+    <p class="meta">此账号从未自定义过其 {surface} 状态，因此这些是 EVE 的默认值，尚未保存。你在此处的首次修改会将它们写入文件。</p>
   {/if}
 
   <!-- The palette as suggestions in the native colour picker. It is a hint, not
@@ -213,23 +212,23 @@
               list="eve-palette"
               controlClass={!c && !fallback ? "unset" : ""}
               value={c ? rgbaToHex(c) : (fallback ?? UNSET_HEX)}
-              ariaLabel={isBg ? "Background colour" : "Colortag colour"}
+              ariaLabel={isBg ? "背景颜色" : "色标颜色"}
               onchange={(e) => setColor(id, (e.currentTarget as HTMLInputElement).value)} />
             <!-- `palette.length` guards the empty case: no palette means we
                  cannot tell, and "we cannot tell" must not be shown as "this
                  will be dropped". -->
             {#if c && palette.length > 0 && !paletteName(c)}
               <span class="off-palette"
-                    title="This exact colour is not one of EVE's {palette.length} palette colours, the only ones a pack can name, so exporting a pack will leave this state out.">off-palette</span>
+                    title="此精确颜色不是 EVE 的 {palette.length} 种调色板颜色之一，而配置包只能命名这些颜色，因此导出配置包时会遗漏此状态。">非调色板色</span>
             {/if}
             {#if c}
               <Button size="sm" class="reset" onclick={() => resetColor(id)}
-                      title="Remove the stored colour, restoring EVE's default">Reset</Button>
+                      title="移除已保存的颜色，恢复 EVE 默认">重置</Button>
             {:else}
               <span class="default-note"
                     title={fallback
-                      ? "No stored colour — this is EVE's built-in default for this state"
-                      : "No stored colour, and EVE's built-in default for this state is unknown"}>default</span>
+                      ? "无已保存的颜色 — 这是 EVE 为此状态内置的默认值"
+                      : "无已保存的颜色，且此状态的 EVE 内置默认值未知"}>默认</span>
             {/if}
           {/snippet}
         </ListRow>

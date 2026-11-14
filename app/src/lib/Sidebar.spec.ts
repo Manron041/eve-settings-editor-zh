@@ -75,24 +75,24 @@ const rowNames = () =>
 describe("when nothing in the sidebar can be listed", () => {
   test("a profile holding only account files says where to go instead", async () => {
     await mount([profile([file("core_user_80000001.dat", "user", 80000001)])]);
-    const hint = await waitFor(() => screen.getByText(/no character files/i));
+    const hint = await waitFor(() => screen.getByText(/没有 EVE 原生命名的角色文件/));
     // "Open file…" is also a button, so assert on the hint's own text.
-    expect(hint.textContent).toMatch(/Open file/);
+    expect(hint.textContent).toMatch(/打开文件/);
   });
 
   test("the hint names the filter when the filter is what hid them", async () => {
     // A non-standard name is hidden by the default toggle, so the profile lists
     // nothing — but the fix here is to untick the box, not to open a file.
     await mount([profile([file("core_char_90000001.dat.bak", "char", 90000001)])]);
-    await waitFor(() => expect(screen.getByText(/Untick/i)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/取消勾选/)).toBeTruthy());
   });
 
   test("unticking the filter reveals the file and drops the hint", async () => {
     await mount([profile([file("core_char_90000001.dat.bak", "char", 90000001)])]);
-    await waitFor(() => expect(screen.getByText(/Untick/i)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/取消勾选/)).toBeTruthy());
     const toggle = screen.getByRole("checkbox", { name: /hide non-standard/i });
     await fireEvent.click(toggle);
-    await waitFor(() => expect(screen.queryByText(/Untick/i)).toBeNull());
+    await waitFor(() => expect(screen.queryByText(/取消勾选/)).toBeNull());
   });
 
   test("a profile with a character file shows no hint at all", async () => {
@@ -219,7 +219,7 @@ describe("the character list", () => {
 // menu — is in AppMenu.spec.ts.
 test("the five migrated actions are gone from the sidebar, and Open file… is not", async () => {
   await mount([profile([file("core_char_950.dat", "char", 950)])]);
-  await waitFor(() => expect(screen.getByRole("button", { name: /open file/i })).toBeTruthy());
+  await waitFor(() => expect(screen.getByRole("button", { name: /打开文件/ })).toBeTruthy());
   for (const name of [/^accounts$/i, /copy settings/i, /^about$/i, /refresh names/i, /rescan/i]) {
     expect(screen.queryByRole("button", { name })).toBeNull();
   }

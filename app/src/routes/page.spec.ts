@@ -119,11 +119,11 @@ async function openFile(name: string) {
 
 /** Open the ☰ menu and click one of its items. */
 async function menu(name: RegExp) {
-  await fireEvent.click(screen.getByRole("button", { name: "Menu" }));
+  await fireEvent.click(screen.getByRole("button", { name: "菜单" }));
   await fireEvent.click(await screen.findByRole("menuitem", { name }));
 }
 
-const save = () => screen.getByRole("button", { name: "Save" }) as HTMLButtonElement;
+const save = () => screen.getByRole("button", { name: "保存" }) as HTMLButtonElement;
 
 describe("routing a file to its slot", () => {
   // `core_user_<id>.dat` is the account file; everything else is the char slot,
@@ -149,7 +149,7 @@ describe("routing a file to its slot", () => {
     calls.stub("open_file", opened("core_user_140.dat"));
     picked = "/eve/core_user_140.dat";
     await mount([both]);
-    await fireEvent.click(within(sidebar()).getByRole("button", { name: /open file/i }));
+    await fireEvent.click(within(sidebar()).getByRole("button", { name: /打开文件/i }));
     await waitFor(() => {
       expect(calls.of("open_file")[0].args).toMatchObject({
         slot: "user", path: "/eve/core_user_140.dat",
@@ -164,7 +164,7 @@ describe("routing a file to its slot", () => {
     calls.stub("open_file", opened("prefs.ini"));
     picked = "/eve/prefs.ini";
     await mount([both]);
-    await fireEvent.click(within(sidebar()).getByRole("button", { name: /open file/i }));
+    await fireEvent.click(within(sidebar()).getByRole("button", { name: /打开文件/i }));
     await waitFor(() => {
       expect(calls.of("open_file")[0].args).toMatchObject({
         slot: "char", path: "/eve/prefs.ini",
@@ -181,7 +181,7 @@ describe("saving", () => {
   // is before the user has anything to save.
   test("nothing open still shows Save, disabled", async () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);
-    expect(screen.getByText(/open a character to begin/i)).toBeTruthy();
+    expect(screen.getByText(/打开角色即可开始/)).toBeTruthy();
     expect(save().disabled).toBe(true);
   });
 
@@ -201,7 +201,7 @@ describe("saving", () => {
     calls.stub("open_file", opened("core_char_950.dat", true));
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
-    await screen.findByText("read-only");
+    await screen.findByText("只读");
     expect(save().disabled).toBe(true);
   });
 
@@ -227,10 +227,10 @@ describe("saving", () => {
     await waitFor(() => expect(save().disabled).toBe(false));
 
     await menu(/accounts/i);
-    await waitFor(() => expect(screen.getByRole("heading", { name: /accounts/i })).toBeTruthy());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /账号/i })).toBeTruthy());
 
     expect(save().disabled).toBe(false);
-    expect(screen.getByText(/1 unsaved/)).toBeTruthy();
+    expect(screen.getByText(/1 处未保存/)).toBeTruthy();
   });
 
   /**
@@ -266,7 +266,7 @@ describe("saving", () => {
     await waitFor(() => expect(calls.of("save_document").length).toBe(2));
     // ...and reported once.
     await waitFor(() => expect(toasts).toHaveLength(1));
-    expect(toasts[0].message).toBe("Saved Pilot Alpha and stormdelay2.");
+    expect(toasts[0].message).toBe("已保存 Pilot Alpha 和 stormdelay2。");
     // The two facts nobody reads at save time are NOT in it; they live in
     // History, where they are wanted.
     expect(toasts[0].message).not.toMatch(/bytes|backup|\.dat/i);
@@ -295,9 +295,9 @@ describe("saving", () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
     await menu(/accounts/i);
-    await waitFor(() => expect(screen.getByRole("heading", { name: /accounts/i })).toBeTruthy());
-    await fireEvent.click(screen.getByRole("tab", { name: "Raw" }));
-    await waitFor(() => expect(screen.queryByRole("heading", { name: /accounts/i })).toBeNull());
+    await waitFor(() => expect(screen.getByRole("heading", { name: /账号/i })).toBeTruthy());
+    await fireEvent.click(screen.getByRole("tab", { name: "原始" }));
+    await waitFor(() => expect(screen.queryByRole("heading", { name: /账号/i })).toBeNull());
   });
 });
 
@@ -324,8 +324,8 @@ test("a tab clicked while a file is still opening is not undone", async () => {
   await waitFor(() => expect(calls.of("open_file").length).toBe(1));
 
   // The user reaches for a tab before the open has finished.
-  await fireEvent.click(screen.getByRole("tab", { name: "Probes" }));
-  expect(screen.getByRole("tab", { name: "Probes" }).getAttribute("aria-selected")).toBe("true");
+  await fireEvent.click(screen.getByRole("tab", { name: "探针" }));
+  expect(screen.getByRole("tab", { name: "探针" }).getAttribute("aria-selected")).toBe("true");
 
   release();
   // Let the rest of the open — the layout probe and the slot reconcile — run to
@@ -333,7 +333,7 @@ test("a tab clicked while a file is still opening is not undone", async () => {
   await waitFor(() => expect(calls.of("window_layout").length).toBeGreaterThan(0));
   await new Promise((r) => setTimeout(r, 0));
   expect(
-    screen.getByRole("tab", { name: "Probes" }).getAttribute("aria-selected"),
+    screen.getByRole("tab", { name: "探针" }).getAttribute("aria-selected"),
     "the open must not snap the view back",
   ).toBe("true");
 });
@@ -376,7 +376,7 @@ test("Ctrl+F focuses the window filter on Layout", async () => {
   });
   await mount([profile(file("core_char_950.dat", "char", 950))]);
   await openFile("core_char_950.dat");
-  await waitFor(() => expect(screen.getByRole("tab", { name: "Layout" }).getAttribute("aria-selected")).toBe("true"));
+  await waitFor(() => expect(screen.getByRole("tab", { name: "布局" }).getAttribute("aria-selected")).toBe("true"));
 
   const box = await screen.findByLabelText("Filter windows");
   await fireEvent.keyDown(window, { key: "f", ctrlKey: true });
@@ -411,11 +411,11 @@ test("Ctrl+F on Overview switches to Filters and focuses the group filter", asyn
   });
   await openFile("core_char_950.dat");
   await waitFor(() => expect(subject.slots.user?.status).toBe("opened"));
-  await fireEvent.click(screen.getByRole("tab", { name: "Overview" }));
+  await fireEvent.click(screen.getByRole("tab", { name: "总览" }));
 
   // The view opens on Columns — so the shortcut has real work to do.
-  const filters = await screen.findByRole("tab", { name: "Filters" });
-  expect(screen.getByRole("tab", { name: "Columns" }).getAttribute("aria-selected")).toBe("true");
+  const filters = await screen.findByRole("tab", { name: "筛选" });
+  expect(screen.getByRole("tab", { name: "列" }).getAttribute("aria-selected")).toBe("true");
   expect(filters.getAttribute("aria-selected")).toBe("false");
 
   const box = await screen.findByLabelText("Filter groups");
@@ -433,20 +433,20 @@ describe("the view tabs", () => {
     calls.stub("open_file", opened("prefs.ini"));
     picked = "/eve/prefs.ini";
     await mount([profile(file("core_char_950.dat", "char", 950))]);
-    await fireEvent.click(within(sidebar()).getByRole("button", { name: /open file/i }));
+    await fireEvent.click(within(sidebar()).getByRole("button", { name: /打开文件/i }));
     await waitFor(() => expect(calls.of("open_file").length).toBe(1));
     picked = null;
 
-    for (const v of ["Layout", "Overview", "Autofill", "Keybinds", "Probes", "Raw"]) {
+    for (const v of ["布局", "总览", "自动补全", "快捷键", "探针", "原始"]) {
       expect(screen.getByRole("tab", { name: v })).toBeTruthy();
     }
     // Raw is always reachable; the other five say why they are not.
-    for (const v of ["Layout", "Overview", "Autofill", "Keybinds", "Probes"]) {
+    for (const v of ["布局", "总览", "自动补全", "快捷键", "探针"]) {
       const tab = screen.getByRole("tab", { name: v });
       expect(tab.getAttribute("aria-disabled")).toBe("true");
       expect(tab.getAttribute("title")).toBeTruthy();
     }
-    expect(screen.getByRole("tab", { name: "Raw" }).getAttribute("aria-disabled")).toBeNull();
+    expect(screen.getByRole("tab", { name: "原始" }).getAttribute("aria-disabled")).toBeNull();
   });
 
   // The account-scoped editors need an id to work from — a character id or an
@@ -455,7 +455,7 @@ describe("the view tabs", () => {
     calls.stub("open_file", opened("core_char_950.dat"));
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
-    for (const v of ["Overview", "Autofill", "Keybinds", "Probes"]) {
+    for (const v of ["总览", "自动补全", "快捷键", "探针"]) {
       const tab = await screen.findByRole("tab", { name: v });
       await waitFor(() => expect(tab.getAttribute("aria-disabled")).toBeNull());
     }
@@ -469,9 +469,9 @@ describe("the view tabs", () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
     await waitFor(() => expect(calls.of("window_layout").length).toBeGreaterThan(0));
-    const tab = screen.getByRole("tab", { name: "Layout" });
+    const tab = screen.getByRole("tab", { name: "布局" });
     await waitFor(() => expect(tab.getAttribute("aria-disabled")).toBe("true"));
-    expect(tab.getAttribute("title")).toMatch(/no saved window layout/i);
+    expect(tab.getAttribute("title")).toMatch(/此文件没有保存的窗口布局/);
   });
 
   /**
@@ -487,7 +487,7 @@ describe("the view tabs", () => {
     await openFile("core_char_950.dat");
     await waitFor(() => expect(calls.of("open_file").length).toBe(1));
     expect(names()).toEqual(before);
-    expect(before).toEqual(["Layout", "Overview", "Autofill", "Keybinds", "Probes", "Fleet", "Racks", "Raw"]);
+    expect(before).toEqual(["布局", "总览", "自动补全", "快捷键", "探针", "舰队", "槽位架", "原始"]);
   });
 });
 
@@ -511,8 +511,8 @@ describe("fault (b) — a panel that changed subject with the tab", () => {
   };
 
   const historyHeadings = async () => {
-    await fireEvent.click(screen.getByRole("button", { name: /history/i }));
-    const popover = await screen.findByRole("dialog", { name: "History" });
+    await fireEvent.click(screen.getByRole("button", { name: /历史/i }));
+    const popover = await screen.findByRole("dialog", { name: "历史" });
     return within(popover)
       .getAllByRole("heading")
       .map((h) => h.textContent?.trim());
@@ -533,10 +533,10 @@ describe("fault (b) — a panel that changed subject with the tab", () => {
     expect(onOverview).toHaveLength(2);
     expect(onOverview.join(" ")).toMatch(/core_char_950\.dat/);
     expect(onOverview.join(" ")).toMatch(/core_user_140\.dat/);
-    await fireEvent.click(screen.getByRole("button", { name: /history/i }));
+    await fireEvent.click(screen.getByRole("button", { name: /历史/i }));
 
     calls.log.length = 0;
-    await fireEvent.click(screen.getByRole("tab", { name: "Autofill" }));
+    await fireEvent.click(screen.getByRole("tab", { name: "自动补全" }));
     const onAutofill = await historyHeadings();
     expect(onAutofill).toEqual(onOverview);
     await waitFor(() => {
@@ -552,7 +552,7 @@ describe("fault (b) — a panel that changed subject with the tab", () => {
     await openPaired();
     await waitFor(() => expect(setTitle).toHaveBeenCalled());
     const before = setTitle.mock.calls.at(-1);
-    for (const v of ["Autofill", "Keybinds", "Probes"]) {
+    for (const v of ["自动补全", "快捷键", "探针"]) {
       await fireEvent.click(screen.getByRole("tab", { name: v }));
       await Promise.resolve();
     }
@@ -579,26 +579,26 @@ describe("sheets", () => {
   test("the editor stays mounted while a sheet is open", async () => {
     await openChar();
     await menu(/accounts/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
-    for (const v of ["Layout", "Overview", "Autofill", "Keybinds", "Probes", "Raw"]) {
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
+    for (const v of ["布局", "总览", "自动补全", "快捷键", "探针", "原始"]) {
       expect(screen.getByRole("tab", { name: v })).toBeTruthy();
     }
-    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "保存" })).toBeTruthy();
   });
 
   test("Esc closes the sheet and returns to the editor", async () => {
     await openChar();
     await menu(/accounts/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await fireEvent.keyDown(window, { key: "Escape" });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Accounts" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
   });
 
   test("the close button closes the sheet", async () => {
     await openChar();
     await menu(/copy settings/i);
     await waitFor(() => screen.getByRole("dialog", { name: "Copy settings" }));
-    await fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "Copy settings" })).toBeNull());
   });
 
@@ -606,32 +606,32 @@ describe("sheets", () => {
   // — which resets the view, the selection and the scroll position with it.
   test("the view tab survives a sheet round-trip", async () => {
     await openChar();
-    await fireEvent.click(await screen.findByRole("tab", { name: "Keybinds" }));
+    await fireEvent.click(await screen.findByRole("tab", { name: "快捷键" }));
     await waitFor(() =>
-      expect(screen.getByRole("tab", { name: "Keybinds" }).getAttribute("aria-selected")).toBe("true"),
+      expect(screen.getByRole("tab", { name: "快捷键" }).getAttribute("aria-selected")).toBe("true"),
     );
     await menu(/accounts/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await fireEvent.keyDown(window, { key: "Escape" });
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Accounts" })).toBeNull());
-    expect(screen.getByRole("tab", { name: "Keybinds" }).getAttribute("aria-selected")).toBe("true");
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
+    expect(screen.getByRole("tab", { name: "快捷键" }).getAttribute("aria-selected")).toBe("true");
   });
 
   // Opening a document is a request to be in the editor, so it closes any sheet.
   test("opening a file closes an open sheet", async () => {
     await openChar();
     await menu(/accounts/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await openFile("core_char_950.dat");
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Accounts" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
   });
 
   test("a tab click also leaves the sheet", async () => {
     await openChar();
     await menu(/accounts/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
-    await fireEvent.click(screen.getByRole("tab", { name: "Raw" }));
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Accounts" })).toBeNull());
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
+    await fireEvent.click(screen.getByRole("tab", { name: "原始" }));
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
   });
 });
 
@@ -693,7 +693,7 @@ describe("a batch copy that wrote the open document", () => {
     // Re-reading would destroy unsaved edits, and no amount of warning makes a
     // silent discard acceptable. The message moves the discovery forward from
     // save time to now; Discard and Save are both already correct routes out.
-    await waitFor(() => screen.getByText(/rewritten on disk by Copy settings/i));
+    await waitFor(() => screen.getByText(/已被「复制设置」重写到磁盘/));
     expect(calls.of("open_file").length).toBe(1);
   });
 });
@@ -714,8 +714,8 @@ describe("the launch empty state", () => {
   test("with no characters it reuses the sidebar's own hint, word for word", async () => {
     await mount([profile(file("core_user_140.dat", "user", 140))]);
     const work = document.querySelector(".work") as HTMLElement;
-    const inWork = await within(work).findByText(/no character files/i);
-    const inSidebar = within(sidebar()).getByText(/no character files/i);
+    const inWork = await within(work).findByText(/没有 EVE 原生命名的角色文件/);
+    const inSidebar = within(sidebar()).getByText(/没有 EVE 原生命名的角色文件/);
     expect(inWork.textContent).toBe(inSidebar.textContent);
   });
 });
@@ -726,14 +726,14 @@ describe("the launch empty state", () => {
 // at the far right of the bar opened a popup at the far left. One door now, and
 // the shortcut is written on it.
 describe("opening the subject switcher", () => {
-  const panel = () => screen.queryByPlaceholderText(/search characters, presets and commands/i);
+  const panel = () => screen.queryByPlaceholderText(/Search 角色、预设和命令/);
 
   test("the subject button opens it, and it is the only button that does", async () => {
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     expect(panel()).toBeNull();
     expect(screen.queryByRole("button", { name: /search or run a command/i })).toBeNull();
 
-    await fireEvent.click(screen.getByRole("button", { name: /no character open/i }));
+    await fireEvent.click(screen.getByRole("button", { name: /未打开角色/ }));
     await waitFor(() => expect(panel()).toBeTruthy());
   });
 
@@ -770,7 +770,7 @@ describe("which views get an inspector", () => {
     calls.stub("open_file", opened("core_char_950.dat"));
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
-    await waitFor(() => expect(selected("Layout")).toBe("false"));
+    await waitFor(() => expect(selected("布局")).toBe("false"));
   }
 
   async function on(tab: string) {
@@ -780,12 +780,12 @@ describe("which views get an inspector", () => {
 
   test("Raw has one, and it is the shell's", async () => {
     await openChar();
-    await on("Raw");
+    await on("原始");
     await waitFor(() => expect(shellAside()).toBeTruthy());
     expect(work().classList.contains("wide")).toBe(false);
   });
 
-  for (const tab of ["Autofill", "Keybinds", "Probes", "Overview"]) {
+  for (const tab of ["自动补全", "快捷键", "探针", "总览"]) {
     test(`${tab} has none, and takes the width instead`, async () => {
       await openChar();
       await on(tab);
@@ -835,8 +835,8 @@ describe("live mode: the in-window assistant", () => {
     await waitFor(() => expect(subject.dirty.char).toBe(true));
     expect(subject.slots.char?.status === "opened" && subject.slots.char.tree.display).toBe("{edited}");
     expect(subject.savedAt).toBe(before + 1);
-    const t = toasts.find((t) => t.message === "Assistant: layout_edit");
-    expect(t?.action?.label).toBe("Undo");
+    const t = toasts.find((t) => t.message === "助手：layout_edit");
+    expect(t?.action?.label).toBe("撤销");
   });
 
   test("ai-edit for undo itself, or an outcome with nothing left to undo, toasts with no Undo action", async () => {
@@ -847,7 +847,7 @@ describe("live mode: the in-window assistant", () => {
 
     events.fire("ai-edit", { tool: "undo", outcome: outcome(false) });
 
-    const t = toasts.find((t) => t.message === "Assistant: undo");
+    const t = toasts.find((t) => t.message === "助手：undo");
     expect(t).toBeTruthy();
     expect(t?.action).toBeUndefined();
   });
@@ -866,10 +866,10 @@ describe("live mode: the in-window assistant", () => {
 
   test("ai-connected shows the indicator while a connection is attached", async () => {
     await mount([both]);
-    expect(screen.queryByTitle("AI assistant connected")).toBeNull();
+    expect(screen.queryByTitle("AI 助手已连接")).toBeNull();
     events.fire("ai-connected", { connections: 1 });
-    expect(await screen.findByTitle("AI assistant connected")).toBeTruthy();
+    expect(await screen.findByTitle("AI 助手已连接")).toBeTruthy();
     events.fire("ai-connected", { connections: 0 });
-    await waitFor(() => expect(screen.queryByTitle("AI assistant connected")).toBeNull());
+    await waitFor(() => expect(screen.queryByTitle("AI 助手已连接")).toBeNull());
   });
 });

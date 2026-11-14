@@ -72,7 +72,7 @@ const panel = async (title: string) => {
 describe("the broadcast panel", () => {
   test("renders the top checkbox and every type in EVE's order, checked from the file", async () => {
     mount();
-    const p = await panel("Broadcast settings");
+    const p = await panel("广播设置");
     const boxes = within(p).getAllByRole("checkbox") as HTMLInputElement[];
     expect(boxes.length).toBe(17);
     expect(within(p).getByLabelText("Always show my own broadcasts")).toBeTruthy();
@@ -80,7 +80,7 @@ describe("the broadcast panel", () => {
     expect((within(p).getByLabelText("Target") as HTMLInputElement).checked).toBe(true);
     // Never written: the default (1) is what shows.
     expect((within(p).getByLabelText("Warp to") as HTMLInputElement).checked).toBe(true);
-    expect(within(p).getByText("account file")).toBeTruthy();
+    expect(within(p).getByText("账户文件")).toBeTruthy();
   });
 
   test("a toggle writes 1 or 0 to the type's field and marks the account dirty", async () => {
@@ -88,7 +88,7 @@ describe("the broadcast panel", () => {
     calls.stub("fleet_settings", FLEET);
     calls.stub("set_fleet_field", FLEET);
     render(FleetView, { charOpen: true, userOpen: true, onUserDirty: () => dirty++, onCharDirty: noop });
-    const p = await panel("Broadcast settings");
+    const p = await panel("广播设置");
     await fireEvent.click(within(p).getByLabelText("Need armor"));
     await waitFor(() => expect(calls.of("set_fleet_field").length).toBe(1));
     expect(calls.only("set_fleet_field").args).toEqual({ name: "listen_HealArmor", text: "1" });
@@ -97,17 +97,17 @@ describe("the broadcast panel", () => {
 
   test("the top checkbox writes its own field", async () => {
     mount();
-    const p = await panel("Broadcast settings");
+    const p = await panel("广播设置");
     await fireEvent.click(within(p).getByLabelText("Always show my own broadcasts"));
     await waitFor(() => expect(calls.only("set_fleet_field").args).toEqual({ name: "listen_show_own", text: "0" }));
   });
 
   test("swatches show the stored colour, the default for an absent one, and a picked palette hex writes exact floats", async () => {
     mount();
-    const p = await panel("Broadcast settings");
-    const armor = within(p).getByLabelText("Colour for Need armor") as HTMLInputElement;
+    const p = await panel("广播设置");
+    const armor = within(p).getByLabelText("Need armor 的颜色") as HTMLInputElement;
     expect(armor.value).toBe("#1a991a"); // 0.1 * 255 rounds to 26
-    const target = within(p).getByLabelText("Colour for Target") as HTMLInputElement;
+    const target = within(p).getByLabelText("Target 的颜色") as HTMLInputElement;
     expect(target.value).toBe("#bf0000");
     await fireEvent.change(target, { target: { value: "#3380ff" } });
     await waitFor(() => expect(calls.of("set_fleet_colour").length).toBe(1));
@@ -116,7 +116,7 @@ describe("the broadcast panel", () => {
 
   test("✕ writes null, and is disabled once there is no colour", async () => {
     mount();
-    const p = await panel("Broadcast settings");
+    const p = await panel("广播设置");
     // By role+name, not `getByTitle`: the swatch itself also carries a "No
     // colour" title (the placeholder hint on an unset swatch), and that title
     // attribute is the one that survives when the ✕ button is disabled — its
@@ -125,14 +125,14 @@ describe("the broadcast panel", () => {
     // found by) is the static "No colour" passed at the call site regardless
     // of state. Role scoping also excludes the swatch, which is not a button.
     const clearOn = (label: string) =>
-      within(within(p).getByLabelText(label).closest(".row") as HTMLElement).getByRole("button", { name: "No colour" }) as HTMLButtonElement;
+      within(within(p).getByLabelText(label).closest(".row") as HTMLElement).getByRole("button", { name: "无颜色" }) as HTMLButtonElement;
     // Set, and absent-with-a-default, can still be cleared; cleared, and
     // absent-with-no-default, cannot — there is nothing left for ✕ to do.
     expect(clearOn("Need armor").disabled).toBe(false);
     expect(clearOn("Target").disabled).toBe(false);
     expect(clearOn("At location").disabled).toBe(true);
     expect(clearOn("Warp to").disabled).toBe(true);
-    expect(clearOn("Warp to").title).toBe("Already no colour");
+    expect(clearOn("Warp to").title).toBe("已无颜色");
     await fireEvent.click(clearOn("Need armor"));
     await waitFor(() => expect(calls.of("set_fleet_colour").length).toBe(1));
     expect(calls.only("set_fleet_colour").args).toEqual({ broadcast: "HealArmor", rgb: null });
@@ -140,23 +140,23 @@ describe("the broadcast panel", () => {
 
   test("an unreadable colour disables its swatch with a reason", async () => {
     mount();
-    const p = await panel("Broadcast settings");
-    const jump = within(p).getByLabelText("Colour for Jump to") as HTMLInputElement;
+    const p = await panel("广播设置");
+    const jump = within(p).getByLabelText("Jump to 的颜色") as HTMLInputElement;
     expect(jump.disabled).toBe(true);
-    expect(jump.title).toMatch(/unexpected type/);
+    expect(jump.title).toMatch(/类型不符合预期/);
   });
 
   test("a refused write reports on the panel in the error grammar", async () => {
     mount();
     calls.stub("set_fleet_field", () => Promise.reject({ code: "not_editable", message: "This value has an unexpected type here and cannot be edited safely." }));
-    const p = await panel("Broadcast settings");
+    const p = await panel("广播设置");
     await fireEvent.click(within(p).getByLabelText("Need armor"));
     const msg = await within(p).findByRole("alert");
     // `.trim()`: InlineMessage collapses the whitespace between its (absent)
     // `title` block and its children to one leading space when no title is
     // passed — the same reason other specs in this codebase read this text via
     // `.trim()` or `.toContain` rather than an unanchored match.
-    expect(msg.textContent?.trim()).toMatch(/^That broadcast setting wasn't changed — This value has an unexpected type/);
+    expect(msg.textContent?.trim()).toMatch(/^该广播设置未更改 — This value has an unexpected type/);
     expect(msg.textContent).not.toMatch(/\[not_editable\]/);
   });
 
@@ -164,15 +164,15 @@ describe("the broadcast panel", () => {
     let shown = 0;
     calls.stub("fleet_settings", { ...FLEET, user_open: false, colours: [], fields: FLEET.fields.filter((f) => f.scope === "char") });
     render(FleetView, { charOpen: true, userOpen: false, onUserDirty: noop, onCharDirty: noop, onShowAccounts: () => shown++ });
-    const p = await panel("Broadcast settings");
-    expect(within(p).getByText("No account paired")).toBeTruthy();
-    await fireEvent.click(within(p).getByRole("button", { name: "Pair this character…" }));
+    const p = await panel("广播设置");
+    expect(within(p).getByText("尚未配对账户")).toBeTruthy();
+    await fireEvent.click(within(p).getByRole("button", { name: "配对此角色…" }));
     expect(shown).toBe(1);
   });
 
   test("reloads when refreshToken changes", async () => {
     const { rerender } = mount();
-    await panel("Broadcast settings");
+    await panel("广播设置");
     await waitFor(() => expect(calls.of("fleet_settings").length).toBe(1));
     await rerender({ charOpen: true, userOpen: true, userId: 1, charId: 2, refreshToken: 1, onUserDirty: noop, onCharDirty: noop });
     await waitFor(() => expect(calls.of("fleet_settings").length).toBe(2));
@@ -183,26 +183,26 @@ describe("the watch list panel", () => {
   test("lists entries with the resolved name, the id, a swatch and a remove button", async () => {
     calls.stub("resolve_character_names", { "90000201": { name: "Pilot Delta", category: "character" } });
     mount();
-    const p = await panel("Watch list colours");
+    const p = await panel("监视列表颜色");
     const row = (await within(p).findByText("Pilot Delta")).closest("li")!;
     expect(within(row).getByText("90000201")).toBeTruthy();
-    expect((within(row).getByLabelText("Colour for Pilot Delta") as HTMLInputElement).value).toBe("#3380ff");
-    expect(within(p).getByText("character file")).toBeTruthy();
+    expect((within(row).getByLabelText("Pilot Delta 的颜色") as HTMLInputElement).value).toBe("#3380ff");
+    expect(within(p).getByText("角色文件")).toBeTruthy();
     // The unresolved id renders bare, and its unreadable colour is marked and disabled.
     const bare = within(p).getByText("90000001").closest("li")!;
-    expect(within(bare).getByText("unreadable")).toBeTruthy();
-    expect((within(bare).getByLabelText("Colour for 90000001") as HTMLInputElement).disabled).toBe(true);
+    expect(within(bare).getByText("不可读")).toBeTruthy();
+    expect((within(bare).getByLabelText("90000001 的颜色") as HTMLInputElement).disabled).toBe(true);
   });
 
   test("recolour writes exact palette floats; remove writes null", async () => {
     mount();
-    const p = await panel("Watch list colours");
-    const swatch = (await within(p).findByLabelText("Colour for 90000201")) as HTMLInputElement;
+    const p = await panel("监视列表颜色");
+    const swatch = (await within(p).findByLabelText("90000201 的颜色")) as HTMLInputElement;
     await fireEvent.change(swatch, { target: { value: "#bf0000" } });
     await waitFor(() => expect(calls.of("set_watchlist_colour").length).toBe(1));
     expect(calls.only("set_watchlist_colour").args).toEqual({ charId: 90000201, rgb: [0.75, 0.0, 0.0] });
     const row = swatch.closest("li")!;
-    await fireEvent.click(within(row).getByTitle("Remove from the list"));
+    await fireEvent.click(within(row).getByTitle("从列表移除"));
     await waitFor(() => expect(calls.of("set_watchlist_colour").length).toBe(2));
     expect(calls.of("set_watchlist_colour")[1].args).toEqual({ charId: 90000201, rgb: null });
   });
@@ -211,9 +211,9 @@ describe("the watch list panel", () => {
     toasts.splice(0, toasts.length);
     calls.stub("lookup_character", { id: 2117000000, name: "New Pilot" });
     mount();
-    const p = await panel("Watch list colours");
-    const box = within(p).getByLabelText("Add a character") as HTMLInputElement;
-    const add = within(p).getByRole("button", { name: "Add" }) as HTMLButtonElement;
+    const p = await panel("监视列表颜色");
+    const box = within(p).getByLabelText("添加角色") as HTMLInputElement;
+    const add = within(p).getByRole("button", { name: "添加" }) as HTMLButtonElement;
     expect(add.disabled).toBe(true);
     await fireEvent.input(box, { target: { value: "new pilot" } });
     expect(add.disabled).toBe(false);
@@ -224,16 +224,16 @@ describe("the watch list panel", () => {
     expect(calls.only("set_watchlist_colour").args).toEqual({ charId: 2117000000, rgb: [0.2, 0.5, 1.0] });
     await waitFor(() => expect(box.value).toBe(""));
     // ToastHost lives in +layout, so the component test reads the store.
-    expect(toasts.map((t) => t.message)).toContain("Added New Pilot");
+    expect(toasts.map((t) => t.message)).toContain("已添加 New Pilot");
   });
 
   test("add: no such character, unreachable ESI, and already listed each say so and write nothing", async () => {
     mount();
-    const p = await panel("Watch list colours");
-    const box = within(p).getByLabelText("Add a character");
+    const p = await panel("监视列表颜色");
+    const box = within(p).getByLabelText("添加角色");
     const submit = async (q: string) => {
       await fireEvent.input(box, { target: { value: q } });
-      await fireEvent.click(within(p).getByRole("button", { name: "Add" }));
+      await fireEvent.click(within(p).getByRole("button", { name: "添加" }));
     };
 
     // `.trim()`: InlineMessage collapses the whitespace around its (absent)
@@ -241,94 +241,94 @@ describe("the watch list panel", () => {
     // same reason the broadcast panel's error test above reads this way.
     calls.stub("lookup_character", null);
     await submit("Nobody");
-    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("No character called Nobody");
+    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("没有名为 Nobody 的角色");
 
     calls.stub("lookup_character", () => Promise.reject({ code: "esi", message: "ESI status 502" }));
     await submit("Someone");
-    await waitFor(() => expect(within(p).getByRole("alert").textContent?.trim()).toBe("Someone wasn't looked up — couldn't reach ESI"));
+    await waitFor(() => expect(within(p).getByRole("alert").textContent?.trim()).toBe("Someone 查询失败 — 无法连接 ESI"));
 
     calls.stub("lookup_character", { id: 90000201, name: "Pilot Delta" });
     await submit("Pilot Delta");
-    await waitFor(() => expect(within(p).getByRole("alert").textContent?.trim()).toBe("Pilot Delta is already in the list"));
+    await waitFor(() => expect(within(p).getByRole("alert").textContent?.trim()).toBe("Pilot Delta 已在列表中"));
     calls.never("set_watchlist_colour");
   });
 
   test("add: a numeric id already listed says so without an ESI lookup", async () => {
     mount();
-    const p = await panel("Watch list colours");
-    const box = within(p).getByLabelText("Add a character");
+    const p = await panel("监视列表颜色");
+    const box = within(p).getByLabelText("添加角色");
     await fireEvent.input(box, { target: { value: "90000001" } });
-    await fireEvent.click(within(p).getByRole("button", { name: "Add" }));
-    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("90000001 is already in the list");
+    await fireEvent.click(within(p).getByRole("button", { name: "添加" }));
+    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("90000001 已在列表中");
     calls.never("lookup_character");
   });
 
   test("an empty list has an empty state and the add row; no character file has neither", async () => {
     mount({ watchlist: [] });
-    const p = await panel("Watch list colours");
-    expect(within(p).getByText("No watch-list colours")).toBeTruthy();
-    expect(within(p).getByLabelText("Add a character")).toBeTruthy();
+    const p = await panel("监视列表颜色");
+    expect(within(p).getByText("尚无监视列表颜色")).toBeTruthy();
+    expect(within(p).getByLabelText("添加角色")).toBeTruthy();
   });
 
   test("no character file: the panel says so without an action", async () => {
     calls.stub("fleet_settings", { ...FLEET, char_open: false, watchlist: [] });
     render(FleetView, { charOpen: false, userOpen: true, onUserDirty: noop, onCharDirty: noop });
-    const p = await panel("Watch list colours");
-    expect(within(p).getByText("No character open")).toBeTruthy();
-    expect(within(p).queryByLabelText("Add a character")).toBeNull();
+    const p = await panel("监视列表颜色");
+    expect(within(p).getByText("未打开角色文件")).toBeTruthy();
+    expect(within(p).queryByLabelText("添加角色")).toBeNull();
     // The Formation panel is the other character-scoped one, and says so too.
-    const f = await panel("Formation");
-    expect(within(f).getByText("No character open")).toBeTruthy();
+    const f = await panel("阵型");
+    expect(within(f).getByText("未打开角色文件")).toBeTruthy();
   });
 });
 
 describe("the formation panel", () => {
   test("renders alongside the other two, each with its file chip", async () => {
     mount();
-    await panel("Broadcast settings");
-    await panel("Watch list colours");
-    const p = await panel("Formation");
-    expect(within(p).getByText("character file")).toBeTruthy();
+    await panel("广播设置");
+    await panel("监视列表颜色");
+    const p = await panel("阵型");
+    expect(within(p).getByText("角色文件")).toBeTruthy();
     // And with no account file, the character panels still render.
     calls.stub("fleet_settings", { ...FLEET, user_open: false });
     render(FleetView, { charOpen: true, userOpen: false, onUserDirty: noop, onCharDirty: noop });
-    expect((await screen.findAllByRole("heading", { name: "Formation" })).length).toBe(2);
+    expect((await screen.findAllByRole("heading", { name: "阵型" })).length).toBe(2);
   });
 
   test("shows the three numbers and the finder toggle, defaults where absent", async () => {
     mount();
-    const p = await panel("Formation");
-    const formation = within(p).getByLabelText("Formation") as HTMLSelectElement;
+    const p = await panel("阵型");
+    const formation = within(p).getByLabelText("阵型") as HTMLSelectElement;
     expect(formation.value).toBe("0");
     expect(formation.selectedOptions[0].textContent).toBe("Point");
-    expect((within(p).getByLabelText("Size") as HTMLInputElement).value).toBe("20000");
-    expect((within(p).getByLabelText("Spacing") as HTMLInputElement).value).toBe("2000");
-    expect((within(p).getByLabelText("Show only my corp, alliance and high-standing fleets") as HTMLInputElement).checked).toBe(true);
-    expect(within(p).getByText("character file")).toBeTruthy();
-    expect(within(p).getByText(/Saved fleet setups live on CCP's servers/)).toBeTruthy();
+    expect((within(p).getByLabelText("大小") as HTMLInputElement).value).toBe("20000");
+    expect((within(p).getByLabelText("间距") as HTMLInputElement).value).toBe("2000");
+    expect((within(p).getByLabelText("仅显示我的军团、联盟和高声望舰队") as HTMLInputElement).checked).toBe(true);
+    expect(within(p).getByText("角色文件")).toBeTruthy();
+    expect(within(p).getByText(/已保存的舰队配置存于 CCP 服务器/)).toBeTruthy();
   });
 
   test("a number commits rounded on change and the toggle writes 1/0", async () => {
     mount();
-    const p = await panel("Formation");
-    const size = within(p).getByLabelText("Size") as HTMLInputElement;
+    const p = await panel("阵型");
+    const size = within(p).getByLabelText("大小") as HTMLInputElement;
     await fireEvent.change(size, { target: { value: "30000.6" } });
     await waitFor(() => expect(calls.only("set_fleet_field").args).toEqual({ name: "formation_size", text: "30001" }));
-    await fireEvent.click(within(p).getByLabelText("Show only my corp, alliance and high-standing fleets"));
+    await fireEvent.click(within(p).getByLabelText("仅显示我的军团、联盟和高声望舰队"));
     await waitFor(() => expect(calls.of("set_fleet_field").length).toBe(2));
     expect(calls.of("set_fleet_field")[1].args).toEqual({ name: "finder_group_only", text: "0" });
   });
 
   test("the formation is picked by name and written as its id", async () => {
     mount();
-    const p = await panel("Formation");
-    await fireEvent.change(within(p).getByLabelText("Formation"), { target: { value: "4" } });
+    const p = await panel("阵型");
+    await fireEvent.change(within(p).getByLabelText("阵型"), { target: { value: "4" } });
     await waitFor(() => expect(calls.only("set_fleet_field").args).toEqual({ name: "formation", text: "4" }));
   });
 
   test("a formation id outside EVE's six still shows, as its raw id", async () => {
     mount({ fields: FLEET.fields.map((f) => (f.name === "formation" ? { ...f, value: "9" } : f)) });
-    const formation = within(await panel("Formation")).getByLabelText("Formation") as HTMLSelectElement;
+    const formation = within(await panel("阵型")).getByLabelText("阵型") as HTMLSelectElement;
     expect(formation.value).toBe("9");
     expect(formation.selectedOptions[0].textContent).toBe("9");
   });
@@ -336,12 +336,12 @@ describe("the formation panel", () => {
   test("a refused number edit reports on this panel and puts the field back", async () => {
     mount();
     calls.stub("set_fleet_field", () => Promise.reject({ code: "not_editable", message: "nope" }));
-    const p = await panel("Formation");
-    const size = within(p).getByLabelText("Size") as HTMLInputElement;
+    const p = await panel("阵型");
+    const size = within(p).getByLabelText("大小") as HTMLInputElement;
     await fireEvent.change(size, { target: { value: "1" } });
     // `.trim()`: same InlineMessage whitespace-collapse as the broadcast and
     // watch-list panels' own error tests above (no `title` prop passed here).
-    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("That formation setting wasn't changed — nope");
+    expect((await within(p).findByRole("alert")).textContent?.trim()).toBe("该阵型设置未更改 — nope");
     await waitFor(() => expect(size.value).toBe("20000"));
   });
 });

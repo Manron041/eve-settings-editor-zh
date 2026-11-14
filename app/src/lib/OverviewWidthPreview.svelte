@@ -171,7 +171,7 @@
   const cssPx = (v: number) => (v * scale) / (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
 </script>
 
-<section class="preview" aria-label="Overview preview">
+<section class="preview" aria-label="总览预览">
   <div class="stage">
     <canvas bind:this={canvas} class:resize={hoverEdge || drag}
             onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={() => (drag = null)}></canvas>

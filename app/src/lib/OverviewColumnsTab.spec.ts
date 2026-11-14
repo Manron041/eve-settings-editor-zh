@@ -56,7 +56,7 @@ const noop = () => {};
 // The tab list highlights a row; the pane names it too, drawn rather than raw.
 test("the pane is headed with the tab's drawn name", () => {
   render(OverviewColumnsTab, { data: multi, tabIndex: 1, charOpen: true, onChanged: noop, onUserDirty: noop, onCharDirty: noop });
-  expect(screen.getByRole("heading", { name: "Columns · pvp" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "列 · pvp" })).toBeTruthy();
 });
 
 describe("the column width field", () => {
@@ -87,7 +87,7 @@ describe("the column width field", () => {
 
 const openPanel = async (charOpen = true) => {
   render(OverviewColumnsTab, { data: multi, tabIndex: 0, charOpen, onChanged: noop, onUserDirty: noop, onCharDirty: noop });
-  await fireEvent.click(screen.getByTitle("Copy this tab's column settings onto other tabs"));
+  await fireEvent.click(screen.getByTitle("复制此标签页的列设置到其他标签页"));
 };
 const targetBoxes = () => [...document.querySelectorAll(".copy-targets input[type='checkbox']")] as HTMLInputElement[];
 const partBox = (label: string) =>
@@ -103,15 +103,15 @@ describe("copying columns to other tabs", () => {
     expect(labels).toEqual(["pvp", "loose"]);
     expect(targetBoxes().every((b) => !b.checked)).toBe(true);
     // …while all three properties start on.
-    expect([partBox("Column order"), partBox("Visible columns"), partBox("Widths")].every((b) => b.checked)).toBe(true);
+    expect([partBox("列顺序"), partBox("可见列"), partBox("列宽")].every((b) => b.checked)).toBe(true);
   });
 
   test("All ticks every target", async () => {
     await openPanel();
-    await fireEvent.click(screen.getByText("All"));
+    await fireEvent.click(screen.getByText("全部"));
     expect(targetBoxes().every((b) => b.checked)).toBe(true);
 
-    await fireEvent.click(screen.getByText("None"));
+    await fireEvent.click(screen.getByText("无"));
     expect(targetBoxes().some((b) => b.checked)).toBe(false);
   });
 
@@ -119,9 +119,9 @@ describe("copying columns to other tabs", () => {
     const onUserDirty = vi.fn();
     const onCharDirty = vi.fn();
     render(OverviewColumnsTab, { data: multi, tabIndex: 0, charOpen: true, onChanged: noop, onUserDirty, onCharDirty });
-    await fireEvent.click(screen.getByTitle("Copy this tab's column settings onto other tabs"));
-    await fireEvent.click(screen.getByText("All"));
-    await fireEvent.click(partBox("Visible columns"));
+    await fireEvent.click(screen.getByTitle("复制此标签页的列设置到其他标签页"));
+    await fireEvent.click(screen.getByText("全部"));
+    await fireEvent.click(partBox("可见列"));
 
     await fireEvent.click(screen.getByText(/^Copy to 2 tabs$/));
 
@@ -136,13 +136,13 @@ describe("copying columns to other tabs", () => {
   test("widths are off and unavailable with no character open", async () => {
     const onCharDirty = vi.fn();
     render(OverviewColumnsTab, { data: multi, tabIndex: 0, charOpen: false, onChanged: noop, onUserDirty: noop, onCharDirty });
-    await fireEvent.click(screen.getByTitle("Copy this tab's column settings onto other tabs"));
+    await fireEvent.click(screen.getByTitle("复制此标签页的列设置到其他标签页"));
 
-    const widths = partBox("Widths");
+    const widths = partBox("列宽");
     expect(widths.disabled).toBe(true);
     expect(widths.checked).toBe(false);
 
-    await fireEvent.click(screen.getByText("All"));
+    await fireEvent.click(screen.getByText("全部"));
     await fireEvent.click(screen.getByText(/^Copy to 2 tabs$/));
 
     expect((calls.only("overview_copy_columns").args as { widths: boolean }).widths).toBe(false);

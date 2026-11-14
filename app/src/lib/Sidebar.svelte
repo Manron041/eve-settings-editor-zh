@@ -102,7 +102,7 @@
        hint is ONE element whose text also names "Open file…" — splitting it
        across EmptyState's title and description would break that. -->
   {#if subject.profiles.length === 0}
-    <InlineMessage>No EVE profiles found in standard locations. Use “Open file…”.</InlineMessage>
+    <InlineMessage>未在标准位置找到 EVE 配置档。用“打开文件…”。</InlineMessage>
   {:else if subject.characters.length === 0}
     <InlineMessage>{noCharactersHint()}</InlineMessage>
   {/if}
@@ -170,7 +170,7 @@
     <div class="toggle" title="Show only EVE's own core_char_<id>.dat files">
       <Field kind="checkbox" label="Hide non-standard files" bind:value={subject.hideNonStandard} />
     </div>
-    <Button onclick={onPickFile}>Open file…</Button>
+    <Button onclick={onPickFile}>打开文件…</Button>
   </div>
 </aside>
 

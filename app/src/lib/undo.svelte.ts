@@ -92,7 +92,7 @@ export function undoAction(): ToastAction | undefined {
     .then((s) => s.depth)
     .catch(() => -1);
   return {
-    label: "Undo",
+    label: "撤销",
     run: () =>
       void (async () => {
         const [was, now] = await Promise.all([mintedAt, api.undoState()]);

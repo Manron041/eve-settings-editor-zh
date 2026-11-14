@@ -93,13 +93,13 @@ describe("the target anchor, which is stored as a fraction", () => {
 
   test("the rows show pixels, not the stored fraction", () => {
     mount(hud(), REF);
-    expect(input("Target list", "x").value).toBe("1426");
-    expect(input("Target list", "y").value).toBe("752");
+    expect(input("目标列表", "x").value).toBe("1426");
+    expect(input("目标列表", "y").value).toBe("752");
   });
 
   test("typing a pixel writes the fraction it lands on", () => {
     const { onSet } = mount(hud(), REF);
-    fireEvent.change(input("Target list", "x"), { target: { value: "1316" } });
+    fireEvent.change(input("目标列表", "x"), { target: { value: "1316" } });
     // 110px left of 1426, over the width right of the 72px neocom:
     // (1316 - 72) / 2488.
     expect(onSet).toHaveBeenCalledWith("target_x", String(1244 / 2488));
@@ -107,20 +107,20 @@ describe("the target anchor, which is stored as a fraction", () => {
 
   test("editing one axis leaves the other alone", () => {
     const { onSet } = mount(hud(), REF);
-    fireEvent.change(input("Target list", "y"), { target: { value: "100" } });
+    fireEvent.change(input("目标列表", "y"), { target: { value: "100" } });
     expect(onSet).toHaveBeenCalledTimes(1);
     expect(onSet).toHaveBeenCalledWith("target_y", String(100 / 1440));
   });
 
   test("with no reference size the raw fraction is shown rather than a pixel computed from nothing", () => {
     mount(hud());
-    expect(input("Target list", "x").value).toBe("0.5442122186495176");
+    expect(input("目标列表", "x").value).toBe("0.5442122186495176");
   });
 });
 
 test("the compass toggle sits with the ship HUD and writes the account file", () => {
   mount(hud(), { accountReadOnly: true });
-  expect(input("Ship HUD", "Compass").disabled).toBe(true);
+  expect(input("舰船 HUD", "指南针").disabled).toBe(true);
 });
 
 describe("a target list the account never placed", () => {
@@ -134,13 +134,13 @@ describe("a target list the account never placed", () => {
 
   test("shows where the client puts it", () => {
     mount(unplaced(), { referenceW: 2560, referenceH: 1440, targetDefault: DEF });
-    expect(input("Target list", "x").value).toBe("1885");
-    expect(input("Target list", "y").value).toBe("100");
+    expect(input("目标列表", "x").value).toBe("1885");
+    expect(input("目标列表", "y").value).toBe("100");
   });
 
   test("typing one axis writes both, since the key is minted whole", () => {
     const { onSet } = mount(unplaced(), { referenceW: 2560, referenceH: 1440, targetDefault: DEF });
-    fireEvent.change(input("Target list", "x"), { target: { value: "1800" } });
+    fireEvent.change(input("目标列表", "x"), { target: { value: "1800" } });
     expect(onSet).toHaveBeenCalledWith("target_x", String((1800 - 72) / 2488));
     expect(onSet).toHaveBeenCalledWith("target_y", String(100 / 1440));
   });
@@ -152,8 +152,8 @@ describe("the fighter panel's default", () => {
       hud(entry("fighter_x", "int", null), entry("fighter_y", "int", null)),
       { referenceW: 2560, referenceH: 1440 },
     );
-    expect(input("Fighter panel", "x").value).toBe("1280");
-    expect(input("Fighter panel", "y").value).toBe("660");
+    expect(input("战斗机面板", "x").value).toBe("1280");
+    expect(input("战斗机面板", "y").value).toBe("660");
   });
 
   test("typing one axis of an unplaced panel writes both", () => {
@@ -161,7 +161,7 @@ describe("the fighter panel's default", () => {
       hud(entry("fighter_x", "int", null), entry("fighter_y", "int", null)),
       { referenceW: 2560, referenceH: 1440 },
     );
-    fireEvent.change(input("Fighter panel", "x"), { target: { value: "1300" } });
+    fireEvent.change(input("战斗机面板", "x"), { target: { value: "1300" } });
     expect(onSet).toHaveBeenCalledWith("fighter_x", "1300");
     expect(onSet).toHaveBeenCalledWith("fighter_y", "660");
   });
@@ -170,31 +170,31 @@ describe("the fighter panel's default", () => {
 describe("writing a value", () => {
   test("an int field rounds a fractional entry before writing", () => {
     const { onSet } = mount(hud());
-    fireEvent.change(input("Fighter panel", "x"), { target: { value: "1.5" } });
+    fireEvent.change(input("战斗机面板", "x"), { target: { value: "1.5" } });
     expect(onSet).toHaveBeenCalledWith("fighter_x", "2");
   });
 
   test("an int field rounds half-down for a negative fraction the same way", () => {
     const { onSet } = mount(hud());
-    fireEvent.change(input("Fighter panel", "x"), { target: { value: "3.4" } });
+    fireEvent.change(input("战斗机面板", "x"), { target: { value: "3.4" } });
     expect(onSet).toHaveBeenCalledWith("fighter_x", "3");
   });
 
   test("a float field passes the raw text through unrounded", () => {
     const { onSet } = mount(hud());
-    fireEvent.change(input("Ship HUD", "Offset from centre"), { target: { value: "-172.5" } });
+    fireEvent.change(input("舰船 HUD", "中心偏移量"), { target: { value: "-172.5" } });
     expect(onSet).toHaveBeenCalledWith("ship_offset", "-172.5");
   });
 
   test("a blank input writes nothing rather than a zero", () => {
     const { onSet } = mount(hud());
-    fireEvent.change(input("Fighter panel", "x"), { target: { value: "   " } });
+    fireEvent.change(input("战斗机面板", "x"), { target: { value: "   " } });
     expect(onSet).not.toHaveBeenCalled();
   });
 
   test("a non-numeric input writes nothing", () => {
     const { onSet } = mount(hud());
-    fireEvent.change(input("Fighter panel", "x"), { target: { value: "abc" } });
+    fireEvent.change(input("战斗机面板", "x"), { target: { value: "abc" } });
     expect(onSet).not.toHaveBeenCalled();
   });
 
@@ -203,7 +203,7 @@ describe("writing a value", () => {
     // edit used to leave the typed text on screen next to a value that is not
     // it, until some unrelated re-render cleared it.
     mount(hud());
-    const el = input("Fighter panel", "x");
+    const el = input("战斗机面板", "x");
     await fireEvent.change(el, { target: { value: "   " } });
     expect(el.value).toBe("326");
   });
@@ -212,7 +212,7 @@ describe("writing a value", () => {
     // 326.4 rounds to 326, which the model already holds — nothing changes, so
     // nothing re-renders, so the field kept showing 326.4.
     const { onSet } = mount(hud());
-    const el = input("Fighter panel", "x");
+    const el = input("战斗机面板", "x");
     await fireEvent.change(el, { target: { value: "326.4" } });
     expect(onSet).toHaveBeenCalledWith("fighter_x", "326");
     expect(el.value).toBe("326");
@@ -220,7 +220,7 @@ describe("writing a value", () => {
 
   test("a checkbox writes the string the backend parses, not a boolean", () => {
     const { onSet } = mount(hud());
-    fireEvent.click(input("Fighter panel", "Detached"));
+    fireEvent.click(input("战斗机面板", "分离"));
     expect(onSet).toHaveBeenCalledWith("fighter_detached", "true");
   });
 });
@@ -228,7 +228,7 @@ describe("writing a value", () => {
 describe("the effect count, which is a view setting rather than a field", () => {
   test("typing a count reports it and writes no settings field", () => {
     const { onEffects, onSet } = mount(hud());
-    fireEvent.change(input("Ship HUD", "Effects drawn"), { target: { value: "7" } });
+    fireEvent.change(input("舰船 HUD", "绘制效果数"), { target: { value: "7" } });
     expect(onEffects).toHaveBeenCalledWith(7);
     expect(onSet).not.toHaveBeenCalled();
   });
@@ -237,13 +237,13 @@ describe("the effect count, which is a view setting rather than a field", () => 
     // A ship with nothing applied is the COMMON case, so 0 has to reach the
     // store rather than being treated as an empty box the way a field would.
     const { onEffects } = mount(hud());
-    fireEvent.change(input("Ship HUD", "Effects drawn"), { target: { value: "0" } });
+    fireEvent.change(input("舰船 HUD", "绘制效果数"), { target: { value: "0" } });
     expect(onEffects).toHaveBeenCalledWith(0);
   });
 
   test("a non-numeric entry reports nothing and snaps back", () => {
     const { onEffects } = mount(hud());
-    const el = input("Ship HUD", "Effects drawn");
+    const el = input("舰船 HUD", "绘制效果数");
     fireEvent.change(el, { target: { value: "" } });
     expect(onEffects).not.toHaveBeenCalled();
     expect(el.value).toBe("2");
@@ -272,8 +272,8 @@ describe("what the panel refuses to edit", () => {
 
   test("a field the file cannot hold is disabled on its own", () => {
     mount(hud(entry("badge_x", "int", null, { set: UNAVAILABLE })));
-    expect(input("Fighter panel", "x").disabled).toBe(false);
-    expect(input("Notification badge", "x").disabled).toBe(true);
+    expect(input("战斗机面板", "x").disabled).toBe(false);
+    expect(input("通知角标", "x").disabled).toBe(true);
   });
 
   test("a read-only ACCOUNT file disables only the rows that write it", () => {
@@ -281,31 +281,31 @@ describe("what the panel refuses to edit", () => {
     // the account file instead, and were left clickable when that file was the
     // read-only one — the refusal then arrived as a backend dialog.
     mount(hud(), { accountReadOnly: true });
-    expect(input("Fighter panel", "Detached").disabled).toBe(true);
+    expect(input("战斗机面板", "分离").disabled).toBe(true);
     // The neocom width is a character setting (`settings.char.ui`).
-    expect(input("Neocom", "Width").disabled).toBe(false);
-    expect(input("Fighter panel", "x").disabled).toBe(false);
-    expect(input("Ship HUD", "Offset from centre").disabled).toBe(false);
+    expect(input("Neocom", "宽度").disabled).toBe(false);
+    expect(input("战斗机面板", "x").disabled).toBe(false);
+    expect(input("舰船 HUD", "中心偏移量").disabled).toBe(false);
   });
 
   test("a fighter axis the file cannot hold is disabled without taking its sibling with it", () => {
     mount(hud(entry("fighter_y", "int", null, { set: UNAVAILABLE })));
-    expect(input("Fighter panel", "y").disabled).toBe(true);
-    expect(input("Fighter panel", "x").disabled).toBe(false);
+    expect(input("战斗机面板", "y").disabled).toBe(true);
+    expect(input("战斗机面板", "x").disabled).toBe(false);
   });
 });
 
 describe("what the panel shows", () => {
   test("an absent value falls back to EVE's default and is badged", () => {
     mount(hud(entry("neocom_width", "int", null, { default: "48" })));
-    expect(input("Neocom", "Width").value).toBe("48");
-    expect(row("Neocom", "Width").textContent).toContain("default");
+    expect(input("Neocom", "宽度").value).toBe("48");
+    expect(row("Neocom", "宽度").textContent).toContain("默认");
   });
 
   test("account-scoped rows are badged so an account-wide write is visible", () => {
     mount(hud());
-    expect(row("Fighter panel", "Detached").textContent).toContain("account");
-    expect(row("Notification badge", "y").textContent).not.toContain("account");
+    expect(row("战斗机面板", "分离").textContent).toContain("账户");
+    expect(row("通知角标", "y").textContent).not.toContain("账户");
   });
 
   test("the account legend names the other characters an edit would change", () => {
@@ -333,6 +333,6 @@ describe("what the panel shows", () => {
 
 test("clicking a group title selects that furniture on the canvas", () => {
   const { onSelectKind } = mount(hud());
-  fireEvent.click(screen.getByRole("button", { name: "Notification badge" }));
+  fireEvent.click(screen.getByRole("button", { name: "通知角标" }));
   expect(onSelectKind).toHaveBeenCalledWith("badge");
 });

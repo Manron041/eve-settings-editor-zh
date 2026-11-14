@@ -95,7 +95,7 @@
 
 <Popover {anchor} placement="bottom-start" {onclose} ariaLabel="Find a character" class="switcher">
   <!-- eslint-disable-next-line -- autofocus is the point of a type-ahead -->
-  <SearchField verb="search" nouns="characters, presets and commands" bind:value={query} />
+  <SearchField verb="search" nouns="角色、预设和命令" bind:value={query} />
 
   {#if rows.length === 0 && presets.length === 0 && views.length === 0 && commands.length === 0}
     <EmptyState title="No matches" description="Nothing matches “{query}”." />

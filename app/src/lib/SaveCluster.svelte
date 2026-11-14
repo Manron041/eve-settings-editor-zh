@@ -54,7 +54,7 @@
         size="sm"
         title="What a save would write"
         onpointerdown={(e: PointerEvent) => e.stopPropagation()}
-        onclick={() => (open = !open)}>{targets.length} unsaved ▾</Button>
+        onclick={() => (open = !open)}>{targets.length} 处未保存 ▾</Button>
     </span>
   {/if}
   <!-- Nothing is shortcut-only. Undo has a keyboard binding and a toast button,
@@ -66,12 +66,12 @@
     disabled={!undoState.canUndo}
     disabledReason="Nothing to undo"
     title="Undo the last change ({accel('Z')})"
-    onclick={() => void doUndo()}>Undo</Button>
+    onclick={() => void doUndo()}>撤销</Button>
   <Button
     variant="primary"
     disabled={!subject.canSave}
     disabledReason={saveReason}
-    onclick={() => saveFile()}>Save</Button>
+    onclick={() => saveFile()}>保存</Button>
   <!-- Both Save and Discard report here, because this is the control the user
        operated. A two-slot save can half-fail, so the sentence names WHICH half
        rather than saying "Save failed". -->

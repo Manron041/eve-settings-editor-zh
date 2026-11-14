@@ -72,20 +72,20 @@
   // Account-scoped rows are badged because they change every character on the
   // account — the legend below names them.
   const GROUPS: { title: string; kind: FurnitureRect["kind"]; rows: { name: string; label: string }[] }[] = [
-    { title: "Ship HUD", kind: "shipui", rows: [
-      { name: "ship_offset", label: "Offset from centre" },
-      { name: "ship_top", label: "Align to top" },
+    { title: "舰船 HUD", kind: "shipui", rows: [
+      { name: "ship_offset", label: "中心偏移量" },
+      { name: "ship_top", label: "顶部对齐" },
       // The sensor-overlay compass widens the HUD, so it lives with it.
-      { name: "compass", label: "Compass" },
+      { name: "compass", label: "指南针" },
     ] },
-    { title: "Fighter panel", kind: "fighter", rows: [
+    { title: "战斗机面板", kind: "fighter", rows: [
       { name: "fighter_x", label: "x" },
       { name: "fighter_y", label: "y" },
-      { name: "fighter_detached", label: "Detached" },
-      { name: "fighter_shown", label: "Shown" },
+      { name: "fighter_detached", label: "分离" },
+      { name: "fighter_shown", label: "显示" },
     ] },
-    { title: "Neocom", kind: "neocom", rows: [{ name: "neocom_width", label: "Width" }] },
-    { title: "Notification badge", kind: "badge", rows: [
+    { title: "Neocom", kind: "neocom", rows: [{ name: "neocom_width", label: "宽度" }] },
+    { title: "通知角标", kind: "badge", rows: [
       { name: "badge_x", label: "x" },
       { name: "badge_y", label: "y" },
     ] },
@@ -93,10 +93,10 @@
     // stores them as a FRACTION — see `shown`/`numberEdit` below, which convert
     // both ways. Dragging on the canvas is the ergonomic path; these are for
     // typing an exact position.
-    { title: "Target list", kind: "target", rows: [
+    { title: "目标列表", kind: "target", rows: [
       { name: "target_x", label: "x" },
       { name: "target_y", label: "y" },
-      { name: "target_horizontal", label: "Horizontal" },
+      { name: "target_horizontal", label: "水平" },
     ] },
   ];
 
@@ -146,13 +146,13 @@
     // file" and "EVE's default" still have to win, or the two anchor rows would
     // claim to be editable pixels while reading nothing.
     AXIS[e.name] && asPixels && e.set.how !== "unavailable" && e.value !== null
-      ? `Screen pixels at ${referenceW}x${referenceH}. Stored as a fraction — account-wide.`
+      ? `屏幕像素 ${referenceW}x${referenceH}。以分数存储 — 账户级。`
       : e.set.how === "unavailable"
-      ? "Not present in this file"
+      ? "此文件中不存在"
       : e.value === null
-        ? `EVE's default (${e.default}) — editing stores a value`
+        ? `EVE 默认值（${e.default}）— 编辑将存储一个值`
         : e.scope === "account"
-          ? "Account-wide: changes every character on this account"
+          ? "账户级：更改此账户下的每个角色"
           : "";
 
   // The two `view` rows' shared handler. They write no settings field, so they
@@ -230,9 +230,9 @@
          IS an info InlineMessage with a fixed shape. The class stays because
          HudPanel.spec finds the legend by it. -->
     <InlineMessage class="account-legend">
-      <Chip tone="neutral" size="sm">account</Chip> rows are stored once for the whole account{sharedNames.length
-        ? ` — editing one also changes ${sharedNames.join(", ")}`
-        : " — every character on it"}.
+      <Chip tone="neutral" size="sm">账户</Chip> 行在整个账户只存储一次{sharedNames.length
+        ? ` — 编辑其中一个也会更改 ${sharedNames.join(", ")}`
+        : " — 该账户下的每个角色"}。
     </InlineMessage>
   {/if}
   {#each GROUPS as g (g.title)}
@@ -262,7 +262,7 @@
                 kind="checkbox"
                 value={shown(row.name) === "true"}
                 disabled={disabled(e)}
-                disabledReason="Not present in this file"
+                disabledReason="此文件中不存在"
                 onchange={(ev) => onSet(row.name, (ev.target as HTMLInputElement).checked ? "true" : "false")} />
             {:else}
               <Field
@@ -271,13 +271,13 @@
                 step={e.kind === "float" && !AXIS[row.name] ? undefined : 1}
                 value={shown(row.name)}
                 disabled={disabled(e)}
-                disabledReason="Not present in this file"
+                disabledReason="此文件中不存在"
                 onchange={numberEdit(row.name, e.kind)} />
             {/if}
             <span class="badges">
-              {#if e.scope === "account"}<Chip tone="neutral" size="sm">account</Chip>{/if}
+              {#if e.scope === "account"}<Chip tone="neutral" size="sm">账户</Chip>{/if}
               {#if e.value === null && e.set.how !== "unavailable"}
-                <Chip tone="neutral" size="sm">default</Chip>
+                <Chip tone="neutral" size="sm">默认</Chip>
               {/if}
             </span>
           </label>
@@ -290,8 +290,8 @@
         <!-- Same `view` badge and same reasoning as "Targets drawn" below: no
              settings file records what is applied to a ship, so the canvas has
              to be told, and telling it writes nothing. -->
-        <label class="row view" title="How many effect icons the canvas draws under the ship HUD. A view setting — it writes nothing.">
-          <span class="label">Effects drawn</span>
+        <label class="row view" title="画布在舰船 HUD 下绘制多少效果图标。视图设置 — 不写入任何内容。">
+          <span class="label">绘制效果数</span>
           <Field
             kind="number"
             width="5.5rem"
@@ -300,14 +300,14 @@
             step={1}
             value={effects}
             onchange={viewEdit(() => effects, onEffects)} />
-          <span class="badges"><Chip tone="neutral" size="sm">view</Chip></span>
+          <span class="badges"><Chip tone="neutral" size="sm">视图</Chip></span>
         </label>
       {/if}
       {#if g.kind === "target"}
         <!-- `view`, not a field: it stays enabled on a read-only document,
              because changing it writes nothing. HudPanel.spec pins that. -->
-        <label class="row view" title="How many locked targets the canvas draws. A view setting — it writes nothing.">
-          <span class="label">Targets drawn</span>
+        <label class="row view" title="画布绘制多少锁定目标。视图设置 — 不写入任何内容。">
+          <span class="label">绘制目标数</span>
           <Field
             kind="number"
             width="5.5rem"
@@ -316,7 +316,7 @@
             step={1}
             value={targets}
             onchange={viewEdit(() => targets, onTargets)} />
-          <span class="badges"><Chip tone="neutral" size="sm">view</Chip></span>
+          <span class="badges"><Chip tone="neutral" size="sm">视图</Chip></span>
         </label>
       {/if}
       {#if g.kind === "neocom" && neocom}

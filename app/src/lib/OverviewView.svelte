@@ -116,7 +116,7 @@
     // the "Other" group gets the new tab in window 0: arbitrary, but visible and
     // movable, where refusing would leave the command dead for a selection that
     // looks ordinary.
-    if (await edit(() => api.tabCreate(windowIdx ?? 0, name, tabIndex), "entry", "That wasn't saved")) {
+    if (await edit(() => api.tabCreate(windowIdx ?? 0, name, tabIndex), "entry", "未能保存")) {
       tabIndex = newestTab() ?? tabIndex;
       onUserDirty();
     }
@@ -128,7 +128,7 @@
     // window's position never persists. Then hand the new window's id up so the
     // Layout editor selects it: it defaults offset on top of window 0, so
     // without selecting it it's easy to miss.
-    if (!(await edit(() => api.overviewWindowAdd(name, tabIndex), "entry", "That window wasn't added"))) return;
+    if (!(await edit(() => api.overviewWindowAdd(name, tabIndex), "entry", "窗口未能添加"))) return;
     tabIndex = newestTab() ?? tabIndex;
     onUserDirty();
     onCharDirty();
@@ -152,7 +152,7 @@
       if (change.raw === current.name) return;
       call = () => api.tabRename(idx, change.raw);
     }
-    if (await edit(call, "name", "The tab name wasn't changed")) onUserDirty();
+    if (await edit(call, "name", "标签页名称未能修改")) onUserDirty();
   }
 
   // The confirm this replaces said "This can't be undone." It could: the delete
@@ -168,8 +168,8 @@
     const target = data?.tabs.find((t) => t.index === idx);
     if (!target) return;
     const name = plainTabName(target);
-    if (!(await edit(() => api.tabDelete(idx), "actions", "That tab wasn't deleted"))) return;
-    toast(`Deleted “${name}”. Save to write it to disk.`, { action: undoAction() });
+    if (!(await edit(() => api.tabDelete(idx), "actions", "标签页未能删除"))) return;
+    toast(`已删除“${name}”。保存以写入磁盘。`, { action: undoAction() });
     tabIndex = data?.tabs[0]?.index ?? null;
     onUserDirty();
     // A delete renumbers the account's tabs, and the backend carries the open
@@ -187,9 +187,9 @@
     const shifted = windowIdx < data.windows.length - 1;
     // Edits both slots (grouping + geometry) — mark both dirty so saveFile
     // doesn't skip the char slot.
-    if (!(await edit(() => api.overviewWindowRemove(windowIdx), "actions", "That window wasn't removed"))) return;
+    if (!(await edit(() => api.overviewWindowRemove(windowIdx), "actions", "窗口未能移除"))) return;
     toast(
-      `Removed Overview ${windowIdx + 1}. Its ${moved} tab${moved === 1 ? "" : "s"} moved to Overview 1.`,
+      `已移除总览 ${windowIdx + 1}。其 ${moved} 个标签页移到总览 1。`,
       { action: undoAction() },
     );
     if (shifted) warnStalePositions(windowIdx);
@@ -205,10 +205,10 @@
   // later window opens where the one before it used to be. With no character
   // open, nothing was re-keyed at all.
   function warnStalePositions(windowIdx: number) {
-    const who = charOpen ? sharedNames : ["Every character on this account"];
+    const who = charOpen ? sharedNames : ["此账户上的每个角色"];
     if (who.length === 0) return;
     toast(
-      `Overview ${windowIdx + 2} and later are now one number lower. ${who.join(", ")} still ${who.length === 1 ? "has" : "have"} the old window positions, so in game those windows open one place off. Move them there, or copy this layout across.`,
+      `总览 ${windowIdx + 2} 及之后的窗口编号都减 1。${who.join("、")} 仍使用旧的窗口位置，游戏中这些窗口会错开一格。把它们移过去，或复制此布局。`,
       { variant: "warn" },
     );
   }
@@ -234,7 +234,7 @@
     // not dirty the file or fire the width warning.
     if (order.length === before.length && order.every((v, i) => v === before[i])) return;
     const selectedAt = tabIndex === null ? -1 : order.indexOf(tabIndex);
-    if (!(await edit(() => api.tabReorder(windowIdx, order), "strip", "The tabs weren't reordered"))) return;
+    if (!(await edit(() => api.tabReorder(windowIdx, order), "strip", "标签页顺序未能调整"))) return;
     if (selectedAt >= 0) tabIndex = keepSelection(windowIdx, selectedAt);
     onUserDirty();
     warnWidthSwap();
@@ -245,7 +245,7 @@
     const after = [...dst];
     after.splice(Math.min(pos, after.length), 0, tabIdx);
     const selectedAt = tabIndex === null ? -1 : after.indexOf(tabIndex);
-    if (!(await edit(() => api.tabMove(tabIdx, from, to, pos), "move", "That tab wasn't moved"))) return;
+    if (!(await edit(() => api.tabMove(tabIdx, from, to, pos), "move", "标签页未能移动"))) return;
     if (selectedAt >= 0) tabIndex = keepSelection(to, selectedAt);
     onUserDirty();
     warnWidthSwap();
@@ -259,7 +259,7 @@
   // there is nothing to say.
   function warnWidthSwap() {
     if (!charOpen) return;
-    toast("Column widths moved with the tabs, for every character on this account when you save. A character logged in at the time keeps the old order.", { variant: "warn" });
+    toast("列宽随标签页移动，保存后对此账户的所有角色生效。当时已登录的角色仍保持旧顺序。", { variant: "warn" });
   }
 
   // A windowless account is normal: EVE's own overview importer deletes the
@@ -275,9 +275,9 @@
   async function setUpWindowMapping() {
     if (!data || data.windows.length > 0) return;
     const n = data.tabs.length;
-    if (!(await edit(() => api.overviewCreateWindowMapping(), "windows", "The windows weren't set up"))) return;
+    if (!(await edit(() => api.overviewCreateWindowMapping(), "windows", "窗口未能设置"))) return;
     onUserDirty();
-    toast(`All ${n} tab${n === 1 ? "" : "s"} are now in one overview window.`, {
+    toast(`全部 ${n} 个标签页已位于同一个总览窗口。`, {
       action: undoAction(),
     });
   }
@@ -285,7 +285,7 @@
   // A file with no overview container — a fresh account, or a preset pruned to
   // other aspects. The mint is an ordinary in-memory edit: undoable, saved by Save.
   async function createOverview() {
-    if (await edit(() => api.overviewCreate(), "pack", "The overview settings weren't created")) onUserDirty();
+    if (await edit(() => api.overviewCreate(), "pack", "总览设置未能创建")) onUserDirty();
   }
 
   // Pack import/export is account-wide, so it lives in the view's ⋯ rather than
@@ -297,10 +297,10 @@
   function viewMenu(): MenuItem[] {
     const mapped = (data?.windows.length ?? 0) > 0;
     return [
-      { label: "Import overview pack…", run: importPack, disabled: packBusy, hint: packBusy ? "A pack command is in flight" : undefined },
-      { label: "Export overview pack…", run: exportPack, disabled: packBusy, hint: packBusy ? "A pack command is in flight" : undefined },
-      { label: "Assign tabs to windows", run: setUpWindowMapping, disabled: mapped,
-        hint: mapped ? "This account already assigns tabs to windows" : undefined },
+      { label: "导入总览包…", run: importPack, disabled: packBusy, hint: packBusy ? "正在执行总览包操作" : undefined },
+      { label: "导出总览包…", run: exportPack, disabled: packBusy, hint: packBusy ? "正在执行总览包操作" : undefined },
+      { label: "分配标签页到窗口", run: setUpWindowMapping, disabled: mapped,
+        hint: mapped ? "此账户已按窗口分配标签页" : undefined },
     ];
   }
 
@@ -319,7 +319,7 @@
     const picked = await openDialog({
       multiple: false,
       defaultPath: await overviewFolder(),
-      filters: [{ name: "Overview pack", extensions: ["yaml", "yml"] }],
+      filters: [{ name: "总览包", extensions: ["yaml", "yml"] }],
     });
     if (typeof picked !== "string") return;
     packBusy = true;
@@ -329,22 +329,22 @@
         .map(([name, count]) => (count > 0 ? `${name} (${count})` : name))
         .join(", ");
       const ignored = summary.ignored.length
-        ? `\nIgnored, not understood: ${summary.ignored.join(", ")}.`
+        ? `\n已忽略，无法识别：${summary.ignored.join(", ")}。`
         : "";
       // Per-tab column overrides are only ever stripped inside apply_tabs,
       // which only runs when the pack defines a non-empty tabSetup section —
       // a preset-only pack never touches them, so don't claim it does.
       const dropsColumns = summary.sections.some(([name, count]) => name === "tabSetup" && count > 0);
-      const columnsNote = dropsColumns ? "\nPer-tab column widths are discarded." : "";
+      const columnsNote = dropsColumns ? "\n每个标签页的列宽将被丢弃。" : "";
       // The seventh modal surface, and the only one that is NOT a confirmation:
       // it is a PREVIEW of a file the user has not seen the contents of
       // anywhere else, so it cannot become a toast after the fact. It appears
       // only once a pack has been picked.
       const ok = await confirmDialog({
-        title: `Import ${picked.split(/[\\/]/).pop()}?`,
-        body: `It replaces: ${what}.${columnsNote}${ignored}`,
+        title: `导入 ${picked.split(/[\\/]/).pop()}？`,
+        body: `它将替换：${what}。${columnsNote}${ignored}`,
         detail: picked,
-        confirm: "Import pack",
+        confirm: "导入总览包",
       });
       if (!ok) return;
       const result = await api.packImport(picked);
@@ -359,12 +359,12 @@
       // Warnings ride the same toast rather than stacking a second modal on the
       // first. Past three they stop being readable in a toast at all, so it says
       // how many and the detail stays on hover.
-      const warnings = w.length === 0 ? "" : w.length > 3 ? `\n${w.length} warnings.` : `\n${w.join("\n")}`;
-      toast(`Pack imported. Save to write it to the account file.${warnings}`, {
+      const warnings = w.length === 0 ? "" : w.length > 3 ? `\n${w.length} 条警告。` : `\n${w.join("\n")}`;
+      toast(`总览包已导入。保存以写入账户文件。${warnings}`, {
         variant: w.length ? "warn" : "success",
       });
     } catch (e) {
-      editError = { where: "pack", text: `The pack wasn't imported — ${errText(e)}`, detail: errMessage(e) };
+      editError = { where: "pack", text: `总览包未能导入 — ${errText(e)}`, detail: errMessage(e) };
     } finally {
       packBusy = false;
     }
@@ -373,18 +373,18 @@
   async function exportPack() {
     const picked = await saveDialog({
       defaultPath: "overview.yaml",
-      filters: [{ name: "Overview pack", extensions: ["yaml"] }],
+      filters: [{ name: "总览包", extensions: ["yaml"] }],
     });
     if (typeof picked !== "string") return;
     packBusy = true;
     try {
       const report = await api.packExport(picked);
       const n = report.applied.length;
-      toast(`Exported ${n} section${n === 1 ? "" : "s"} to ${picked.split(/[\\/]/).pop()}.`, {
+      toast(`已导出 ${n} 个部分到 ${picked.split(/[\\/]/).pop()}。`, {
         variant: "success",
       });
     } catch (e) {
-      editError = { where: "pack", text: `The pack wasn't exported — ${errText(e)}`, detail: errMessage(e) };
+      editError = { where: "pack", text: `总览包未能导出 — ${errText(e)}`, detail: errMessage(e) };
     } finally {
       packBusy = false;
     }
@@ -402,27 +402,27 @@
     {#if !userOpen && charId !== null}
       <div class="scroll">
         <EmptyState
-          title="No account paired"
-          description="Overview columns live in the account file.">
-          {#snippet action()}<Button onclick={onShowAccounts}>Pair this character…</Button>{/snippet}
+          title="未配对账户"
+          description="总览列保存在账户文件里。">
+          {#snippet action()}<Button onclick={onShowAccounts}>配对此角色…</Button>{/snippet}
         </EmptyState>
       </div>
     {:else if !userOpen}
       <div class="scroll">
         <EmptyState
-          title="No file open"
-          description="Open a character or an account file to edit its overview." />
+          title="未打开文件"
+          description="打开角色或账户文件以编辑总览。" />
       </div>
     {:else if error}
       <div class="scroll"><InlineMessage variant="error">{error}</InlineMessage></div>
     {:else if data?.no_container}
       <div class="scroll">
         <EmptyState
-          title="No overview settings"
-          description="This account file has none yet. Create them to add tabs, or import an overview pack.">
+          title="没有总览设置"
+          description="此账户文件尚未包含总览设置。创建后可添加标签页，或导入总览包。">
           {#snippet action()}
-            <Button onclick={createOverview}>Create overview settings</Button>
-            <Button onclick={importPack} disabled={packBusy}>Import overview pack…</Button>
+            <Button onclick={createOverview}>创建总览设置</Button>
+            <Button onclick={importPack} disabled={packBusy}>导入总览包…</Button>
           {/snippet}
         </EmptyState>
         {#if at("pack")}
@@ -435,11 +435,11 @@
           <Tabs
             variant="underline"
             class="subtabs"
-            ariaLabel="Overview section"
+            ariaLabel="总览区域"
             tabs={[
-              { id: "Columns", label: "Columns" },
-              { id: "Filters", label: "Filters" },
-              { id: "Appearance", label: "Appearance" },
+              { id: "Columns", label: "列" },
+              { id: "Filters", label: "筛选" },
+              { id: "Appearance", label: "外观" },
             ]}
             bind:value={sub} />
         {/if}
@@ -447,7 +447,7 @@
              of the work column: as a small ghost at the right margin of a wide
              window it was several hundred pixels from anything and read as
              decoration. It is the only home for three account-wide commands. -->
-        <MenuButton items={viewMenu} title="Overview actions" variant="default" size="md" />
+        <MenuButton items={viewMenu} title="总览操作" variant="default" size="md" />
       </div>
       <!-- Pack import and export both live in that menu, so their failures land
            beside the control that opens it. -->

@@ -96,7 +96,7 @@
       for (const lost of res.stolen) next[lost] = labelFor(command);
       stolenFrom = next;
     } catch (e) {
-      rowError = { command, text: `That binding wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      rowError = { command, text: `该绑定未更改 — ${errText(e)}`, detail: errMessage(e) };
     } finally {
       listening = null;
     }
@@ -118,19 +118,19 @@
      and nobody noticed. That is the sharpest single piece of evidence for this
      phase: there was no shared thing whose absence would show. -->
 {#if !userOpen}
-  <EmptyState title="No account paired" description="Keybindings live in the account file.">
+  <EmptyState title="尚未配对账户" description="快捷键保存在账户文件中。">
     {#snippet action()}
-      <Button onclick={onShowAccounts}>Pair this character…</Button>
+      <Button onclick={onShowAccounts}>配对该角色…</Button>
     {/snippet}
   </EmptyState>
 {:else if error}
   <InlineMessage variant="error">{error}</InlineMessage>
 {:else if binds && !binds.available}
   <EmptyState
-    title="No keybindings yet"
-    description="EVE only writes one once you have opened the in-game keybinding screen at least once on this account.">
+    title="尚无快捷键"
+    description="只有在该账户至少打开过一次游戏内快捷键界面后，EVE 才会写入快捷键。">
     {#snippet action()}
-      <Button onclick={onShowBatch}>Copy bindings from another account…</Button>
+      <Button onclick={onShowBatch}>从另一账户复制绑定…</Button>
     {/snippet}
   </EmptyState>
 {:else if binds}
@@ -144,9 +144,9 @@
          instead of being suppressed and doing nothing. -->
     <!-- Filter, not Search: the table is on screen, so this narrows what you can
          already see. "Commands" now means palette commands. -->
-    <SearchField nouns="keybindings" shortcut={accel("F")} bind:element={searchInput} bind:value={query} class="search" />
-    <Field kind="checkbox" label="Only changed ({changedCount})" bind:value={changedOnly} />
-    <span class="meta">Click a binding, then press the combination you want.</span>
+    <SearchField nouns="快捷键" shortcut={accel("F")} bind:element={searchInput} bind:value={query} class="search" />
+    <Field kind="checkbox" label="仅已更改 ({changedCount})" bind:value={changedOnly} />
+    <span class="meta">点击某个绑定，然后按下你想要的组合键。</span>
   </div>
   {#each grouped as [group, entries] (group)}
     <h3>{group}</h3>
@@ -163,7 +163,7 @@
             <td class="label" title={e.command}>{labelFor(e.command)}</td>
             <td class="combo">
               {#if e.malformed}
-                <Chip class="readonly" title="Unrecognised value; left untouched">unreadable</Chip>
+                <Chip class="readonly" title="无法识别的值；保持原样">无法读取</Chip>
               {:else}
                 <!-- Keeps `class="chip"`: KeybindsView.spec finds this control
                      by that class. It is a toggle, so it says so with
@@ -173,12 +173,12 @@
                   pressed={listening === e.command}
                   onclick={() => (listening = e.command)}
                   onkeydown={(ev: KeyboardEvent) => listening === e.command && onKeydown(ev, e.command)}>
-                  {listening === e.command ? "press a key…" : keysToLabel(e.keys)}
+                  {listening === e.command ? "按下按键…" : keysToLabel(e.keys)}
                 </Button>
               {/if}
               {#if stolenFrom[e.command]}
                 <span class="meta" title={stolenFrom[e.command]}
-                  >taken by {stolenFrom[e.command]}</span>
+                  >已被 {stolenFrom[e.command]} 占用</span>
               {/if}
               {#if rowError?.command === e.command}
                 <InlineMessage variant="error" detail={rowError.detail}>{rowError.text}</InlineMessage>
@@ -194,8 +194,8 @@
                 size="sm"
                 iconOnly
                 disabled={def === undefined}
-                disabledReason="EVE's default for this command isn't known to this version of the editor"
-                title="Reset to EVE's default ({keysToLabel(def ?? null)})"
+                disabledReason="此版本的编辑器不知道该命令的 EVE 默认按键"
+                title="恢复 EVE 默认 ({keysToLabel(def ?? null)})"
                 onclick={() => commit(e.command, def ?? null)}>↺</Button>
             </td>
           </tr>
@@ -207,7 +207,7 @@
     <!-- Pinned rather than inline: inside the row it widened the cell and shoved
          the Default column sideways on every click, and at the foot of a
          hundred-row list it was several screens from the chip being captured. -->
-    <p class="capture-bar">press a key… <span class="meta">Esc cancels · Backspace unbinds</span></p>
+    <p class="capture-bar">按下按键… <span class="meta">Esc 取消 · Backspace 解除绑定</span></p>
   {/if}
 {/if}
 

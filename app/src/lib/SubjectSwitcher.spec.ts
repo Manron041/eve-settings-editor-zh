@@ -169,9 +169,9 @@ test("the Go to… section lists the six views with their disabled reasons", asy
   mountSwitcher();
   const box = await screen.findByRole("dialog", { name: "Find a character" });
   expect(within(box).getByText("Go to…")).toBeTruthy();
-  for (const v of ["Layout", "Overview", "Autofill", "Keybinds", "Probes", "Raw"]) {
+  for (const v of ["布局", "总览", "自动补全", "快捷键", "探针", "原始"]) {
     expect(within(box).getByRole("button", { name: v })).toBeTruthy();
   }
   // Nothing is open in this fixture, so five of the six say why not.
-  expect(within(box).getByRole("button", { name: "Layout" }).getAttribute("title")).toMatch(/open a character/i);
+  expect(within(box).getByRole("button", { name: "布局" }).getAttribute("title")).toMatch(/打开角色以编辑其窗口布局/);
 });

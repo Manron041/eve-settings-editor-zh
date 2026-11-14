@@ -1,4 +1,5 @@
 # EVE Settings Editor
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 A small desktop app for editing your local EVE Online client settings — the
 `core_char_*.dat` / `core_user_*.dat` files EVE stores per character and per

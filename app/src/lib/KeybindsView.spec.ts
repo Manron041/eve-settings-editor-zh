@@ -37,7 +37,7 @@ describe("the 'taken by' note", () => {
     // untruncated name has to remain reachable — otherwise constraining the row
     // silently destroys the information it was showing.
     await steal();
-    const note = await screen.findByText(/taken by/);
+    const note = await screen.findByText(/已被.*占用/);
     expect(note.getAttribute("title")).toBe("Activate High Power Slot 4");
   });
 });
@@ -110,7 +110,7 @@ test("'Only changed' keeps just the rows the file binds differently from EVE's d
     { command: "CmdApproachItem", keys: [81], malformed: false, custom: false },  // at its default
   ] });
   render(KeybindsView, { userOpen: true, userId: 1, onUserDirty: noop });
-  const toggle = await screen.findByLabelText("Only changed (1)");
+  const toggle = await screen.findByLabelText("仅已更改 (1)");
   await fireEvent.click(toggle);
   await screen.findByTitle("CmdExitStation");
   expect(screen.queryByTitle("CmdReloadAmmo")).toBeNull();

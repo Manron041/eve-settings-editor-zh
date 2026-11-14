@@ -127,7 +127,7 @@
             {#if subtitle}<p class="sub">{subtitle}</p>{/if}
           </div>
           {#if actions}<div class="actions">{@render actions()}</div>{/if}
-          <Button variant="ghost" iconOnly title="Close" onclick={onclose}>✕</Button>
+          <Button variant="ghost" iconOnly title="关闭" onclick={onclose}>✕</Button>
         </header>
       {/if}
       <div class="content">{@render children()}</div>

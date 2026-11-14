@@ -144,7 +144,7 @@
          cannot silently swallow a control the way the old one did to four
          buttons elsewhere. -->
     {#if container}
-      <Button variant="ghost" size="sm" iconOnly class="row-act" title="Add entry…"
+      <Button variant="ghost" size="sm" iconOnly class="row-act" title="添加条目…"
               onclick={() => onInsertRequest(node)}>+</Button>
     {/if}
     {#if node.removable}

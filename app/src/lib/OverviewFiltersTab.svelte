@@ -266,7 +266,7 @@
   <div class="filters-controls">
     <Field
       kind="select"
-      label="Preset"
+      label="预设"
       value={tab.preset}
       onchange={(e) => setTabPreset((e.currentTarget as HTMLSelectElement).value)}
       options={[
@@ -282,16 +282,16 @@
     <div class="preset-actions">
       <Button onclick={duplicatePreset} disabled={!editable}
               disabledReason="This preset cannot be duplicated"
-              title="Duplicate this preset">Duplicate preset</Button>
+              title="复制此预设">复制一份预设</Button>
       <Button onclick={startRenamePreset} disabled={!storedPreset || isDefaultKey(tab.preset)}
               disabledReason="A built-in profile cannot be renamed"
-              title="Rename this preset">Rename preset…</Button>
+              title="重命名此预设">重命名预设…</Button>
       <Button variant="danger" onclick={deletePreset}
               disabled={!storedPreset || isDefaultKey(tab.preset) || (data?.presets.length ?? 0) <= 1}
               disabledReason={isDefaultKey(tab.preset)
                 ? "A built-in profile cannot be deleted"
                 : "The last preset cannot be deleted"}
-              title="Delete this preset">Delete preset</Button>
+              title="删除此预设">删除预设</Button>
     </div>
     <!-- At the three buttons, which is where the click was. -->
     {#if at("duplicate") || at("delete")}
@@ -311,7 +311,7 @@
             bind:value={typedFilter} />
         </div>
 
-        <h4 class="section-heading">Types shown</h4>
+        <h4 class="section-heading">显示的类型</h4>
 
         <!-- Above the group grid: a group toggle can fail from anywhere in a
              four-hundred-row list, and the list is what it is about. -->
@@ -364,7 +364,7 @@
           </details>
         {/each}
 
-        <h4 class="section-heading">Exceptions</h4>
+        <h4 class="section-heading">例外</h4>
         {#if at("exception")}
           <InlineMessage variant="error" detail={error!.detail}>{error!.text}</InlineMessage>
         {/if}
@@ -373,13 +373,13 @@
             {@const choice = exceptionOf(presetFiltered, presetAlwaysShown, row.id)}
             <div class="exception-row">
               <span class="exception-label">{row.label}</span>
-              <Field kind="radio" name={`exc-${row.id}`} label="Show"
+              <Field kind="radio" name={`exc-${row.id}`} label="显示"
                      value={choice} radioValue="show"
                      onchange={() => setException(row.id, "show")} />
-              <Field kind="radio" name={`exc-${row.id}`} label="Hide"
+              <Field kind="radio" name={`exc-${row.id}`} label="隐藏"
                      value={choice} radioValue="hide"
                      onchange={() => setException(row.id, "hide")} />
-              <Field kind="radio" name={`exc-${row.id}`} label="Always show"
+              <Field kind="radio" name={`exc-${row.id}`} label="始终显示"
                      value={choice} radioValue="always"
                      onchange={() => setException(row.id, "always")} />
             </div>
@@ -389,13 +389,13 @@
     {/if}
     {#if pending}
       <div class="name-entry">
-        <Field bind:value={pending.value} bind:element={renameInput} ariaLabel="Preset name" placeholder="Preset name"
+        <Field bind:value={pending.value} bind:element={renameInput} ariaLabel="预设名称" placeholder="预设名称"
                onkeydown={(e: KeyboardEvent) => {
                  if (e.key === "Enter") { e.preventDefault(); submitPending(); }
                  else if (e.key === "Escape") pending = null;
                }} />
-        <Button variant="primary" onclick={submitPending}>Rename preset</Button>
-        <Button onclick={() => (pending = null)}>Cancel</Button>
+        <Button variant="primary" onclick={submitPending}>重命名预设</Button>
+        <Button onclick={() => (pending = null)}>取消</Button>
       </div>
       {#if at("rename")}
         <InlineMessage variant="error" detail={error!.detail}>{error!.text}</InlineMessage>

@@ -60,7 +60,7 @@
   /** The stored value, or EVE's default when the key is absent. */
   const shown = (name: string): string => { const e = field(name); return e?.value ?? e?.default ?? ""; };
   const unavailable = (name: string): boolean => field(name)?.set.how === "unavailable";
-  const NOT_EDITABLE = "This value has an unexpected type here";
+  const NOT_EDITABLE = "此处该值的类型不符合预期";
 
   const colourEntry = (broadcast: string) => fleet?.colours.find((c) => c.broadcast === broadcast);
   /** What the swatch shows: the stored colour, else the type's default, else nothing. */
@@ -92,11 +92,11 @@
   }
 
   const setBroadcastField = (name: string, on: boolean) =>
-    write("broadcast", "That broadcast setting wasn't changed", () => api.setFleetField(name, on ? "1" : "0"), onUserDirty);
+    write("broadcast", "该广播设置未更改", () => api.setFleetField(name, on ? "1" : "0"), onUserDirty);
   const pickColour = (broadcast: string, hex: string) =>
-    write("broadcast", "That colour wasn't changed", () => api.setFleetColour(broadcast, snapToPalette(hex, palette) ?? hexToRgb(hex)), onUserDirty);
+    write("broadcast", "该颜色未更改", () => api.setFleetColour(broadcast, snapToPalette(hex, palette) ?? hexToRgb(hex)), onUserDirty);
   const clearColour = (broadcast: string) =>
-    write("broadcast", "That colour wasn't changed", () => api.setFleetColour(broadcast, null), onUserDirty);
+    write("broadcast", "该颜色未更改", () => api.setFleetColour(broadcast, null), onUserDirty);
 
   const checked = (e: Event) => (e.currentTarget as HTMLInputElement).checked;
   const picked = (e: Event) => (e.currentTarget as HTMLInputElement).value;
@@ -110,9 +110,9 @@
   let adding = $state(false);
 
   const recolour = (id: number, hex: string) =>
-    write("watch", `${nameOf(id)}'s colour wasn't changed`, () => api.setWatchlistColour(id, snapToPalette(hex, palette) ?? hexToRgb(hex)), onCharDirty);
+    write("watch", `${nameOf(id)} 的颜色未更改`, () => api.setWatchlistColour(id, snapToPalette(hex, palette) ?? hexToRgb(hex)), onCharDirty);
   const remove = (id: number) =>
-    write("watch", `${nameOf(id)} wasn't removed`, () => api.setWatchlistColour(id, null), onCharDirty);
+    write("watch", `${nameOf(id)} 未移除`, () => api.setWatchlistColour(id, null), onCharDirty);
 
   async function add(ev: SubmitEvent) {
     ev.preventDefault();
@@ -126,29 +126,29 @@
       // name only resolves after. `Number(q)` on a non-numeric query is NaN,
       // which no real char_id equals, so this is a no-op for a name query.
       if (fleet?.watchlist.some((w) => w.char_id === Number(q))) {
-        watchError = { text: `${nameOf(Number(q))} is already in the list`, detail: "" };
+        watchError = { text: `${nameOf(Number(q))} 已在列表中`, detail: "" };
         return;
       }
       let found: FoundCharacter | null;
       try { found = await api.lookupCharacter(q); }
-      catch (e) { watchError = { text: `${q} wasn't looked up — couldn't reach ESI`, detail: errMessage(e) }; return; }
-      if (!found) { watchError = { text: `No character called ${q}`, detail: "" }; return; }
+      catch (e) { watchError = { text: `${q} 查询失败 — 无法连接 ESI`, detail: errMessage(e) }; return; }
+      if (!found) { watchError = { text: `没有名为 ${q} 的角色`, detail: "" }; return; }
       const id = found.id;
-      if (fleet?.watchlist.some((w) => w.char_id === id)) { watchError = { text: `${found.name} is already in the list`, detail: "" }; return; }
+      if (fleet?.watchlist.some((w) => w.char_id === id)) { watchError = { text: `${found.name} 已在列表中`, detail: "" }; return; }
       const rgb = snapToPalette(addHex, palette) ?? hexToRgb(addHex);
-      const ok = await write("watch", `${found.name} wasn't added`, () => api.setWatchlistColour(id, rgb), onCharDirty);
+      const ok = await write("watch", `${found.name} 未添加`, () => api.setWatchlistColour(id, rgb), onCharDirty);
       if (ok) {
         void resolveNames([id]);
         addQuery = "";
         // The new row can land below the fold, so the success is said out loud.
-        toast(`Added ${found.name}`, { action: undoAction() });
+        toast(`已添加 ${found.name}`, { action: undoAction() });
       }
     } finally { adding = false; }
   }
 
   // --- formation ----------------------------------------------------------
   const setFormationField = (name: string, text: string) =>
-    write("formation", "That formation setting wasn't changed", () => api.setFleetField(name, text), onCharDirty);
+    write("formation", "该阵型设置未更改", () => api.setFleetField(name, text), onCharDirty);
 
   // Int fields: round before writing, and put the input back in step with the
   // model whether or not the write landed — Svelte only patches `value` when
@@ -175,8 +175,8 @@
     el.value = shown("formation");
   };
   const NUMBERS: { name: string; label: string; step: number }[] = [
-    { name: "formation_size", label: "Size", step: 100 },
-    { name: "formation_spacing", label: "Spacing", step: 100 },
+    { name: "formation_size", label: "大小", step: 100 },
+    { name: "formation_spacing", label: "间距", step: 100 },
   ];
 </script>
 
@@ -191,12 +191,12 @@
   </datalist>
 
   <Panel class="broadcasts">
-    <PanelHeader title="Broadcast settings" subtitle="Which broadcasts you receive, and the colour each shows in">
-      {#snippet actions()}<Chip size="sm">account file</Chip>{/snippet}
+    <PanelHeader title="广播设置" subtitle="你接收哪些广播，以及各广播显示的颜色">
+      {#snippet actions()}<Chip size="sm">账户文件</Chip>{/snippet}
     </PanelHeader>
     {#if !userOpen}
-      <EmptyState title="No account paired" description="Broadcast settings live in the account file.">
-        {#snippet action()}<Button onclick={onShowAccounts}>Pair this character…</Button>{/snippet}
+      <EmptyState title="尚未配对账户" description="广播设置保存在账户文件中。">
+        {#snippet action()}<Button onclick={onShowAccounts}>配对此角色…</Button>{/snippet}
       </EmptyState>
     {:else if fleet}
       {#if broadcastError}
@@ -225,11 +225,11 @@
                    the appearance tab's convention. -->
               <Field kind="color" list="fleet-palette" controlClass={rgb ? "" : "unset"}
                 value={rgb ? rgbToHex(rgb) : UNSET_HEX}
-                ariaLabel="Colour for {b.label}" title={rgb ? undefined : "No colour"}
+                ariaLabel="{b.label} 的颜色" title={rgb ? undefined : "无颜色"}
                 disabled={unreadable} disabledReason={NOT_EDITABLE}
                 onchange={(e) => pickColour(b.type, picked(e))} />
-              <Button variant="ghost" size="sm" iconOnly title="No colour"
-                disabled={noColour(b.type)} disabledReason="Already no colour"
+              <Button variant="ghost" size="sm" iconOnly title="无颜色"
+                disabled={noColour(b.type)} disabledReason="已无颜色"
                 onclick={() => clearColour(b.type)}>✕</Button>
             </span>
           </div>
@@ -239,18 +239,18 @@
   </Panel>
 
   <Panel class="watchlist">
-    <PanelHeader title="Watch list colours" subtitle="The colour a fleet-mate shows in your watch list">
-      {#snippet actions()}<Chip size="sm">character file</Chip>{/snippet}
+    <PanelHeader title="监视列表颜色" subtitle="舰队成员在监视列表中显示的颜色">
+      {#snippet actions()}<Chip size="sm">角色文件</Chip>{/snippet}
     </PanelHeader>
     {#if !charOpen}
-      <EmptyState title="No character open" description="Watch-list colours live in the character file." />
+      <EmptyState title="未打开角色文件" description="监视列表颜色保存在角色文件中。" />
     {:else if fleet}
       {#if watchError}
         <InlineMessage variant="error" detail={watchError.detail || undefined}>{watchError.text}</InlineMessage>
       {/if}
       {#if fleet.watchlist.length === 0}
-        <EmptyState title="No watch-list colours"
-          description="Colours you set on watch-list members in-game appear here. Add one below to colour a character before you next fleet with them." />
+        <EmptyState title="尚无监视列表颜色"
+          description="你在游戏内为监视列表成员设置的颜色会显示在此处。在下方添加一个，即可在下次组队前为角色设置颜色。" />
       {:else}
         <ul class="watch-list">
           {#each fleet.watchlist as w (w.char_id)}
@@ -259,15 +259,15 @@
               <ListRow title={String(w.char_id)}>
                 {#snippet leading()}
                   <Field kind="color" list="fleet-palette" controlClass={w.rgb ? "" : "unset"}
-                    value={w.rgb ? rgbToHex(w.rgb) : UNSET_HEX} ariaLabel="Colour for {label}"
+                    value={w.rgb ? rgbToHex(w.rgb) : UNSET_HEX} ariaLabel="{label} 的颜色"
                     disabled={w.rgb === null} disabledReason={NOT_EDITABLE}
                     onchange={(e) => recolour(w.char_id, picked(e))} />
                 {/snippet}
                 <span class="label">{label}</span>
                 {#snippet trailing()}
-                  {#if w.rgb === null}<Chip tone="warn" size="sm">unreadable</Chip>{/if}
+                  {#if w.rgb === null}<Chip tone="warn" size="sm">不可读</Chip>{/if}
                   {#if label !== String(w.char_id)}<span class="meta">{w.char_id}</span>{/if}
-                  <Button variant="ghost" size="sm" iconOnly title="Remove from the list"
+                  <Button variant="ghost" size="sm" iconOnly title="从列表移除"
                     onclick={() => remove(w.char_id)}>✕</Button>
                 {/snippet}
               </ListRow>
@@ -276,20 +276,20 @@
         </ul>
       {/if}
       <form class="add" onsubmit={add}>
-        <Field kind="text" label="Add a character" placeholder="Name or ID" width="18rem" bind:value={addQuery} />
-        <Field kind="color" list="fleet-palette" ariaLabel="Colour for the new entry" bind:value={addHex} />
+        <Field kind="text" label="添加角色" placeholder="名称或 ID" width="18rem" bind:value={addQuery} />
+        <Field kind="color" list="fleet-palette" ariaLabel="新条目的颜色" bind:value={addHex} />
         <Button variant="primary" type="submit" disabled={addQuery.trim() === "" || adding}
-          disabledReason={adding ? "Looking the character up…" : "Type a character name or ID"}>Add</Button>
+          disabledReason={adding ? "正在查询角色…" : "输入角色名称或 ID"}>添加</Button>
       </form>
     {/if}
   </Panel>
 
   <Panel class="formation">
-    <PanelHeader title="Formation" subtitle="Fleet-warp formation, and the fleet finder">
-      {#snippet actions()}<Chip size="sm">character file</Chip>{/snippet}
+    <PanelHeader title="阵型" subtitle="舰队跃迁阵型与舰队查找器">
+      {#snippet actions()}<Chip size="sm">角色文件</Chip>{/snippet}
     </PanelHeader>
     {#if !charOpen}
-      <EmptyState title="No character open" description="Formation settings live in the character file." />
+      <EmptyState title="未打开角色文件" description="阵型设置保存在角色文件中。" />
     {:else if fleet}
       {#if formationError}
         <InlineMessage variant="error" detail={formationError.detail}>{formationError.text}</InlineMessage>
@@ -301,8 +301,8 @@
              others, so nothing lines up. A bare Field plus a leading label
              span keeps every control in the same track. -->
         <div class="row">
-          <span class="label">Formation</span>
-          <Field kind="select" ariaLabel="Formation" width="8rem" options={formationOptions}
+          <span class="label">阵型</span>
+          <Field kind="select" ariaLabel="阵型" width="8rem" options={formationOptions}
             value={shown("formation")} disabled={unavailable("formation")} disabledReason={NOT_EDITABLE}
             onchange={formationEdit} />
           <span></span>
@@ -317,15 +317,15 @@
           </div>
         {/each}
         <div class="row">
-          <span class="label">Show only my corp, alliance and high-standing fleets</span>
-          <Field kind="checkbox" ariaLabel="Show only my corp, alliance and high-standing fleets"
+          <span class="label">仅显示我的军团、联盟和高声望舰队</span>
+          <Field kind="checkbox" ariaLabel="仅显示我的军团、联盟和高声望舰队"
             value={shown("finder_group_only") === "1"}
             disabled={unavailable("finder_group_only")} disabledReason={NOT_EDITABLE}
             onchange={(e) => setFormationField("finder_group_only", checked(e) ? "1" : "0")} />
           <span></span>
         </div>
       </div>
-      <p class="meta">Saved fleet setups live on CCP's servers and can't be edited here.</p>
+      <p class="meta">已保存的舰队配置存于 CCP 服务器，无法在此编辑。</p>
     {/if}
   </Panel>
 </div>

@@ -144,27 +144,27 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="editor" bind:this={editorEl} onfocusout={focusOut} onkeydown={keydown}>
   {#if raw}
-    <Field bind:value={markup} bind:element={firstInput} ariaLabel="Tab name markup"
+    <Field bind:value={markup} bind:element={firstInput} ariaLabel="标签页名称标记"
            placeholder="<color=0xFFFF4040>name</color>" class="markup" />
   {:else}
     {#each pieces as p, i (i)}
       <div class="piece">
         {#if i === 0}
-          <Field bind:value={p.text} bind:element={firstInput} ariaLabel="Piece {i + 1} text"
-                 placeholder="Text" class="text" style={pieceStyle(p, tab.color)} />
+          <Field bind:value={p.text} bind:element={firstInput} ariaLabel="第 {i + 1} 段文本"
+                 placeholder="文本" class="text" style={pieceStyle(p, tab.color)} />
         {:else}
-          <Field bind:value={p.text} ariaLabel="Piece {i + 1} text"
-                 placeholder="Text" class="text" style={pieceStyle(p, tab.color)} />
+          <Field bind:value={p.text} ariaLabel="第 {i + 1} 段文本"
+                 placeholder="文本" class="text" style={pieceStyle(p, tab.color)} />
         {/if}
         <div class="controls">
           <div class="swatch-wrap" bind:this={swatchEls[i]}>
             <!-- aria-label as well as title: the swatch's only content is a dash
                  or nothing at all. -->
-            <Button class="swatch" title="Piece {i + 1} colour" aria-label="Piece {i + 1} colour"
+            <Button class="swatch" title="第 {i + 1} 段颜色" aria-label="第 {i + 1} 段颜色"
                     style={p.color ? `background:${cssColor(p.color)}` : ""}
                     onclick={() => (swatchFor = swatchFor === i ? null : i)}>{p.color ? "" : "—"}</Button>
             {#if swatchFor === i && swatchEls[i]}
-              <Popover anchor={swatchEls[i]} placement="bottom-start" ariaLabel="Piece {i + 1} colour"
+              <Popover anchor={swatchEls[i]} placement="bottom-start" ariaLabel="第 {i + 1} 段颜色"
                        class="palette" onclose={() => (swatchFor = null)}>
                 <div class="palette-grid">
                   {#each EVE_PALETTE as c (c)}
@@ -172,24 +172,24 @@
                             onclick={() => { p.color = `FF${c.toUpperCase()}`; swatchFor = null; }}></button>
                   {/each}
                 </div>
-                <Field kind="color" label="Custom" value={toPicker(p.color)}
+                <Field kind="color" label="自定义" value={toPicker(p.color)}
                        onchange={(e: Event) => { p.color = fromPicker((e.target as HTMLInputElement).value); }} />
                 <Button variant="ghost" size="sm" class="palette-none"
-                        onclick={() => { p.color = undefined; swatchFor = null; }}>No colour</Button>
+                        onclick={() => { p.color = undefined; swatchFor = null; }}>无颜色</Button>
               </Popover>
             {/if}
           </div>
-          <Button class="toggle b" pressed={!!p.bold} title="Bold" aria-label="Piece {i + 1} bold"
+          <Button class="toggle b" pressed={!!p.bold} title="粗体" aria-label="第 {i + 1} 段粗体"
                   onclick={() => (p.bold = !p.bold)}>B</Button>
-          <Button class="toggle i" pressed={!!p.italic} title="Italic" aria-label="Piece {i + 1} italic"
+          <Button class="toggle i" pressed={!!p.italic} title="斜体" aria-label="第 {i + 1} 段斜体"
                   onclick={() => (p.italic = !p.italic)}>I</Button>
-          <Button class="toggle u" pressed={!!p.underline} title="Underline" aria-label="Piece {i + 1} underline"
+          <Button class="toggle u" pressed={!!p.underline} title="下划线" aria-label="第 {i + 1} 段下划线"
                   onclick={() => (p.underline = !p.underline)}>U</Button>
-          <Field kind="number" bind:value={p.size} ariaLabel="Piece {i + 1} size" title="Font size, pixels"
+          <Field kind="number" bind:value={p.size} ariaLabel="第 {i + 1} 段字号" title="字号（像素）"
                  placeholder={String(TAB_FONT_PX)} min={1} max={64} width="3.5rem" />
-          <Field kind="number" bind:value={p.spacing} ariaLabel="Piece {i + 1} letter spacing"
-                 title="Extra space after each letter, pixels" placeholder="0" min={-10} max={50} width="3.5rem" />
-          <Button variant="ghost" size="sm" title="Remove piece" aria-label="Remove piece {i + 1}"
+          <Field kind="number" bind:value={p.spacing} ariaLabel="第 {i + 1} 段字距"
+                 title="每字后的额外间距（像素）" placeholder="0" min={-10} max={50} width="3.5rem" />
+          <Button variant="ghost" size="sm" title="删除此段" aria-label="删除第 {i + 1} 段"
                   disabled={pieces.length === 1} onclick={() => removePiece(i)}>✕</Button>
         </div>
       </div>
@@ -198,14 +198,14 @@
 
   <div class="foot">
     <!-- The name as the tab will draw it, the tab's own colour underneath. -->
-    <span class="preview" aria-label="Preview">
+    <span class="preview" aria-label="预览">
       {#each shown as p, i (i)}{#if !p.hidden}<span style={pieceStyle(p, tab.color)}>{p.text}</span>{/if}{/each}
     </span>
     {#if !raw}
       <Button size="sm" onclick={addPiece}>+ Piece</Button>
-      <Button size="sm" variant="ghost" onclick={toRaw}>Edit markup</Button>
+      <Button size="sm" variant="ghost" onclick={toRaw}>编辑标记</Button>
     {:else}
-      <Button size="sm" variant="ghost" onclick={toPieces}>Edit pieces</Button>
+      <Button size="sm" variant="ghost" onclick={toPieces}>编辑分段</Button>
     {/if}
   </div>
   {#each warnings as w (w)}

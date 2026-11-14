@@ -121,7 +121,7 @@ describe("what it shows", () => {
 describe("the row actions, as real buttons", () => {
   test("a container offers Add entry", async () => {
     const { onInsertRequest } = mount(mid.path);
-    await fireEvent.click(screen.getByRole("button", { name: "Add entry…" }));
+    await fireEvent.click(screen.getByRole("button", { name: "添加条目…" }));
     expect(onInsertRequest).toHaveBeenCalledWith(mid);
   });
 

@@ -200,12 +200,12 @@
 </script>
 
 <details open>
-  <summary>Presets</summary>
+  <summary>预设</summary>
   <div class="actions">
     <Button onclick={() => (creating = !creating)} disabled={!charOpen && !userOpen}
       disabledReason="Open a character first"
       title={charOpen || userOpen ? "Save the open character's settings as a preset" : "Open a character first"}
-      >New preset from this character…</Button>
+      >从此角色新建预设…</Button>
     <Button onclick={importPreset} disabled={busy} disabledReason="A preset command is in flight">
       Import preset…
     </Button>
@@ -217,7 +217,7 @@
 
   {#if creating}
     <form class="new" onsubmit={(e) => { e.preventDefault(); void create(); }}>
-      <Field placeholder="Preset name" ariaLabel="Preset name" bind:value={newName} />
+      <Field placeholder="预设名称" ariaLabel="预设名称" bind:value={newName} />
       <!-- Live, at the field, as the name is typed. Both of these used to be
            dialogs raised after the submit, and the app knew each of them
            before it. -->
@@ -261,14 +261,14 @@
               ? "Name the preset first"
               : "Pick at least one thing to copy"}
           >{collides ? "Replace preset" : "Save preset"}</Button>
-        <Button type="button" onclick={() => (creating = false)}>Cancel</Button>
+        <Button type="button" onclick={() => (creating = false)}>取消</Button>
       </div>
     </form>
   {/if}
 
   {#if allPresets().length === 0}
     <EmptyState
-      title="No presets yet"
+      title="还没有预设"
       description="Save the open character's settings as a preset to reuse them." />
   {:else}
     <ul>
@@ -277,7 +277,7 @@
           {#if renaming === p.name}
             <Field
               class="rename"
-              ariaLabel="Rename preset"
+              ariaLabel="重命名预设"
               bind:value={renameTo}
               onblur={commitRename}
               onkeydown={(e: KeyboardEvent) => {

@@ -78,13 +78,13 @@
     // this IS the in-game order. Do not sort it and do not re-derive it.
     const out: Group[] = data.windows.map((w) => ({
       key: `w${w.index}`,
-      label: `Overview ${w.index + 1}`,
+      label: `总览 ${w.index + 1}`,
       windowIdx: w.index,
       tabs: w.tab_indices.map((i) => byIndex.get(i)).filter((t): t is OverviewTab => !!t),
     }));
     const grouped = new Set(data.windows.flatMap((w) => w.tab_indices));
     const orphans = data.tabs.filter((t) => !grouped.has(t.index));
-    if (orphans.length > 0) out.push({ key: "other", label: "Other", windowIdx: null, tabs: orphans });
+    if (orphans.length > 0) out.push({ key: "other", label: "其他", windowIdx: null, tabs: orphans });
     return out;
   });
 
@@ -93,7 +93,7 @@
 
   function rowMenu(t: OverviewTab, g: Group, i: number): MenuItem[] {
     const loose = g.windowIdx === null;
-    const looseHint = "This tab isn't assigned to a window — EVE decides where it appears";
+    const looseHint = "此标签页未分配到窗口 — EVE 决定它出现在哪里";
     // The keyboard route for the drag's reorder: the same `onReorder`, one step.
     const step = (to: number) => () => {
       const order = g.tabs.map((x) => x.index);
@@ -105,12 +105,12 @@
       // Renaming happens ON the row. A rename started here and finished in a
       // panel below was two places for one gesture, and it left a Name field
       // sitting there permanently for the 99% of the time nobody is renaming.
-      { label: "Rename tab…", run: () => startRename(t) },
-      { label: "Delete tab", run: () => onDeleteTab(t.index) },
-      { label: "Move up", run: step(i - 1), disabled: loose || i === 0,
-        hint: loose ? looseHint : i === 0 ? "Already first in this window" : undefined },
-      { label: "Move down", run: step(i + 1), disabled: loose || i === g.tabs.length - 1,
-        hint: loose ? looseHint : i === g.tabs.length - 1 ? "Already last in this window" : undefined },
+      { label: "重命名标签页…", run: () => startRename(t) },
+      { label: "删除标签页", run: () => onDeleteTab(t.index) },
+      { label: "上移", run: step(i - 1), disabled: loose || i === 0,
+        hint: loose ? looseHint : i === 0 ? "已是此窗口的第一个" : undefined },
+      { label: "下移", run: step(i + 1), disabled: loose || i === g.tabs.length - 1,
+        hint: loose ? looseHint : i === g.tabs.length - 1 ? "已是此窗口的最后一个" : undefined },
     ];
     // Cross-window drag is the fast route; this is the keyboard one, and the
     // one that still works when the two windows are scrolled apart. Present and
@@ -118,7 +118,7 @@
     for (const w of data.windows) {
       if (w.index === g.windowIdx) continue;
       items.push({
-        label: `Move to Overview ${w.index + 1}`,
+        label: `移到总览 ${w.index + 1}`,
         run: () => onMove(t.index, g.windowIdx as number, w.index, w.tab_indices.length),
         disabled: loose,
         hint: loose ? looseHint : undefined,
@@ -133,16 +133,16 @@
   function groupMenu(g: Group): MenuItem[] {
     // Other has no window: the view puts its new tab in Overview 1, so say so.
     const items: MenuItem[] = [{
-      label: g.windowIdx === null ? "New tab (goes to Overview 1)" : "New tab in this window",
+      label: g.windowIdx === null ? "新建标签页（进入总览 1）" : "在此窗口新建标签页",
       run: () => startCreate(g),
     }];
     if (g.windowIdx === null) return items;
     const only = data.windows.length <= 1;
     items.push({
-      label: "Remove this window",
+      label: "移除此窗口",
       run: () => onRemoveWindow(g.windowIdx as number),
       disabled: only,
-      hint: only ? "This is the only overview window" : undefined,
+      hint: only ? "这是唯一的总览窗口" : undefined,
     });
     return items;
   }
@@ -204,24 +204,22 @@
 </script>
 
 <div class="tablist">
-  <PanelHeader title="Tabs" level={4} />
+  <PanelHeader title="标签页" level={4} />
 
   {#if data.windows.length === 0}
     <!-- The message explains the SHAPE of this list, so it belongs against the
          list rather than in a toolbar three controls away. -->
     <InlineMessage>
-      Tabs aren't assigned to specific overview windows on this account — EVE spreads them
-      across your windows itself. That's normal: importing an overview pack through the
-      client removes the assignment.
+      此账户的标签页不绑定到特定的总览窗口 — EVE 会自行把它们分布到你的各窗口。
+      这很正常：通过客户端导入总览包会移除该绑定。
       <!-- The sentence the deleted confirm used to carry, moved to where it is
            read BEFORE the click rather than after it. It is the one place in
            this app where "can't undo" is nearly true, and it earns its keep by
            saying why: the editor has no command that removes the last overview
            window. -->
-      Assigning them replaces that with an explicit list, and the editor can't
-      undo it — it can't remove the last overview window. Importing an overview
-      pack through the client removes the list again.
-      <Button size="sm" onclick={onSetUpWindowMapping}>Assign tabs to windows</Button>
+      分配后会以一份显式列表取而代之，而编辑器撤销不了这一操作 —— 因为它没有移除最后一个总览窗口的命令。
+      通过客户端导入总览包会再次移除该列表。
+      <Button size="sm" onclick={onSetUpWindowMapping}>分配标签页到窗口</Button>
     </InlineMessage>
   {/if}
   {#if editError?.where === "windows"}
@@ -230,8 +228,8 @@
 
   {#if data.tabs.length === 0}
     <EmptyState
-      title="No overview tabs"
-      description="This account file holds none. Add one with + Tab, or import an overview pack." />
+      title="没有总览标签页"
+      description="此账户文件里没有标签页。用 + 标签页 添加，或导入总览包。" />
   {/if}
   <!-- The strip's own failures, above the strip. -->
   {#if editError && ["strip", "actions", "move"].includes(editError.where)}
@@ -243,7 +241,7 @@
       {#if g.label}
         <div class="group-head">
           <span class="group-label">{g.label}</span>
-          <MenuButton items={() => groupMenu(g)} title="{g.label} actions" />
+          <MenuButton items={() => groupMenu(g)} title="{g.label} 操作" />
         </div>
       {/if}
       <ul>
@@ -275,7 +273,7 @@
                    game. Text EVE won't draw is left out, and flagged. -->
               <span class="name" title={plainTabName(t)}>{#each t.pieces as p, pi (pi)}{#if !p.hidden}<span style={pieceStyle(p, t.color)}>{p.text}</span>{/if}{/each}</span>
               {#if t.warnings?.length}
-                <span class="warn" role="img" aria-label="Won't show fully in game" title={t.warnings.join("\n")}>⚠</span>
+                <span class="warn" role="img" aria-label="游戏中显示不全" title={t.warnings.join("\n")}>⚠</span>
               {/if}
             </ListRow>
             {/if}
@@ -289,13 +287,13 @@
                 if (e.dataTransfer) e.dataTransfer.dropEffect = "move"; }}
               ondragleave={() => (dropEnd = null)}
               ondrop={(e: DragEvent) => { e.preventDefault(); dropEnd = null; drop(g, g.tabs.length); }}>
-            Drop here to move to the end
+            放到这里移到末尾
           </li>
         {/if}
         {#if pending?.kind === "tab" && pending.windowIdx === g.windowIdx}
           <li>
             <Field bind:value={pending.value} bind:element={nameInput}
-                   ariaLabel="Tab name" placeholder="Tab name"
+                   ariaLabel="标签页名称" placeholder="标签页名称"
                    onkeydown={(e: KeyboardEvent) => {
                      if (e.key === "Enter") { e.preventDefault(); submit(); }
                      else if (e.key === "Escape") pending = null;
@@ -307,7 +305,7 @@
 
     {#if pending?.kind === "window"}
       <Field bind:value={pending.value} bind:element={nameInput}
-             ariaLabel="First tab name" placeholder="First tab name"
+             ariaLabel="首个标签页名称" placeholder="首个标签页名称"
              onkeydown={(e: KeyboardEvent) => {
                if (e.key === "Enter") { e.preventDefault(); submit(); }
                else if (e.key === "Escape") pending = null;
@@ -326,17 +324,17 @@
          and clicking away are its three exits. -->
     {#if pending && pending.kind !== "rename"}
       <Button variant="primary" onclick={submit}>
-        {pending.kind === "window" ? "Add window" : "Add tab"}
+        {pending.kind === "window" ? "添加窗口" : "添加标签页"}
       </Button>
-      <Button onclick={() => (pending = null)}>Cancel</Button>
+      <Button onclick={() => (pending = null)}>取消</Button>
     {:else if !pending}
       <!-- With no selection (a zero-tab account) the entry opens under the
            first group, which is where the view creates it. -->
-      <Button size="sm" onclick={() => startCreate(selectedGroup ?? groups[0])}>+ Tab</Button>
+      <Button size="sm" onclick={() => startCreate(selectedGroup ?? groups[0])}>+ 标签页</Button>
       <Button size="sm" onclick={() => (pending = { kind: "window", windowIdx: null, value: "Overview" })}
               disabled={data.windows.length === 0}
-              disabledReason="This account doesn't assign tabs to windows — set that up first"
-              title="Add a new overview window">+ Window</Button>
+              disabledReason="此账户不按窗口分配标签页 — 请先设置"
+              title="添加新的总览窗口">+ 窗口</Button>
     {/if}
   </div>
 </div>

@@ -24,10 +24,10 @@ const opened = (file_name: string, readOnly = false): OpenOutcome => ({
   },
 });
 
-const save = () => screen.getByRole("button", { name: "Save" }) as HTMLButtonElement;
+const save = () => screen.getByRole("button", { name: "保存" }) as HTMLButtonElement;
 
 async function disclose() {
-  await fireEvent.click(screen.getByRole("button", { name: /unsaved/ }));
+  await fireEvent.click(screen.getByRole("button", { name: /未保存/ }));
   return await screen.findByRole("dialog", { name: "Unsaved changes" });
 }
 
@@ -35,7 +35,7 @@ test("a clean subject shows Save disabled and no count", () => {
   subject.slots.char = opened("core_char_950.dat");
   render(SaveCluster);
   expect(save().disabled).toBe(true);
-  expect(screen.queryByText(/unsaved/)).toBeNull();
+  expect(screen.queryByText(/未保存/)).toBeNull();
 });
 
 test("nothing open still renders Save, disabled, saying to open a character", () => {
@@ -58,7 +58,7 @@ describe("the disclosure", () => {
     subject.dirty.user = true;
     render(SaveCluster);
 
-    expect(screen.getByText("2 unsaved ▾")).toBeTruthy();
+    expect(screen.getByText("2 处未保存 ▾")).toBeTruthy();
     const box = await disclose();
     const text = box.textContent ?? "";
     expect(text).toMatch(/Will write/i);
@@ -85,7 +85,7 @@ describe("the disclosure", () => {
     subject.dirty.user = true;
     render(SaveCluster);
 
-    expect(screen.getByText("1 unsaved ▾")).toBeTruthy();
+    expect(screen.getByText("1 处未保存 ▾")).toBeTruthy();
     const text = (await disclose()).textContent ?? "";
     expect(text).toMatch(/core_user_140\.dat/);
     expect(text).not.toMatch(/core_char_950\.dat/);

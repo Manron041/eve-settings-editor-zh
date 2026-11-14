@@ -142,7 +142,7 @@
   const viewOwnsInspector = $derived(hasInspector && view === "layout");
   const scopeLabel = $derived(
     sheet === null && ACCOUNT_SCOPED.includes(view) && subject.sharedNames.length
-      ? `Shared account settings — also applies to ${subject.sharedNames.join(", ")}`
+      ? `共享账号设置 — 也适用于 ${subject.sharedNames.join("、")}`
       : "",
   );
 
@@ -163,7 +163,7 @@
     landUndo(e.payload.outcome);
     // No Undo button on a toast that is itself an undo, or on one that left
     // nothing to undo — there would be nothing for the button to do.
-    toast(`Assistant: ${e.payload.tool}`, {
+    toast(`助手：${e.payload.tool}`, {
       action: e.payload.tool === "undo" || !e.payload.outcome.state.can_undo ? undefined : undoAction(),
     });
   });
@@ -177,9 +177,9 @@
     .checkForUpdate()
     .then((u) => {
       if (u)
-        toast(`Version ${u.version} is available`, {
+        toast(`新版本 ${u.version} 可用`, {
           duration: 0,
-          action: { label: "Download", run: () => void openUrl(u.url).catch(() => {}) },
+          action: { label: "下载", run: () => void openUrl(u.url).catch(() => {}) },
         });
     })
     .catch(() => {});
@@ -271,7 +271,7 @@
   async function pickFile() {
     const picked = await openDialog({
       multiple: false,
-      filters: [{ name: "EVE settings", extensions: ["dat"] }],
+      filters: [{ name: "EVE 设置", extensions: ["dat"] }],
     });
     if (typeof picked === "string") await openFile(picked);
   }
@@ -326,7 +326,7 @@
       // returns its argument when that view is reachable.
       view = resolveView(view);
     } catch (e) {
-      shellErrors.open = { text: `${name} wasn't opened — ${errText(e)}`, detail: errMessage(e) };
+      shellErrors.open = { text: `“${name}” 未能打开 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -358,7 +358,7 @@
       // Read late, not captured before the await — see the note in `openFile`.
       view = resolveView(view);
     } catch (e) {
-      shellErrors.open = { text: `“${p.name}” wasn't opened — ${errText(e)}`, detail: errMessage(e) };
+      shellErrors.open = { text: `“${p.name}” 未能打开 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -382,7 +382,7 @@
       noteEdit();
     } catch (e) {
       if (rethrow) throw e;
-      treeError = { text: `That value wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      treeError = { text: `该值未能修改 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -400,7 +400,7 @@
       noteEdit();
     } catch (e) {
       if (rethrow) throw e;
-      treeError = { text: `That value wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      treeError = { text: `该值未能修改 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -541,7 +541,7 @@
       onShowAccounts={() => (sheet = "accounts")} />
   {:else}
     <button class="rail rail-left" onclick={() => (sidebarOpen = true)}
-      title="Show file list" aria-label="Show file list">&raquo;</button>
+      title="显示文件列表" aria-label="显示文件列表">&raquo;</button>
   {/if}
 
   <ViewTabs bind:value={view} bind:height={tabsHeight} onpick={() => (sheet = null)} />
@@ -553,11 +553,7 @@
   {#if staleSlots.length > 0}
     <div class="stale">
       <InlineMessage variant="warn">
-        {staleSlots.length === 1 ? "The" : "Both the"}
-        {staleSlots.map((s) => (s === "char" ? "character" : "account")).join(" and ")}
-        file {staleSlots.length === 1 ? "was" : "were"} rewritten on disk by Copy settings. Your
-        unsaved edits are still here — saving will overwrite what was just copied. Discard to take
-        the copied version instead.
+        {staleSlots.length === 1 ? "" : "两份"}{staleSlots.map((s) => (s === "char" ? "角色" : "账号")).join("和")}文件已被「复制设置」重写到磁盘。你未保存的修改仍在 — 保存会覆盖刚复制的内容；丢弃则改用复制来的版本。
       </InlineMessage>
     </div>
   {/if}
@@ -566,11 +562,11 @@
     <div class="work" class:wide={!hasInspector}>
       <div class="scroll">
         <EmptyState
-          title="Open a character to begin"
-          description="EVE Settings Editor edits the settings files EVE writes for each of your characters and accounts." />
+          title="打开角色即可开始"
+          description="EVE Settings Editor 编辑 EVE 为每个角色和账号写入的设置文件。" />
         <div class="launch">
           {#if subject.profiles.length === 0}
-            <InlineMessage>No EVE profiles found in standard locations. Use “Open file…”.</InlineMessage>
+            <InlineMessage>未在标准位置找到 EVE 配置档。用“打开文件…”。</InlineMessage>
           {:else if launchRows.length === 0}
             <!-- The same words the sidebar uses, from the same function, so the
                  two cannot drift — including the one that names the filter as
@@ -589,12 +585,12 @@
               {/each}
             </ul>
             {#if launchMore > 0}
-              <Button variant="ghost" onclick={() => (sidebarOpen = true)}>… {launchMore} more</Button>
+              <Button variant="ghost" onclick={() => (sidebarOpen = true)}>… 还有 {launchMore} 个</Button>
             {/if}
           {/if}
           <p class="launch-foot">
-            <Button onclick={pickFile}>Open file…</Button>
-            <span>or press {accel("K")} to search</span>
+            <Button onclick={pickFile}>打开文件…</Button>
+            <span>或按 {accel("K")} 搜索</span>
           </p>
         </div>
       </div>
@@ -602,7 +598,7 @@
   {:else if current.status !== "opened"}
     <div class="work" class:wide={!hasInspector}>
       <div class="scroll">
-        <InlineMessage variant="error">Cannot edit: {current.message} (offset {current.offset})</InlineMessage>
+        <InlineMessage variant="error">无法编辑：{current.message}（偏移 {current.offset}）</InlineMessage>
         <pre class="hex">{current.hex_preview}</pre>
       </div>
     </div>
@@ -705,17 +701,17 @@
         {#if subject.slots.user?.status === "opened"}
           <Tabs
             class="tree-file"
-            ariaLabel="Raw file"
+            ariaLabel="原始文件"
             tabs={[
-              { id: "char", label: "Character file" },
-              { id: "user", label: "Account file" },
+              { id: "char", label: "角色文件" },
+              { id: "user", label: "账号文件" },
             ]}
             bind:value={treeFile} />
         {/if}
         <div class="raw-search">
           <SearchField
             verb="search"
-            nouns="labels and values"
+            nouns="标签与值"
             shortcut={accel("F")}
             bind:element={searchBox}
             bind:value={query}
@@ -743,7 +739,7 @@
               onRemove={handleRemove}
               onInsertRequest={(n) => (insertTarget = n)} />
           {:else}
-            <EmptyState title="Nothing in this file matches &ldquo;{query}&rdquo;." />
+            <EmptyState title="此文件中没有与“{query}”匹配的内容。" />
           {/if}
         </div>
       {/if}
@@ -757,13 +753,13 @@
     <!-- nothing -->
   {:else if !inspectorOpen}
     <button class="rail rail-right" onclick={() => (inspectorOpen = true)}
-      title="Show properties" aria-label="Show properties">&laquo;</button>
+      title="显示属性" aria-label="显示属性">&laquo;</button>
   <!-- No longer conditioned on `sheet`: the editor is never unmounted now, so
        Layout still supplies its own inspector underneath an open sheet. -->
   {:else if !viewOwnsInspector}
     <aside class="inspector">
       <div class="inspector-head">
-        <Button variant="ghost" size="sm" iconOnly title="Hide properties"
+        <Button variant="ghost" size="sm" iconOnly title="隐藏属性"
           onclick={() => (inspectorOpen = false)}>&raquo;</Button>
       </div>
       <!-- Raw is the third view with an inspector, and the strongest case in the
@@ -781,7 +777,7 @@
           onRemove={handleRemove}
           onInsertRequest={(n) => (insertTarget = n)} />
       {:else}
-        <EmptyState title="Select something to see its properties." />
+        <EmptyState title="选择一项以查看其属性。" />
       {/if}
     </aside>
   {/if}
@@ -789,7 +785,7 @@
   {#if insertTarget !== null}
     <!-- A Sheet, so it traps focus, restores it to the opener and closes on
          Escape. The `.modal` it replaces did none of the three. -->
-    <Sheet title="Add entry" width="min(420px, 92vw)" onclose={() => (insertTarget = null)}>
+    <Sheet title="添加条目" width="min(420px, 92vw)" onclose={() => (insertTarget = null)}>
       <InsertForm
         target={insertTarget}
         onSubmit={async (m) => {

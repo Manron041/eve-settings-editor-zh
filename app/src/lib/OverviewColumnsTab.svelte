@@ -129,11 +129,11 @@
 {#if tab}
   <!-- Names the tab being edited: the list beside it highlights a row, but
        nothing in this pane said which. -->
-  <div class="pane-head"><PanelHeader title="Columns · {plainTabName(tab).trim()}" level={4} /></div>
+  <div class="pane-head"><PanelHeader title="列 · {plainTabName(tab).trim()}" level={4} /></div>
   <div class="col-actions">
     <Button onclick={openCopy} disabled={copyOpen || (data?.tabs.length ?? 0) < 2}
             disabledReason={copyOpen ? "The copy panel is already open" : "There is no other tab to copy onto"}
-            title="Copy this tab's column settings onto other tabs">Copy columns…</Button>
+            title="复制此标签页的列设置到其他标签页">复制列…</Button>
   </div>
   {#if copyOpen}
     <!-- A Sheet rather than an inline block: the column list stays put instead
@@ -143,20 +143,20 @@
          modal"; Phase 1 gave it one. Ticking the targets by hand is still the
          confirmation step, so no confirm is added. -->
     <Sheet
-      title="Copy columns"
+      title="复制列"
       width="min(34rem, 92vw)"
       class="copy-panel"
       onclose={() => (copyOpen = false)}>
       <!-- What travels, then where it goes: the two questions are separate and
            the panel asks them in that order. -->
       <section>
-        <h4>What to copy from <strong>{plainTabName(tab).trim()}</strong></h4>
+        <h4>复制来源 <strong>{plainTabName(tab).trim()}</strong></h4>
         <div class="copy-parts">
-          <Field kind="checkbox" label="Column order" bind:value={parts.order} />
-          <Field kind="checkbox" label="Visible columns" bind:value={parts.visible} />
+          <Field kind="checkbox" label="列顺序" bind:value={parts.order} />
+          <Field kind="checkbox" label="可见列" bind:value={parts.visible} />
           <Field
             kind="checkbox"
-            label="Widths{charOpen ? '' : ' — no character open'}"
+            label="列宽{charOpen ? '' : ' — 未打开角色'}"
             value={copyWidths}
             disabled={!charOpen}
             disabledReason="Widths are per character — open one to copy them"
@@ -166,10 +166,10 @@
       </section>
       <section>
         <div class="copy-head">
-          <h4>Copy it to</h4>
+          <h4>复制到</h4>
           <!-- All / None, everywhere. Four panels used three different pairs. -->
-          <Button size="sm" onclick={() => pickAll(true)}>All</Button>
-          <Button size="sm" onclick={() => pickAll(false)}>None</Button>
+          <Button size="sm" onclick={() => pickAll(true)}>全部</Button>
+          <Button size="sm" onclick={() => pickAll(false)}>无</Button>
         </div>
         <div class="copy-targets">
           {#each targetGroups as g (g.label)}
@@ -191,7 +191,7 @@
           disabledReason={chosen.length === 0 ? "Tick at least one tab" : "Tick at least one thing to copy"}>
           Copy to {chosen.length} tab{chosen.length === 1 ? "" : "s"}
         </Button>
-        <Button onclick={() => (copyOpen = false)}>Cancel</Button>
+        <Button onclick={() => (copyOpen = false)}>取消</Button>
       {/snippet}
     </Sheet>
   {/if}

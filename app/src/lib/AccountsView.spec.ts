@@ -58,14 +58,14 @@ function mount(
  * so they match either. The anchors matter: a ghost's own accept is named
  * "Accept Alpha" and must not be caught here.
  */
-const BULK = /^accept( all)?$/i;
+const BULK = /^接受(全部)?$/i;
 const bulkAccept = () => screen.getByRole("button", { name: BULK });
 const bulkAcceptOrNull = () => screen.queryByRole("button", { name: BULK });
 
 describe("launcher proposals", () => {
   test("an undisputed proposal offers the character on the named account", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    const accept = await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
+    const accept = await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
     await fireEvent.click(accept);
     await waitFor(() => expect(calls.only("confirm_pairing").args).toEqual({
       charId: 90000001,
@@ -93,19 +93,19 @@ describe("launcher proposals", () => {
     const all = await waitFor(() => bulkAccept());
     await fireEvent.click(all);
     await waitFor(() =>
-      expect(screen.queryByRole("button", { name: /accept Alpha/i })).toBeNull(),
+      expect(screen.queryByRole("button", { name: /接受 Alpha/i })).toBeNull(),
     );
   });
 
   test("a disputed character is flagged on the card that holds it, naming the target", async () => {
     mount([{ char_id: 90000009, user_id: 80000001, conflict: 80000002 }]);
-    const warning = await waitFor(() => screen.getByText(/launcher log puts Zulu on Main/i));
+    const warning = await waitFor(() => screen.getByText(/启动器日志把 Zulu 放在 Main 上/i));
     expect(warning).toBeTruthy();
   });
 
   test("Move to repairs the pairing to the account the launcher names", async () => {
     mount([{ char_id: 90000009, user_id: 80000001, conflict: 80000002 }]);
-    const move = await waitFor(() => screen.getByRole("button", { name: /^Move to /i }));
+    const move = await waitFor(() => screen.getByRole("button", { name: /^移动到 /i }));
     await fireEvent.click(move);
     await waitFor(() => expect(calls.only("confirm_pairing").args).toEqual({
       charId: 90000009,
@@ -115,19 +115,19 @@ describe("launcher proposals", () => {
 
   test("Move to drops its proposal from the list", async () => {
     mount([{ char_id: 90000009, user_id: 80000001, conflict: 80000002 }]);
-    const move = await waitFor(() => screen.getByRole("button", { name: /^Move to /i }));
+    const move = await waitFor(() => screen.getByRole("button", { name: /^移动到 /i }));
     await fireEvent.click(move);
     await waitFor(() =>
-      expect(screen.queryByText(/launcher log puts Zulu/i)).toBeNull(),
+      expect(screen.queryByText(/启动器日志把 Zulu/i)).toBeNull(),
     );
   });
 
   test("Keep here drops the warning and writes nothing", async () => {
     mount([{ char_id: 90000009, user_id: 80000001, conflict: 80000002 }]);
-    const keep = await waitFor(() => screen.getByRole("button", { name: /^Keep here$/i }));
+    const keep = await waitFor(() => screen.getByRole("button", { name: /^保留在此$/i }));
     await fireEvent.click(keep);
     await waitFor(() =>
-      expect(screen.queryByText(/launcher log puts Zulu/i)).toBeNull(),
+      expect(screen.queryByText(/启动器日志把 Zulu/i)).toBeNull(),
     );
     calls.never("confirm_pairing");
     calls.never("confirm_pairings");
@@ -135,16 +135,16 @@ describe("launcher proposals", () => {
 
   test("an accepted ghost leaves the list instead of reappearing in the next slot", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    const accept = await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
+    const accept = await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
     await fireEvent.click(accept);
     await waitFor(() =>
-      expect(screen.queryByRole("button", { name: /accept Alpha/i })).toBeNull(),
+      expect(screen.queryByRole("button", { name: /接受 Alpha/i })).toBeNull(),
     );
   });
 
   test("with no proposals there is no accept-all button, and the view says why", async () => {
     mount([]);
-    await waitFor(() => screen.getByText(/launcher logs say nothing/i));
+    await waitFor(() => screen.getByText(/启动器日志没提到/i));
     expect(bulkAcceptOrNull()).toBeNull();
   });
 
@@ -153,7 +153,7 @@ describe("launcher proposals", () => {
     const all = await waitFor(() => bulkAccept());
     await fireEvent.click(all);
     await waitFor(() => expect(bulkAcceptOrNull()).toBeNull());
-    expect(screen.queryByText(/launcher logs say nothing/i)).toBeNull();
+    expect(screen.queryByText(/启动器日志没提到/i)).toBeNull();
   });
 
   test("a rejected pair names the character and the account, and keeps its ghost", async () => {
@@ -164,10 +164,10 @@ describe("launcher proposals", () => {
     });
     const all = await waitFor(() => bulkAccept());
     await fireEvent.click(all);
-    await waitFor(() => screen.getByText(/Alpha wasn.t paired with Main/i));
+    await waitFor(() => screen.getByText(/Alpha 未能与 Main 配对/i));
     // Not claimed as applied: the ghost stays, so the user can retry after
     // unpairing something on that account.
-    expect(screen.queryByRole("button", { name: /accept Alpha/i })).not.toBeNull();
+    expect(screen.queryByRole("button", { name: /接受 Alpha/i })).not.toBeNull();
   });
 
   test("calibrating a character the launcher also proposed drops its ghost", async () => {
@@ -178,11 +178,11 @@ describe("launcher proposals", () => {
       changed_users: [80000001],
       detected: [90000001, 80000001],
     });
-    await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
-    await fireEvent.click(screen.getByRole("button", { name: /calibrate/i }));
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "Done" })));
+    await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
+    await fireEvent.click(screen.getByRole("button", { name: /校准/i }));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "完成" })));
     await waitFor(() =>
-      expect(screen.queryByRole("button", { name: /accept Alpha/i })).toBeNull(),
+      expect(screen.queryByRole("button", { name: /接受 Alpha/i })).toBeNull(),
     );
   });
 });
@@ -198,7 +198,7 @@ describe("the empty state says which kind of empty it is", () => {
   test("a failed log read is reported as a failure, not as silent logs", async () => {
     mount([], { launcherFails: true });
     await waitFor(() => screen.getByText(/launcher log folder is unreadable/i));
-    expect(screen.queryByText(/launcher logs say nothing/i)).toBeNull();
+    expect(screen.queryByText(/启动器日志没提到/i)).toBeNull();
   });
 
   test("a failed log read is retried when the sheet is reopened", async () => {
@@ -209,7 +209,7 @@ describe("the empty state says which kind of empty it is", () => {
     await waitFor(() => screen.getByText(/launcher log folder is unreadable/i));
     cleanup();
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
+    await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
     expect(calls.of("launcher_proposals").length).toBe(2);
   });
 
@@ -217,14 +217,14 @@ describe("the empty state says which kind of empty it is", () => {
     // The live case, 2026-08-14: 30 characters named, all 30 already paired, 0
     // proposals. "Your logs say nothing" was the opposite of the truth.
     mount([], { known: 30 });
-    const message = await waitFor(() => screen.getByText(/already paired/i));
+    const message = await waitFor(() => screen.getByText(/已配对/i));
     expect(message.textContent).toMatch(/30/);
-    expect(screen.queryByText(/launcher logs say nothing/i)).toBeNull();
+    expect(screen.queryByText(/启动器日志没提到/i)).toBeNull();
   });
 
   test("one known character is not 'all 1 characters'", async () => {
     mount([], { known: 1 });
-    await waitFor(() => screen.getByText(/The one character your EVE launcher names is already paired\./));
+    await waitFor(() => screen.getByText(/启动器日志提到的那个角色已配对了。/));
   });
 });
 
@@ -267,9 +267,9 @@ describe("accept all is scoped to the visible cards", () => {
     // the button drops "all" at exactly one pair. The `confirm_pairings`
     // payload assertion below is untouched, because the scoping rule this test
     // was really written to protect has not changed.
-    const message = await waitFor(() => screen.getByText(/Your launcher log pairs Alpha\./));
+    const message = await waitFor(() => screen.getByText(/启动器日志将 Alpha 配对。/));
     expect(message.textContent).not.toMatch(/90000002|Bravo/);
-    const all = screen.getByRole("button", { name: /^accept$/i });
+    const all = screen.getByRole("button", { name: /^接受$/i });
     await fireEvent.click(all);
     await waitFor(() =>
       expect(calls.only("confirm_pairings").args).toEqual({ pairs: [[90000001, 80000001]] }),
@@ -283,7 +283,7 @@ describe("accept all is scoped to the visible cards", () => {
       profiles: PROFILES,
       openPath: OPEN,
     });
-    await waitFor(() => screen.getByText(/launcher logs say nothing/i));
+    await waitFor(() => screen.getByText(/启动器日志没提到/i));
     expect(bulkAcceptOrNull()).toBeNull();
   });
 });
@@ -296,18 +296,18 @@ describe("the bulk accept names what it will pair", () => {
       { char_id: 90000001, user_id: 80000001, conflict: null },
       { char_id: 90000009, user_id: 80000001, conflict: null },
     ]);
-    const message = await waitFor(() => screen.getByText(/Your launcher log pairs/));
+    const message = await waitFor(() => screen.getByText(/启动器日志将/));
     expect(message.textContent).toMatch(/Alpha/);
     expect(message.textContent).toMatch(/Zulu/);
     // "2 characters" is exactly what this replaces.
     expect(message.textContent).not.toMatch(/\d/);
-    expect(bulkAccept().textContent?.trim()).toBe("Accept all");
+    expect(bulkAccept().textContent?.trim()).toBe("接受全部");
   });
 
   test("one proposal says Accept, not Accept all", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    await waitFor(() => screen.getByText(/Your launcher log pairs Alpha\./));
-    expect(bulkAccept().textContent?.trim()).toBe("Accept");
+    await waitFor(() => screen.getByText(/启动器日志将 Alpha 配对。/));
+    expect(bulkAccept().textContent?.trim()).toBe("接受");
   });
 
   /**
@@ -320,7 +320,7 @@ describe("the bulk accept names what it will pair", () => {
    */
   test("a proposed chip is a state of its own, not a dimmed confirmed one", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    const accept = await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
+    const accept = await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
     const chip = accept.closest(".chip");
     expect(chip?.classList.contains("proposed")).toBe(true);
     expect(chip?.classList.contains("info")).toBe(true);
@@ -332,12 +332,12 @@ describe("the bulk accept names what it will pair", () => {
   // Accept writes to the store; Dismiss is session-only and undone by reopening
   // the app. Two bare glyphs at equal weight said they were the same kind of
   // action. The accessible name is unchanged, so the five tests querying
-  // /accept Alpha/i keep passing untouched.
+  // /接受 Alpha/i keep passing untouched.
   test("the ghost's accept is a labelled button, still named Accept {character}", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    const accept = await waitFor(() => screen.getByRole("button", { name: /accept Alpha/i }));
-    expect(accept.textContent?.trim()).toBe("Accept");
-    expect(screen.getByRole("button", { name: /dismiss Alpha/i }).textContent?.trim()).toBe("✕");
+    const accept = await waitFor(() => screen.getByRole("button", { name: /接受 Alpha/i }));
+    expect(accept.textContent?.trim()).toBe("接受");
+    expect(screen.getByRole("button", { name: /忽略 Alpha/i }).textContent?.trim()).toBe("✕");
   });
 });
 
@@ -352,8 +352,8 @@ describe("state that has to outlive a dismissal", () => {
   test("a capture survives the sheet being dismissed and reopened", async () => {
     mount([]);
     CAPTURE_STUBS();
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /calibrate/i })));
-    await waitFor(() => screen.getByRole("button", { name: "Done" }));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /校准/i })));
+    await waitFor(() => screen.getByRole("button", { name: "完成" }));
 
     cleanup(); // the sheet is dismissed
     mount([]);
@@ -361,7 +361,7 @@ describe("state that has to outlive a dismissal", () => {
     // Still in flight, and the expensive half — the backend baseline — was never
     // re-taken. A second `begin_capture` would snapshot the files as they are
     // AFTER EVE's write, and the detection would then find nothing, silently.
-    await waitFor(() => expect(screen.getByRole("button", { name: "Done" })).toBeTruthy());
+    await waitFor(() => expect(screen.getByRole("button", { name: "完成" })).toBeTruthy());
     expect(calls.of("begin_capture").length).toBe(1);
     // And dismissing is not an ending, so it discards nothing.
     calls.never("clear_capture");
@@ -370,9 +370,9 @@ describe("state that has to outlive a dismissal", () => {
   test("Calibrate cannot re-baseline a capture already in flight", async () => {
     mount([]);
     CAPTURE_STUBS();
-    const calibrate = await waitFor(() => screen.getByRole("button", { name: /calibrate/i }));
+    const calibrate = await waitFor(() => screen.getByRole("button", { name: /校准/i }));
     await fireEvent.click(calibrate);
-    await waitFor(() => screen.getByRole("button", { name: "Done" }));
+    await waitFor(() => screen.getByRole("button", { name: "完成" }));
     await fireEvent.click(calibrate);
     expect(calls.of("begin_capture").length).toBe(1);
   });
@@ -380,10 +380,10 @@ describe("state that has to outlive a dismissal", () => {
   test("Cancel discards the backend baseline", async () => {
     mount([]);
     CAPTURE_STUBS();
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /calibrate/i })));
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "Cancel" })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /校准/i })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "取消" })));
     await waitFor(() => expect(calls.of("clear_capture").length).toBe(1));
-    expect(screen.queryByRole("button", { name: "Done" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "完成" })).toBeNull();
   });
 
   test("Done pairs the detected character, clears the wizard, and names the account by alias", async () => {
@@ -394,17 +394,17 @@ describe("state that has to outlive a dismissal", () => {
       changed_users: [80000001],
       detected: [90000001, 80000001],
     });
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /calibrate/i })));
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "Done" })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /校准/i })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "完成" })));
 
     await waitFor(() => expect(calls.of("confirm_pairing").length).toBe(1));
     await waitFor(() => expect(calls.of("clear_capture").length).toBe(1));
     // The account is named by ALIAS. "account 80000001" is a raw `core_user`
     // number and does not tell the user which account they just paired — the
     // same reason the rejection copy names it.
-    const note = await waitFor(() => screen.getByText(/ with Main\./));
+    const note = await waitFor(() => screen.getByText(/与 Main 配对。/));
     expect(note.textContent).not.toMatch(/80000001/);
-    expect(screen.queryByRole("button", { name: "Done" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "完成" })).toBeNull();
   });
 
   test("a retryable capture keeps its baseline", async () => {
@@ -415,29 +415,29 @@ describe("state that has to outlive a dismissal", () => {
       changed_users: [80000001, 80000002],
       detected: null,
     });
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /calibrate/i })));
-    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "Done" })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: /校准/i })));
+    await fireEvent.click(await waitFor(() => screen.getByRole("button", { name: "完成" })));
 
     // The message asks for a retry, and the retry diffs against this baseline.
-    await waitFor(() => screen.getByText(/Several account files changed/));
-    expect(screen.getByRole("button", { name: "Done" })).toBeTruthy();
+    await waitFor(() => screen.getByText(/多个账号文件发生变化/));
+    expect(screen.getByRole("button", { name: "完成" })).toBeTruthy();
     calls.never("clear_capture");
   });
 
   test("a dismissed ghost stays dismissed across a sheet round-trip", async () => {
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
     await fireEvent.click(
-      await waitFor(() => screen.getByRole("button", { name: /dismiss Alpha/i })),
+      await waitFor(() => screen.getByRole("button", { name: /忽略 Alpha/i })),
     );
-    await waitFor(() => expect(screen.queryByRole("button", { name: /accept Alpha/i })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("button", { name: /接受 Alpha/i })).toBeNull());
 
     cleanup();
     mount([{ char_id: 90000001, user_id: 80000001, conflict: null }]);
-    await waitFor(() => expect(screen.getByRole("heading", { name: "Accounts" })).toBeTruthy());
+    await waitFor(() => expect(screen.getByRole("heading", { name: "账号" })).toBeTruthy());
 
     // Session-only is right; a dismissal of the SHEET is not the end of the
     // session, and re-dismissing the same ghosts every time is the cost.
-    expect(screen.queryByRole("button", { name: /accept Alpha/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /接受 Alpha/i })).toBeNull();
     // And the logs are parsed once per session, not once per mount.
     expect(calls.of("launcher_proposals").length).toBe(1);
   });
@@ -453,18 +453,18 @@ describe("state that has to outlive a dismissal", () => {
     // `foundCards` is recorded at load and never pruned, precisely because
     // `proposals` empties as they are accepted. Recomputing it on a remount is
     // what makes the panel call its own logs liars.
-    await waitFor(() => expect(screen.getByRole("heading", { name: "Accounts" })).toBeTruthy());
-    expect(screen.queryByText(/launcher logs say nothing/i)).toBeNull();
+    await waitFor(() => expect(screen.getByRole("heading", { name: "账号" })).toBeTruthy());
+    expect(screen.queryByText(/启动器日志没提到/i)).toBeNull();
   });
 });
 
 describe("the sheet frame", () => {
   test("is a labelled dialog with Refresh and Calibrate in its header", async () => {
     mount([]);
-    const dialog = await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
+    const dialog = await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     expect(dialog.getAttribute("aria-modal")).toBe("true");
-    expect(screen.getByRole("button", { name: "Refresh accounts" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /calibrate/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "刷新账号" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /校准/i })).toBeTruthy();
     // The capture panel's own role="dialog" is gone: inside a sheet that was a
     // dialog within a dialog.
     expect(screen.getAllByRole("dialog")).toHaveLength(1);
@@ -473,12 +473,12 @@ describe("the sheet frame", () => {
   test("closes on Escape and on the close button", async () => {
     let closed = 0;
     mount([], { onClose: () => (closed += 1) });
-    await waitFor(() => screen.getByRole("dialog", { name: "Accounts" }));
+    await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
 
     await fireEvent.keyDown(window, { key: "Escape" });
     expect(closed).toBe(1);
 
-    await fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
     expect(closed).toBe(2);
   });
 });

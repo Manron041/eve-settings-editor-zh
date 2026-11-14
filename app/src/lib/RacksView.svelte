@@ -20,9 +20,9 @@
   const rackOf = (f: number) => (f >= 27 ? "high" : f >= 19 ? "mid" : "low");
   // Position p is row p/8: the client's InitDrawSlots, spec §2.2.
   const ROWS = [
-    { name: "Top rack", from: 0 },
-    { name: "Middle rack", from: 8 },
-    { name: "Bottom rack", from: 16 },
+    { name: "顶部槽位架", from: 0 },
+    { name: "中部槽位架", from: 8 },
+    { name: "底部槽位架", from: 16 },
   ];
 
   let ships = $state<SlotEntry[] | null>(null);
@@ -62,7 +62,7 @@
   function swap(a: number, b: number) {
     picked = null;
     const ship = current;
-    if (ship && a !== b) void write("Those slots weren't swapped", () => api.swapSlots(ship.ship_id, a, b));
+    if (ship && a !== b) void write("这些槽位未交换", () => api.swapSlots(ship.ship_id, a, b));
   }
   function pick(flag: number) {
     if (picked === null) picked = flag;
@@ -75,7 +75,7 @@
     if (parsedNewId === null || newIdTaken) return;
     const id = parsedNewId;
     const from = current?.order ? current.ship_id : null;
-    if (await write(`Ship ${id} wasn't added`, () => api.addSlotOrder(id, from))) {
+    if (await write(`舰船 ${id} 未添加`, () => api.addSlotOrder(id, from))) {
       selectedId = id;
       newId = "";
     }
@@ -83,7 +83,7 @@
   async function remove() {
     if (!current) return;
     const id = current.ship_id;
-    if (await write(`Ship ${id} wasn't removed`, () => api.removeSlotOrder(id))) selectedId = null;
+    if (await write(`舰船 ${id} 未移除`, () => api.removeSlotOrder(id))) selectedId = null;
   }
   function toggleCopy(id: number) {
     const next = new Set(copyTo);
@@ -96,44 +96,44 @@
     if (!current || visibleCopyTo.length === 0) return;
     const from = current.ship_id;
     const to = visibleCopyTo;
-    if (await write("That layout wasn't copied", () => api.copySlotOrder(from, to))) copyTo = new Set();
+    if (await write("该布局未复制", () => api.copySlotOrder(from, to))) copyTo = new Set();
   }
 </script>
 
 <div class="racks">
   {#if !userOpen}
-    <EmptyState title="Open an account file to edit its ship layouts." />
+    <EmptyState title="打开账户文件以编辑其舰船布局。" />
   {:else if loadError}
     <InlineMessage variant="error">{loadError}</InlineMessage>
   {:else if ships}
     <div class="cols">
       <div class="list">
-        <SearchField verb="filter" nouns="ship ids" bind:value={filter} count={shown.length} total={ships.length} />
+        <SearchField verb="filter" nouns="舰船 ID" bind:value={filter} count={shown.length} total={ships.length} />
         {#if ships.length === 0}
           <EmptyState
-            title="No ship has a saved layout yet."
-            description="EVE saves one the first time you drag a module on a ship's HUD." />
+            title="尚无舰船保存了布局。"
+            description="EVE 会在你首次将模块拖到舰船 HUD 上时保存布局。" />
         {/if}
         {#each shown as s (s.ship_id)}
           <ListRow selected={s.ship_id === selectedId} onclick={() => (selectedId = s.ship_id)}>
-            {s.ship_id}{#if !s.order}<span class="muted"> · unreadable</span>{/if}
+            {s.ship_id}{#if !s.order}<span class="muted"> · 不可读</span>{/if}
           </ListRow>
         {/each}
         <div class="add">
-          <Field kind="text" label="Ship id" layout="column" bind:value={newId} />
+          <Field kind="text" label="舰船 ID" layout="column" bind:value={newId} />
           <Button
             size="sm"
             disabled={parsedNewId === null || newIdTaken}
-            disabledReason={newIdTaken ? "That ship is already listed" : "Type a ship's item id"}
-            onclick={add}>Add ship</Button>
+            disabledReason={newIdTaken ? "该舰船已在列表中" : "输入舰船的物品 ID"}
+            onclick={add}>添加舰船</Button>
         </div>
       </div>
 
       <div class="editor">
         {#if !current}
-          <EmptyState title="Pick a ship to see its racks." />
+          <EmptyState title="选择一艘舰船以查看其槽位架。" />
         {:else}
-          <h3>Ship {current.ship_id}</h3>
+          <h3>舰船 {current.ship_id}</h3>
           {#if current.order}
             {@const order = current.order}
             {#each ROWS as row, r}
@@ -156,28 +156,28 @@
                 {/each}
               </div>
             {/each}
-            <p class="muted">Click two slots, or drag one onto another, to swap them, as you would on the HUD in game.</p>
+            <p class="muted">点击两个槽位，或将一个拖到另一个上即可交换，与游戏内 HUD 上的操作一致。</p>
           {:else}
-            <InlineMessage variant="warn">This ship's layout is in a shape the editor doesn't read. Remove it to give the ship EVE's default layout.</InlineMessage>
+            <InlineMessage variant="warn">此舰船的布局处于编辑器无法读取的格式。移除它可让该舰船恢复 EVE 的默认布局。</InlineMessage>
           {/if}
           <div class="actions">
-            <Button variant="danger" size="sm" onclick={remove}>Remove ship</Button>
+            <Button variant="danger" size="sm" onclick={remove}>移除舰船</Button>
           </div>
           {#if current.order && ships.length > 1}
             <div class="copy">
-              <div class="head">Copy this layout to</div>
+              <div class="head">复制此布局到</div>
               {#each shown.filter((s) => s.ship_id !== current.ship_id) as s (s.ship_id)}
                 <Field
                   kind="checkbox"
-                  label={`Copy to ${s.ship_id}`}
+                  label={`复制到 ${s.ship_id}`}
                   value={copyTo.has(s.ship_id)}
                   onchange={() => toggleCopy(s.ship_id)} />
               {/each}
               <Button
                 size="sm"
                 disabled={visibleCopyTo.length === 0}
-                disabledReason="Tick at least one ship"
-                onclick={copy}>Copy layout</Button>
+                disabledReason="至少勾选一艘舰船"
+                onclick={copy}>复制布局</Button>
             </div>
           {/if}
         {/if}

@@ -64,12 +64,12 @@
   // costs a click to put back.
   function resetBar() {
     onReset();
-    toast("Neocom reset to the client's original buttons.", { action: undoAction() });
+    toast("Neocom 已恢复为客户端原始按钮。", { action: undoAction() });
   }
 </script>
 
 <div class="buttons">
-  <h4 class="head">Buttons</h4>
+  <h4 class="head">按钮</h4>
   {#if error}
     <InlineMessage variant="error" detail={error.detail}>{error.text}</InlineMessage>
   {/if}
@@ -86,24 +86,24 @@
           size="sm"
           iconOnly
           disabled={disabled || b.index === 0}
-          disabledReason={b.index === 0 ? "Already first" : "The bar is read-only"}
-          title="Move {label} up"
+          disabledReason={b.index === 0 ? "已经是第一个" : "按钮栏为只读"}
+          title="上移 {label}"
           onclick={() => move(b.index, -1)}>↑</Button>
         <Button
           variant="ghost"
           size="sm"
           iconOnly
           disabled={disabled || b.index === bar.buttons.length - 1}
-          disabledReason={b.index === bar.buttons.length - 1 ? "Already last" : "The bar is read-only"}
-          title="Move {label} down"
+          disabledReason={b.index === bar.buttons.length - 1 ? "已经是最后一个" : "按钮栏为只读"}
+          title="下移 {label}"
           onclick={() => move(b.index, 1)}>↓</Button>
         <Button
           variant="ghost"
           size="sm"
           iconOnly
           {disabled}
-          disabledReason="The bar is read-only"
-          title="Remove {label}"
+          disabledReason="按钮栏为只读"
+          title="移除 {label}"
           onclick={() => onRemove(b.index)}>✕</Button>
       {/snippet}
     </ListRow>
@@ -115,23 +115,23 @@
         kind="select"
         bind:value={addChoice}
         {disabled}
-        disabledReason="The bar is read-only"
-        ariaLabel="Add a neocom button"
+        disabledReason="按钮栏为只读"
+        ariaLabel="添加 Neocom 按钮"
         class="add-pick"
-        options={[{ value: "", label: "Add…" }, ...addable.map((a) => ({ value: a.id, label: neocomLabel(a.id) }))]} />
+        options={[{ value: "", label: "添加…" }, ...addable.map((a) => ({ value: a.id, label: neocomLabel(a.id) }))]} />
       <Button
         disabled={disabled || addChoice === ""}
-        disabledReason={addChoice === "" ? "Pick a button first" : "The bar is read-only"}
-        onclick={doAdd}>Add</Button>
+        disabledReason={addChoice === "" ? "请先选择按钮" : "按钮栏为只读"}
+        onclick={doAdd}>添加</Button>
     </div>
   {/if}
 
   <Button
     class="reset"
     disabled={disabled || !canReset}
-    title={canReset ? "Replace the bar with the client's own original" : "This character has no original bar recorded"}
+    title={canReset ? "用客户端原始按钮替换整个按钮栏" : "此角色没有记录原始按钮栏"}
     onclick={resetBar}>
-    Reset to original
+    恢复为原始
   </Button>
 </div>
 

@@ -102,7 +102,7 @@ describe("what each predicate actually answers", () => {
 
   test("Go to Layout borrows the tab strip's own reason, so the two cannot disagree", () => {
     resetSubject();
-    expect(byId("go.layout")!.enabled()).toBe("Open a character to edit its window layout.");
+    expect(byId("go.layout")!.enabled()).toBe("打开角色以编辑其窗口布局。");
   });
 
   test("Go to Raw is always reachable, because it is the escape hatch", () => {
@@ -114,8 +114,8 @@ describe("what each predicate actually answers", () => {
 describe("ranking", () => {
   /** The proposal's own worked example, as a test: typing a group's name
    *  surfaces that group's commands, because the group is in the haystack. */
-  test("typing `overv` ranks the Overview command first", () => {
-    const ranked = rank(COMMANDS, (c) => score("overv", c.label, haystack(c)));
+  test("typing `总览` ranks the Overview command first", () => {
+    const ranked = rank(COMMANDS, (c) => score("总览", c.label, haystack(c)));
     expect(ranked[0].id).toBe("go.overview");
   });
 

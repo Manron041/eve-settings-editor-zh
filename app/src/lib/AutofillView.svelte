@@ -78,7 +78,7 @@
     listError = null;
     try { lists = await api.setAutofillList(widget, entries); onUserDirty(); }
     catch (e) {
-      listError = { widget, text: `That list wasn't changed — ${errText(e)}`, detail: errMessage(e) };
+      listError = { widget, text: `该列表未更改 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
   const removeAt = (l: RememberedList, i: number) =>
@@ -112,18 +112,18 @@
   async function clearAll() {
     const n = lists?.length ?? 0;
     const ok = await confirmDialog({
-      title: "Clear every remembered list?",
+      title: "清除所有记住的列表？",
       body:
-        `${n} list${n === 1 ? "" : "s"} in ${alias ?? "this account"} ${n === 1 ? "is" : "are"} emptied. ` +
-        "Nothing is written until you save, and Discard puts them back — along with any other unsaved edits.",
-      confirm: "Clear everything",
+        `${n} 个列表${n === 1 ? "" : ""}在 ${alias ?? "此账户"} 中${n === 1 ? "已被" : "已被"}清空。` +
+        "保存前不会写入任何内容，放弃更改会恢复这些列表 — 连同其他未保存的修改。",
+      confirm: "全部清除",
       danger: true,
     });
     if (!ok) return;
     clearError = null;
     try { lists = await api.clearAllAutofill(); onUserDirty(); }
     catch (e) {
-      clearError = { text: `The lists weren't cleared — ${errText(e)}`, detail: errMessage(e) };
+      clearError = { text: `列表未能清除 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 </script>
@@ -141,33 +141,33 @@
          prompt and OverviewView's render the same thing with two different
          button treatments — is fixed by both now being a Button. -->
     <div class="pair">
-      <p><strong>{charName ?? "This character"}</strong>'s remembered text lives in the account file.</p>
-      <Button onclick={onShowAccounts}>Pair this character…</Button>
+      <p><strong>{charName ?? "此角色"}</strong>记住的文本保存在账户文件中。</p>
+      <Button onclick={onShowAccounts}>配对该角色…</Button>
     </div>
   {:else}
     <EmptyState
-      title="No file open"
-      description="Open a character to edit its account's remembered text." />
+      title="尚未打开文件"
+      description="打开一个角色，编辑其账户中记住的文本。" />
   {/if}
 {:else if error}
   <InlineMessage variant="error">{error}</InlineMessage>
 {:else if lists && lists.length === 0}
   <EmptyState
-    title="Nothing remembered yet"
-    description="EVE stores what you type into station, search and fitting boxes here." />
+    title="尚无记住的文本"
+    description="EVE 会将你输入到空间站、搜索和装配框中的内容保存在此处。" />
 {:else if lists}
   <!-- The scope banner is the shell's now, rendered once for all four
        account-scoped views. -->
   <div class="af-top">
-    <SearchField class="af-filter" nouns="lists" shortcut={accel("F")} bind:element={filterInput} bind:value={query} />
-    <Button variant="danger" onclick={clearAll}>Clear all remembered text</Button>
+    <SearchField class="af-filter" nouns="列表" shortcut={accel("F")} bind:element={filterInput} bind:value={query} />
+    <Button variant="danger" onclick={clearAll}>清除所有记住的文本</Button>
   </div>
   <!-- At the button that failed, not in a modal over the whole app. -->
   {#if clearError}
     <InlineMessage variant="error" detail={clearError.detail}>{clearError.text}</InlineMessage>
   {/if}
   {#if filtered.length === 0}
-    <EmptyState title="No matches" description="No lists match “{query}”." />
+    <EmptyState title="无匹配项" description="没有列表匹配“{query}”。" />
   {/if}
   {#each filtered as l (l.widget)}
     <section class="af-list">
@@ -182,7 +182,7 @@
           size="sm"
           onclick={() => clearList(l)}
           disabled={l.entries.length === 0}
-          disabledReason="This list is already empty">Clear list</Button>
+          disabledReason="此列表已为空">清除列表</Button>
       </header>
       {#if listError?.widget === l.widget}
         <InlineMessage variant="error" detail={listError.detail}>{listError.text}</InlineMessage>
@@ -205,12 +205,12 @@
               ondragend={() => (drag = null)}>
               <Field
                 class="entry"
-                ariaLabel="Remembered text {i + 1}"
+                ariaLabel="记住的文本 {i + 1}"
                 value={entry}
                 onchange={(e) => editAt(l, i, (e.target as HTMLInputElement).value)} />
               {#snippet trailing()}
                 <!-- Also `.mini`, also invisible, and this one deletes an entry. -->
-                <Button variant="ghost" size="sm" iconOnly title="Remove this entry" onclick={() => removeAt(l, i)}>
+                <Button variant="ghost" size="sm" iconOnly title="移除此条目" onclick={() => removeAt(l, i)}>
                   ×
                 </Button>
               {/snippet}
@@ -220,8 +220,8 @@
         <li class="add">
           <Field
             class="entry"
-            ariaLabel="Add remembered text"
-            placeholder="Add remembered text"
+            ariaLabel="添加记住的文本"
+            placeholder="添加记住的文本"
             onkeydown={(e: KeyboardEvent & { currentTarget: HTMLInputElement }) => {
               if (e.key === "Enter") { addTo(l, e.currentTarget.value); e.currentTarget.value = ""; } }} />
         </li>
