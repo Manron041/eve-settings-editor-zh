@@ -86,7 +86,7 @@ async function mount(openPath: string | null = `${DIR}/core_char_90000001.dat`, 
 /// heading above them. A filename appears in BOTH the source dropdown and the
 /// target list, which is why nothing here queries the document globally.
 function section(head: string): HTMLElement {
-  const h = [...document.querySelectorAll(".head")].find((e) => e.textContent?.includes(head));
+  const h = [...document.querySelectorAll(".head")].find((e) => e.textContent?.includes(head) && e.closest("section"));
   if (!h) throw new Error(`no section headed "${head}"`);
   return h.closest("section") as HTMLElement;
 }
@@ -100,9 +100,9 @@ function rowIn(head: string, text: string): HTMLLabelElement {
 }
 
 const aspect = (label: string) =>
-  rowIn("What to copy", label).querySelector("input")! as HTMLInputElement;
+  rowIn("复制内容", label).querySelector("input")! as HTMLInputElement;
 
-const targetRow = (id: number) => rowIn("Target characters", `core_char_${id}.dat`);
+const targetRow = (id: number) => rowIn("目标角色", `core_char_${id}.dat`);
 
 const targetBox = (id: number) => targetRow(id).querySelector("input")! as HTMLInputElement;
 
@@ -192,7 +192,7 @@ describe("what actually gets written", () => {
     await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
 
-    const apply = screen.getByRole("button", { name: "Copy" });
+    const apply = screen.getByRole("button", { name: "复制" });
     await waitFor(() => expect(apply.hasAttribute("disabled")).toBe(false));
     await fireEvent.click(apply);
 
@@ -208,7 +208,7 @@ describe("what actually gets written", () => {
     await fireEvent.click(aspect("Overview (columns, tabs, presets)"));
     await waitFor(() => expect(targetBox(90000003).disabled).toBe(true));
 
-    await fireEvent.click(screen.getByRole("button", { name: /^All$/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^全选$/ }));
     await waitFor(() => expect(targetBox(90000002).checked).toBe(true));
     expect(targetBox(90000003).checked).toBe(false);
   });
@@ -219,7 +219,7 @@ describe("what actually gets written", () => {
     await fireEvent.click(targetBox(90000002));
     await fireEvent.click(aspect("Window layout"));
     await waitFor(() => expect(calls.of("setup_preview").length).toBeGreaterThan(0));
-    expect(screen.getByRole("button", { name: "Copy" }).hasAttribute("disabled")).toBe(true);
+    expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(true);
   });
 
   test("apply is refused when the source itself failed to read", async () => {
@@ -228,7 +228,7 @@ describe("what actually gets written", () => {
     await fireEvent.click(targetBox(90000002));
     await fireEvent.click(aspect("Window layout"));
     await waitFor(() => expect(calls.of("setup_preview").length).toBeGreaterThan(0));
-    expect(screen.getByRole("button", { name: "Copy" }).hasAttribute("disabled")).toBe(true);
+    expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(true);
   });
 });
 
@@ -260,13 +260,13 @@ test("a stale preview response cannot overwrite a newer one", async () => {
   // Resolve the NEWER request first, then let the stale one land.
   pending[1]({ ...PLAN, source_error: null });
   await waitFor(() =>
-    expect(screen.getByRole("button", { name: "Copy" }).hasAttribute("disabled")).toBe(false),
+    expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(false),
   );
   pending[0]({ ...PLAN, source_error: "stale source error" });
 
   await new Promise((r) => setTimeout(r, 0));
   expect(screen.queryByText(/stale source error/)).toBeNull();
-  expect(screen.getByRole("button", { name: "Copy" }).hasAttribute("disabled")).toBe(false);
+  expect(screen.getByRole("button", { name: "复制" }).hasAttribute("disabled")).toBe(false);
 });
 
 test("changing the source clears the aspects and targets already picked", async () => {
@@ -279,7 +279,7 @@ test("changing the source clears the aspects and targets already picked", async 
   await fireEvent.change(sourceSelect, { target: { value: `${DIR}/core_char_90000002.dat` } });
 
   await waitFor(() => expect(aspect("Window layout").checked).toBe(false));
-  const stillTicked = [...section("Target characters").querySelectorAll("input")].filter(
+  const stillTicked = [...section("目标角色").querySelectorAll("input")].filter(
     (i) => (i as HTMLInputElement).checked,
   );
   expect(stillTicked).toEqual([]);
@@ -298,13 +298,13 @@ test("the account warning says a layout copy can reset fields to EVE's defaults"
   await mount();
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Window layout"));
-  expect(await screen.findByText(/reset to that default/i)).toBeTruthy();
+  expect(await screen.findByText(/重置为该默认值/i)).toBeTruthy();
 
   // Autofill only ever overwrites, so the clause must not claim otherwise.
   await fireEvent.click(aspect("Window layout"));
   await fireEvent.click(aspect("Autofill (remembered text)"));
-  await waitFor(() => expect(screen.queryByText(/reset to that default/i)).toBeNull());
-  expect(screen.getByText(/Autofill \(remembered text\) changed/)).toBeTruthy();
+  await waitFor(() => expect(screen.queryByText(/重置为该默认值/i)).toBeNull());
+  expect(screen.getByText(/Autofill \(remembered text\) 已更改/)).toBeTruthy();
 });
 
 test("a cross-folder copy names the folder of each account write outside the picked one", async () => {
@@ -321,10 +321,10 @@ test("a cross-folder copy names the folder of each account write outside the pic
   await mount();
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Autofill (remembered text)"));
-  const warnings = await screen.findAllByText(/Autofill \(remembered text\) changed/);
+  const warnings = await screen.findAllByText(/Autofill \(remembered text\) 已更改/);
   expect(warnings).toHaveLength(2);
-  expect(warnings.filter((w) => w.textContent!.includes(`in ${ZULU}`))).toHaveLength(1);
-  expect(screen.getByText(/Will write 3 file/)).toBeTruthy();
+  expect(warnings.filter((w) => w.textContent!.includes(`位于 ${ZULU}`))).toHaveLength(1);
+  expect(screen.getByText(/将写入 3 个文件/)).toBeTruthy();
 });
 
 test("warns when a target is the file currently open", async () => {
@@ -342,16 +342,16 @@ test("warns when a target is the file currently open", async () => {
   // REWRITTEN: the warning names the document rather than saying "one target".
   // With the editor standing behind the sheet, the file it is talking about is
   // right there on screen.
-  const warning = await screen.findByText(/open in the editor behind this sheet/i);
+  const warning = await screen.findByText(/该文件已在本面板后方的编辑器中打开/i);
   // Named — by resolved name where there is one, else by the id the row itself
   // shows. What matters is that it identifies a document rather than counting.
   expect(warning.textContent).toMatch(/90000001/);
-  expect(warning.textContent).not.toMatch(/One target/i);
+  expect(warning.textContent).not.toMatch(/单个目标/i);
 
   // And it is about the open file specifically, not about any target.
   await fireEvent.click(targetBox(90000001));
   await fireEvent.click(targetBox(90000003));
-  await waitFor(() => expect(screen.queryByText(/open in the editor/i)).toBeNull());
+  await waitFor(() => expect(screen.queryByText(/编辑器中打开/i)).toBeNull());
 });
 
 /**
@@ -388,8 +388,8 @@ test("warns when the plan writes the open account file", async () => {
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Window layout"));
 
-  const warning = await screen.findByText(/open in the editor behind this sheet/i);
-  expect(warning.textContent).toMatch(/account file/i);
+  const warning = await screen.findByText(/该文件已在本面板后方的编辑器中打开/i);
+  expect(warning.textContent).toMatch(/账号文件/i);
 });
 
 test("apply reports exactly the paths it wrote, and reports nothing when it throws", async () => {
@@ -413,7 +413,7 @@ test("apply reports exactly the paths it wrote, and reports nothing when it thro
   await waitFor(() => expect(targetRow(90000002)).toBeTruthy());
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Window layout"));
-  const copy = screen.getByRole("button", { name: "Copy" });
+  const copy = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
   await fireEvent.click(copy);
 
@@ -441,13 +441,13 @@ test("the sheet stays open after a successful apply, showing the results", async
   await waitFor(() => expect(targetRow(90000002)).toBeTruthy());
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Window layout"));
-  const copy = screen.getByRole("button", { name: "Copy" });
+  const copy = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
   await fireEvent.click(copy);
 
   // Closing automatically would discard the results the user just asked for.
   await waitFor(() => expect(calls.of("setup_apply").length).toBe(1));
-  expect(screen.getByRole("dialog", { name: "Copy settings" })).toBeTruthy();
+  expect(screen.getByRole("dialog", { name: "复制设置" })).toBeTruthy();
   expect(closed).toBe(0);
 });
 
@@ -459,7 +459,7 @@ describe("the file mode", () => {
   async function fileMode(source: string) {
     calls.stub("copy_files", []);
     await mount();
-    await fireEvent.click(screen.getByRole("radio", { name: /a file/i }));
+    await fireEvent.click(screen.getByRole("radio", { name: /文件，原样复制/i }));
     await fireEvent.change(document.querySelector("#srcfile") as HTMLSelectElement, {
       target: { value: source },
     });
@@ -469,10 +469,10 @@ describe("the file mode", () => {
     await fileMode(`${DIR}/core_user_80000002.dat`);
 
     const row = await screen.findByText("core_user_80000001.dat");
-    expect(row.closest("label")!.textContent).not.toMatch(/pair in the Accounts view/);
-    await fireEvent.click(rowIn("Copy onto", "core_user_80000001.dat").querySelector("input")!);
+    expect(row.closest("label")!.textContent).not.toMatch(/在账号视图中配对/);
+    await fireEvent.click(rowIn("复制到", "core_user_80000001.dat").querySelector("input")!);
 
-    const copy = screen.getByRole("button", { name: "Copy" });
+    const copy = screen.getByRole("button", { name: "复制" });
     await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
     await fireEvent.click(copy);
 
@@ -487,9 +487,9 @@ describe("the file mode", () => {
 
   test("only files of the source's own kind are offered", async () => {
     await fileMode(`${DIR}/core_char_90000002.dat`);
-    await waitFor(() => expect(rowIn("Copy onto", "core_char_90000003.dat")).toBeTruthy());
+    await waitFor(() => expect(rowIn("复制到", "core_char_90000003.dat")).toBeTruthy());
 
-    const offered = [...section("Copy onto").querySelectorAll("label")].map((l) => l.textContent);
+    const offered = [...section("复制到").querySelectorAll("label")].map((l) => l.textContent);
     expect(offered.some((t) => t?.includes("core_user_"))).toBe(false);
     // Not itself, either.
     expect(offered.some((t) => t?.includes("core_char_90000002.dat"))).toBe(false);
@@ -521,7 +521,7 @@ test("with a preset as the source, the open character is still a target", async 
   await mount();
   expect(() => targetRow(90000001)).toThrow(); // as a character source, excluded
 
-  await fireEvent.click(screen.getByRole("radio", { name: /a preset/i }));
+  await fireEvent.click(screen.getByRole("radio", { name: /预设/i }));
   await fireEvent.change(document.querySelector("#srcpreset") as HTMLSelectElement, {
     target: { value: `${DIR}/presets/Layout only` },
   });
@@ -562,7 +562,7 @@ test("a preset source offers only what it holds and sends dir verbatim", async (
   ]);
   await mount();
 
-  await fireEvent.click(screen.getByRole("radio", { name: /a preset/i }));
+  await fireEvent.click(screen.getByRole("radio", { name: /预设/i }));
 
   // The broken preset never becomes an option at all.
   const presetSelect = document.querySelector("#srcpreset") as HTMLSelectElement;
@@ -576,7 +576,7 @@ test("a preset source offers only what it holds and sends dir verbatim", async (
   await fireEvent.click(targetBox(90000002));
   await fireEvent.click(aspect("Window layout"));
 
-  const apply = screen.getByRole("button", { name: "Copy" });
+  const apply = screen.getByRole("button", { name: "复制" });
   await waitFor(() => expect(apply.hasAttribute("disabled")).toBe(false));
   await fireEvent.click(apply);
 
@@ -606,20 +606,20 @@ describe("merging ship slot layouts", () => {
       { path: `${DIR}/core_user_80000002.dat`, ok: true, backup_path: null, error: null },
     ]);
     await mount(undefined, onApplied);
-    await fireEvent.click(screen.getByLabelText("Ship slot layouts, merged across the profile"));
+    await fireEvent.click(screen.getByLabelText("舰船槽位布局，跨配置档合并"));
   }
 
   const accountBox = (id: number) =>
-    rowIn("Account files", `core_user_${id}.dat`).querySelector("input")! as HTMLInputElement;
+    rowIn("账号文件", `core_user_${id}.dat`).querySelector("input")! as HTMLInputElement;
 
   test("lists only the profile's account files, all ticked, and previews the merge", async () => {
     await mountRacks();
     await waitFor(() => expect(accountBox(80000001).checked).toBe(true));
     expect(accountBox(80000002).checked).toBe(true);
-    expect(() => rowIn("Account files", "core_char_")).toThrow();
+    expect(() => rowIn("账号文件", "core_char_")).toThrow();
     await waitFor(() => expect(calls.of("slot_order_merge_preview").length).toBeGreaterThan(0));
-    expect(await screen.findByText(/gains 2 ships/)).toBeTruthy();
-    expect(screen.getByText(/no change/)).toBeTruthy();
+    expect(await screen.findByText(/新增 2 艘舰船/)).toBeTruthy();
+    expect(screen.getByText(/无变化/)).toBeTruthy();
     expect(screen.getByText(/90000501/)).toBeTruthy();
   });
 
@@ -629,7 +629,7 @@ describe("merging ship slot layouts", () => {
     await fireEvent.click(accountBox(80000002));
     await waitFor(() =>
       expect(calls.of("slot_order_merge_preview").at(-1)!.args).toEqual({ files: [`${DIR}/core_user_80000001.dat`] }));
-    await fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    await fireEvent.click(screen.getByRole("button", { name: "合并" }));
     await waitFor(() =>
       expect(calls.of("slot_order_merge_apply")[0]?.args).toEqual({ files: [`${DIR}/core_user_80000001.dat`] }));
   });
@@ -637,24 +637,24 @@ describe("merging ship slot layouts", () => {
   test("onApplied reports only the files the merge actually wrote", async () => {
     const onApplied = vi.fn();
     await mountRacks(onApplied);
-    await screen.findByText(/gains 2 ships/);
-    await fireEvent.click(screen.getByRole("button", { name: "Merge" }));
+    await screen.findByText(/新增 2 艘舰船/);
+    await fireEvent.click(screen.getByRole("button", { name: "合并" }));
     await waitFor(() => expect(onApplied).toHaveBeenCalledWith([`${DIR}/core_user_80000001.dat`]));
   });
 
   test("unticking every account file leaves Merge disabled", async () => {
     await mountRacks();
-    await screen.findByText(/gains 2 ships/);
+    await screen.findByText(/新增 2 艘舰船/);
     await fireEvent.click(accountBox(80000001));
     await fireEvent.click(accountBox(80000002));
     await waitFor(() => expect(accountBox(80000001).checked).toBe(false));
-    expect((screen.getByRole("button", { name: "Merge" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "合并" }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   test("a parked backup copy with no id is not listed", async () => {
     await mountRacks();
     await waitFor(() => expect(accountBox(80000001).checked).toBe(true));
-    expect(() => rowIn("Account files", "- old.dat")).toThrow();
+    expect(() => rowIn("账号文件", "- old.dat")).toThrow();
     await waitFor(() =>
       expect(calls.of("slot_order_merge_preview").at(-1)!.args).toEqual({
         files: [`${DIR}/core_user_80000001.dat`, `${DIR}/core_user_80000002.dat`],
@@ -672,7 +672,7 @@ describe("merging ship slot layouts", () => {
       unassigned: [],
     });
     await loadRoster();
-    await waitFor(() => expect(rowIn("Account files", "core_user_").textContent).toContain("core_user_80000002"));
+    await waitFor(() => expect(rowIn("账号文件", "core_user_").textContent).toContain("core_user_80000002"));
     expect(accountBox(80000002).checked).toBe(false);
     expect(accountBox(80000001).checked).toBe(true);
   });
@@ -682,6 +682,6 @@ describe("merging ship slot layouts", () => {
     calls.stub("slot_order_merge_preview", () => Promise.reject({ code: "io", message: "Could not read the account files." }));
     await fireEvent.click(accountBox(80000002));
     expect(await screen.findByText(/Could not read the account files/)).toBeTruthy();
-    expect((screen.getByRole("button", { name: "Merge" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "合并" }) as HTMLButtonElement).disabled).toBe(true);
   });
 });

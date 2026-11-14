@@ -222,7 +222,7 @@
   const resetsToDefaults = $derived(selected.has("layout"));
 
   const nameOf = (kind: string, id: number | null, fileName: string) =>
-    id == null ? fileName : (resolvedName(kind, id) ?? `${kind === "user" ? "account" : "char"} ${id}`);
+    id == null ? fileName : (resolvedName(kind, id) ?? `${kind === "user" ? "账号" : "角色"} ${id}`);
   const nameOfChar = (id: number | null, fileName: string) => nameOf("char", id, fileName);
 
   const accountLabel = (id: number) => {
@@ -279,10 +279,10 @@
   });
   const mergeWrites = $derived(mergePlan?.files.filter((f) => !f.error && f.gained + f.changed > 0).length ?? 0);
   const mergeReason = $derived(
-    effectiveTargets.length === 0 ? "Tick at least one account file"
-    : mergePending ? "Working out what would change…"
-    : mergeError ? "The merge preview failed"
-    : "Nothing to merge — every ticked account already has every ship",
+    effectiveTargets.length === 0 ? "至少勾选一个账号文件"
+    : mergePending ? "正在计算将发生的变化…"
+    : mergeError ? "合并预览失败"
+    : "无可合并 — 每个勾选的账号都已拥有全部舰船",
   );
   const fileName = (p: string) => p.split(/[\\/]/).pop() ?? p;
   const dirOf = (p: string) => p.slice(0, p.length - fileName(p).length - 1);
@@ -313,10 +313,10 @@
     openTargets.map((p) => {
       if (p === openUserPath) {
         const m = p.match(/core_user_(\d+)\.dat$/);
-        return m ? `the ${accountLabel(Number(m[1]))} account file` : "the open account file";
+        return m ? `${accountLabel(Number(m[1]))} 账号文件` : "已打开的账号文件";
       }
       const c = chars.find((x) => x.path === p);
-      return c ? nameOfChar(c.id, c.file_name) : "the open character file";
+      return c ? nameOfChar(c.id, c.file_name) : "已打开的角色文件";
     }),
   );
   let previewSeq = 0;
@@ -376,8 +376,8 @@
      identity does not change under the user when they click a source radio; what
      varies moves to the subtitle, verbatim. -->
 <Sheet
-  title="Copy settings"
-  subtitle={racksMode ? "Merge ship slot layouts across accounts" : fileMode ? "Copy a file onto other files" : "Copy a setup to other characters"}
+  title="复制设置"
+  subtitle={racksMode ? "跨账号合并舰船槽位布局" : fileMode ? "将一个文件复制到其他文件" : "将设置复制到其他角色"}
   titled
   placement="work"
   onclose={onClose}
@@ -388,27 +388,27 @@
     <Field
       kind="select"
       id="folder"
-      label="Profile"
+      label="配置档"
       layout="column"
       value={folder}
       onchange={(e) => pickFolder((e.currentTarget as HTMLSelectElement).value)}
       options={folders.map((f) => ({ value: f.dir, label: f.label }))} />
 
-    <div class="head">Source</div>
-    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="character" label="A character" />
-    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="preset" label="A preset" />
-    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="file" label="A file, copied as-is" />
-    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="racks" label="Ship slot layouts, merged across the profile" />
+    <div class="head">来源</div>
+    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="character" label="角色" />
+    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="preset" label="预设" />
+    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="file" label="文件，原样复制" />
+    <Field kind="radio" name="sourceKind" bind:value={sourceKind} radioValue="racks" label="舰船槽位布局，跨配置档合并" />
 
     {#if sourceKind === "character"}
       <Field
         kind="select"
         id="src"
-        label="Source character"
+        label="来源角色"
         layout="column"
         bind:value={sourcePath}
         options={[
-          { value: null, label: "Choose a character…", disabled: true },
+          { value: null, label: "选择一个角色…", disabled: true },
           ...charsInScope.map((c) => ({
             value: c.path,
             label: `${nameOfChar(c.id, c.file_name)} — ${c.file_name}`,
@@ -418,40 +418,40 @@
       <Field
         kind="select"
         id="srcpreset"
-        label="Source preset"
+        label="来源预设"
         layout="column"
         bind:value={presetDir}
         options={[
-          { value: null, label: "Choose a preset…", disabled: true },
+          { value: null, label: "选择一个预设…", disabled: true },
           ...allPresets()
             .filter((p) => p.error === null)
             .map((p) => ({ value: p.dir, label: `${p.name} — ${summarise(p)}` })),
         ]} />
       {#if allPresets().length === 0}
-        <EmptyState title="No presets yet — save one from the sidebar first." />
+        <EmptyState title="尚无预设 — 先从侧边栏保存一个。" />
       {/if}
     {:else if sourceKind === "racks"}
       <InlineMessage>
-        Every ship arranged on any ticked account ends up on all of them. Where two accounts arrange
-        the same ship differently, the most recently saved account file wins.
+        任何勾选账号上布置的所有舰船都会同步到全部账号。若两个账号对同一艘舰船布置不同，
+        以最后保存的账号文件为准。
       </InlineMessage>
     {:else}
       <Field
         kind="select"
         id="srcfile"
-        label="Source file"
+        label="来源文件"
         layout="column"
         bind:value={sourceFile}
         options={[
-          { value: null, label: "Choose a file…", disabled: true },
+          { value: null, label: "选择一个文件…", disabled: true },
           ...filesInScope.map((f) => ({
             value: f.path,
             label: `${nameOf(f.kind, f.id, f.file_name)} — ${f.file_name}`,
           })),
         ]} />
       <InlineMessage>
-        The whole file is copied onto every file you tick — character files onto character files,
-        account files onto account files. No pairing needed.
+        整个文件会复制到你勾选的每个文件 — 角色文件复制到角色文件，账号文件复制到账号文件。
+        无需配对。
       </InlineMessage>
     {/if}
   </section>
@@ -459,14 +459,14 @@
   {#if racksMode || (fileMode ? !!sourceFile : !!batchSource)}
     {#if !fileMode && !racksMode}
       <section>
-        <div class="head">What to copy</div>
+        <div class="head">复制内容</div>
         {#each ASPECTS.filter((a) => offered.includes(a.key)) as a}
           <Field
             kind="checkbox"
             label={a.label}
             value={selected.has(a.key)}
             disabled={everything && a.key !== "everything"}
-            disabledReason="Everything already covers this"
+            disabledReason="全部内容已涵盖此项"
             onchange={() => toggleAspect(a.key)} />
         {/each}
       </section>
@@ -474,18 +474,18 @@
 
     <section>
       <div class="head">
-        {racksMode ? "Account files" : fileMode ? "Copy onto" : "Target characters"}
+        {racksMode ? "账号文件" : fileMode ? "复制到" : "目标角色"}
         <!-- All / None. `Clear` here meant "untick", which collided with
              "Clear list" and "Clear all remembered text" two views away. -->
         <Button variant="ghost" size="sm" class="linkbtn" type="button" onclick={selectAllTargets}>
-          All
+          全选
         </Button>
-        <Button variant="ghost" size="sm" class="linkbtn" type="button" onclick={clearTargets}>None</Button>
-        {#if !racksMode}<Field kind="checkbox" label="Show other folders" bind:value={allowOtherFolders} />{/if}
+        <Button variant="ghost" size="sm" class="linkbtn" type="button" onclick={clearTargets}>全不选</Button>
+        {#if !racksMode}<Field kind="checkbox" label="显示其他文件夹" bind:value={allowOtherFolders} />{/if}
       </div>
       {#if candidates.length === 0}
         <EmptyState
-          title={racksMode ? "No account files in this profile." : fileMode ? "No other file of this kind in reach." : "No other character files found."} />
+          title={racksMode ? "此配置档中尚无账号文件。" : fileMode ? "未找到同类的其他文件。" : "未找到其他角色文件。"} />
       {:else}
         <!-- The row stays a hand-written wrapping label rather than a Field: its
              caption is three spans, not a string, and BatchView.spec reads the
@@ -494,11 +494,11 @@
           <label class:disabled={targetDisabled(c.id)}>
             <input type="checkbox" checked={selectedTargets.has(c.path) && !targetDisabled(c.id)}
               disabled={targetDisabled(c.id)}
-              title={targetDisabled(c.id) ? "Pair this character in the Accounts view first" : undefined}
+              title={targetDisabled(c.id) ? "请先在账号视图中配对这个角色" : undefined}
               onchange={() => toggleTarget(c.path)} />
             {nameOf(c.kind, c.id, c.file_name)}
             <span class="muted">{c.file_name}{c.dir === folder ? "" : ` · ${folderLabelOf(c.dir)}`}</span>
-            {#if targetDisabled(c.id)}<span class="muted"> — pair in the Accounts view to include</span>{/if}
+            {#if targetDisabled(c.id)}<span class="muted"> — 在账号视图中配对以纳入</span>{/if}
           </label>
         {/each}
       {/if}
@@ -512,9 +512,9 @@
              standing behind the sheet, the file it is talking about is right
              there — warning about a document behind a curtain while holding the
              curtain shut was the wrong way round. -->
-        <InlineMessage variant="warn">⚠ This will rewrite {openTargetNames.join(" and ")},
-          open in the editor behind this sheet. The on-screen
-          {openTargetNames.length === 1 ? "copy" : "copies"} will be out of date afterwards.</InlineMessage>
+        <InlineMessage variant="warn">⚠ 这将重写 {openTargetNames.join("、")}，
+          该文件已在本面板后方的编辑器中打开。之后屏幕上的
+          {openTargetNames.length === 1 ? "这份副本" : "这些副本"}将会过期。</InlineMessage>
       </section>
     {/if}
 
@@ -524,27 +524,26 @@
       {/if}
       {#if mergePlan}
         <section class="preview">
-          <p>Will write {mergeWrites} file(s) — each is backed up first.</p>
+          <p>将写入 {mergeWrites} 个文件 — 每个文件都会先备份。</p>
           {#each mergePlan.files as f}
             <p class:muted={!f.error && f.gained + f.changed === 0}>
-              {f.account_id !== null ? `Account ${accountLabel(f.account_id)}` : fileName(f.path)}:
+              {f.account_id !== null ? `账号 ${accountLabel(f.account_id)}` : fileName(f.path)}:
               {#if f.error}{f.error}
-              {:else if f.gained + f.changed === 0}no change
-              {:else}gains {f.gained} ship{f.gained === 1 ? "" : "s"}, {f.changed} changed{/if}
+              {:else if f.gained + f.changed === 0}无变化
+              {:else}新增 {f.gained} 艘舰船{f.gained === 1 ? "" : ""}，{f.changed} 已更改{/if}
             </p>
           {/each}
           {#each mergePlan.conflicts as c}
-            <InlineMessage variant="warn">⚠ Ship {c.ship_id}: kept the layout from {fileName(c.kept_from)} (newest), replacing it in {c.overridden.map(fileName).join(", ")}.</InlineMessage>
+            <InlineMessage variant="warn">⚠ 舰船 {c.ship_id}：保留 {fileName(c.kept_from)}（最新）的布局，并在 {c.overridden.map(fileName).join(", ")} 中替换它。</InlineMessage>
           {/each}
         </section>
       {/if}
     {:else if fileMode}
       {#if effectiveTargets.length > 0}
         <section class="preview">
-          <p>Will write {effectiveTargets.length} file(s) — each is backed up first.</p>
-          <InlineMessage variant="warn">⚠ Each target is replaced whole — every setting it holds,
-            including ones this editor does not show.{#if sourceFileKind === "user"} An
-            account file carries the settings of every character on that account.{/if}</InlineMessage>
+          <p>将写入 {effectiveTargets.length} 个文件 — 每个文件都会先备份。</p>
+          <InlineMessage variant="warn">⚠ 每个目标都会被整体替换 — 它所包含的全部设置，
+            包括本编辑器不显示的设置。{#if sourceFileKind === "user"} 账号文件承载着该账号上每个角色的设置。{/if}</InlineMessage>
         </section>
       {/if}
     {:else if plan}
@@ -552,15 +551,15 @@
         {#if plan.source_error}
           <InlineMessage variant="error">{plan.source_error}</InlineMessage>
         {:else}
-          <p>Will write {plan.char_writes.length + plan.account_writes.length} file(s) — each is backed up first.</p>
+          <p>将写入 {plan.char_writes.length + plan.account_writes.length} 个文件 — 每个文件都会先备份。</p>
           {#each plan.char_writes.filter((w) => w.resolution_mismatch) as w}
-            <InlineMessage variant="warn">⚠ {nameOfChar(w.char_id, "")}: screen resolution differs from the source — copied windows may land off-screen.</InlineMessage>
+            <InlineMessage variant="warn">⚠ {nameOfChar(w.char_id, "")}：屏幕分辨率与来源不同 — 复制的窗口可能落到屏幕外。</InlineMessage>
           {/each}
           {#each plan.account_writes as w}
-            <InlineMessage variant="warn">⚠ {w.full_copy ? "Entire account settings replaced" : `${changedAspectNames.join(" / ")} changed${resetsToDefaults ? " — and any of those the source leaves at EVE's default is reset to that default here, not left as it is" : ""}`} for account {accountLabel(w.user_id)}{dirOf(w.path) === folder ? "" : ` in ${folderLabelOf(dirOf(w.path))}`}{#if w.collateral_char_ids.length > 0} — also changes: {w.collateral_char_ids.map((id) => nameOfChar(id, `char ${id}`)).join(", ")}{/if}. Other characters on this account that aren't paired yet are affected too — pair them in the Accounts view to see them by name.</InlineMessage>
+            <InlineMessage variant="warn">⚠ {w.full_copy ? "整个账号设置已替换" : `${changedAspectNames.join(" / ")} 已更改${resetsToDefaults ? " — 其中来源保持为 EVE 默认值的项，会在这里重置为该默认值，而不是保持原样" : ""}`}（账号 {accountLabel(w.user_id)}{dirOf(w.path) === folder ? "" : `，位于 ${folderLabelOf(dirOf(w.path))}`}{#if w.collateral_char_ids.length > 0} — 还会更改：{w.collateral_char_ids.map((id) => nameOfChar(id, `角色 ${id}`)).join(", ")}{/if}）。该账号上尚未配对的其他角色同样会受影响 — 在账号视图中为它们配对，即可按名称查看。</InlineMessage>
           {/each}
           {#each plan.excluded as ex}
-            <p class="muted">Excluded {nameOfChar(ex.char_id, `char ${ex.char_id}`)} — {ex.reason}</p>
+            <p class="muted">已排除 {nameOfChar(ex.char_id, `角色 ${ex.char_id}`)} — {ex.reason}</p>
           {/each}
         {/if}
       </section>
@@ -570,14 +569,14 @@
       <Button
         variant="primary"
         disabled={!canApply}
-        disabledReason={busy ? "A copy is already running" : racksMode ? mergeReason : "Pick a source and at least one target"}
-        onclick={apply}>{busy ? (racksMode ? "Merging…" : "Copying…") : racksMode ? "Merge" : "Copy"}</Button>
+        disabledReason={busy ? "已有复制正在进行" : racksMode ? mergeReason : "请选择来源和至少一个目标"}
+        onclick={apply}>{busy ? (racksMode ? "正在合并…" : "正在复制…") : racksMode ? "合并" : "复制"}</Button>
       {#if error}<InlineMessage variant="error">{error}</InlineMessage>{/if}
     </section>
 
     {#if results}
       <section class="results">
-        <div class="head">Result</div>
+        <div class="head">结果</div>
         {#each results as r}
           <div class:ok={r.ok} class:fail={!r.ok}>
             {r.ok ? "✓" : "✗"} {r.path.split(/[\\/]/).pop()}

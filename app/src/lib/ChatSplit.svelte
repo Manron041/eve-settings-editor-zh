@@ -50,13 +50,13 @@
 <div class="chat-split">
   <ScopeBanner
     compact
-    label="Chat layout — account-wide{sharedNames.length > 0
-      ? `, shared with ${sharedNames.join(', ')}`
+    label="聊天布局 — 全账号范围{sharedNames.length > 0
+      ? `，与 ${sharedNames.join(', ')} 共享`
       : ''}" />
   <div class="fields">
     <Field
       kind="number"
-      label="Member list"
+      label="成员列表"
       layout="column"
       width="5rem"
       min={CHAT_SPLIT.members.min}
@@ -64,11 +64,11 @@
       placeholder={String(CHAT_SPLIT.members.default)}
       value={panel?.userlist_width ?? ""}
       disabled={readOnly}
-      disabledReason="Not present in this file"
+      disabledReason="此文件中不存在"
       onchange={edit("userlist")} />
     <Field
       kind="number"
-      label="Input box"
+      label="输入框"
       layout="column"
       width="5rem"
       min={CHAT_SPLIT.input.min}
@@ -76,14 +76,14 @@
       placeholder={String(CHAT_SPLIT.input.default)}
       value={panel?.input_height ?? ""}
       disabled={readOnly}
-      disabledReason="Not present in this file"
+      disabledReason="此文件中不存在"
       onchange={edit("input")} />
   </div>
   {#if area}
     <!-- Unclamped on purpose: a negative area means this account-wide split does
          not fit THIS character's window. See detail.ts's historyArea. -->
     <div class="area" class:bad={area.w <= 0 || area.h <= 0}>
-      History area {area.w} × {area.h}
+      历史区域 {area.w} × {area.h}
     </div>
   {/if}
   {#if targets.length > 1}
@@ -94,10 +94,10 @@
       class="stack-apply"
       disabled={readOnly || nothingToCopy}
       disabledReason={nothingToCopy
-        ? "This channel has no stored sizes to copy"
-        : "Not present in this file"}
+        ? "此频道没有可复制的已存尺寸"
+        : "此文件中不存在"}
       onclick={applyToStack}>
-      Apply to every channel in this stack ({targets.length})
+      应用到此堆叠中的每个频道（{targets.length}）
     </Button>
   {/if}
 </div>

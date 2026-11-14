@@ -597,9 +597,9 @@ describe("sheets", () => {
   test("the close button closes the sheet", async () => {
     await openChar();
     await menu(/复制设置/i);
-    await waitFor(() => screen.getByRole("dialog", { name: "Copy settings" }));
+    await waitFor(() => screen.getByRole("dialog", { name: "复制设置" }));
     await fireEvent.click(screen.getByRole("button", { name: "关闭" }));
-    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Copy settings" })).toBeNull());
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "复制设置" })).toBeNull());
   });
 
   // Fails on master, where the only way back out of a takeover re-opens the file
@@ -671,10 +671,10 @@ describe("a batch copy that wrote the open document", () => {
     subject.dirty.char = dirty;
 
     await menu(/复制设置/i);
-    const box = await screen.findByRole("dialog", { name: "Copy settings" });
+    const box = await screen.findByRole("dialog", { name: "复制设置" });
     await fireEvent.click(within(box).getByRole("checkbox", { name: /core_char_951\.dat/ }));
     await fireEvent.click(within(box).getByRole("checkbox", { name: /window layout/i }));
-    const copy = within(box).getByRole("button", { name: "Copy" });
+    const copy = within(box).getByRole("button", { name: "复制" });
     await waitFor(() => expect(copy.hasAttribute("disabled")).toBe(false));
     await fireEvent.click(copy);
     await waitFor(() => expect(calls.of("setup_apply").length).toBe(1));
