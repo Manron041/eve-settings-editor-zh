@@ -40,13 +40,12 @@
   }
 </script>
 
-<Sheet title="AI access" width="min(560px, 92vw)" onclose={onClose} data-testid="ai-access-backdrop">
+<Sheet title="AI 访问" width="min(560px, 92vw)" onclose={onClose} data-testid="ai-access-backdrop">
   <p>
-    Let an AI assistant edit your settings through this app — overview, probe formations, window
-    layout, keybinds, Neocom, HUD, fleet and chat, plus copy settings and presets. Every change goes
-    through the same backups and checks as editing here.
-    While this app is open, the assistant works in your window: its changes appear as if you'd made
-    them, each with an Undo, and {accel("Z")} reverts them.
+    让 AI 助手通过本应用修改你的设置 —— 总览、探针阵型、窗口布局、快捷键、Neocom、HUD、
+    舰队与聊天，以及复制设置与预设。每次修改都与在此编辑一样，经过相同的备份与检查。
+    本应用打开期间，助手在你的窗口中操作：它的修改如同你亲手完成，每条都可撤销，
+    按 {accel("Z")} 即可回退。
   </p>
 
   {#if info}
@@ -54,32 +53,32 @@
     <h3>Claude Desktop</h3>
     {#if cd}
       <p class="row">
-        <span>{cd.registered ? "Registered" : "Not registered"}</span>
+        <span>{cd.registered ? "已注册" : "未注册"}</span>
         <Button disabled={busy} onclick={() => void setClaude(!cd.registered)}>
-          {cd.registered ? "Unregister" : "Register"}
+          {cd.registered ? "取消注册" : "注册"}
         </Button>
       </p>
-      <p class="meta">Restart Claude Desktop to pick this up.</p>
+      <p class="meta">重启 Claude Desktop 使更改生效。</p>
     {:else}
-      <p class="meta">Claude Desktop is not installed on this machine — use the snippet below in another client.</p>
+      <p class="meta">Claude Desktop 未安装在本机 —— 在其他客户端中使用下方片段。</p>
     {/if}
 
-    <h3>Any other MCP client</h3>
+    <h3>任何其他 MCP 客户端</h3>
     <pre>{info.snippet}</pre>
     <p class="row">
-      <Button variant="ghost" onclick={() => void copy()}>Copy</Button>
-      {#if copied}<span class="meta">Copied</span>{/if}
+      <Button variant="ghost" onclick={() => void copy()}>复制</Button>
+      {#if copied}<span class="meta">已复制</span>{/if}
     </p>
     <p class="meta">
-      Paste it into the client's MCP config. VS Code uses a <code>servers</code> key and Codex a
-      <code>[mcp_servers.…]</code> TOML table — same command and args.
+      将其粘贴到客户端的 MCP 配置中。VS Code 使用 <code>servers</code> 键，Codex 使用
+      <code>[mcp_servers.…]</code> TOML 表 —— 命令与参数相同。
     </p>
   {/if}
 
   {#if error}<InlineMessage variant="error">{error}</InlineMessage>{/if}
 
   {#snippet footer()}
-    <Button onclick={onClose}>Close</Button>
+    <Button onclick={onClose}>关闭</Button>
   {/snippet}
 </Sheet>
 

@@ -78,19 +78,19 @@
     } finally {
       namesBusy = false;
     }
-    toast("Names refreshed", { variant: "success" });
+    toast("角色名称已刷新", { variant: "success" });
   }
 
   async function rescan() {
     const n = await rescanProfiles();
     toast(
-      n === null ? "Rescan failed" : `Refreshed — ${n} profile${n === 1 ? "" : "s"}`,
+      n === null ? "重新扫描失败" : `已刷新 — ${n} 个配置`,
       { variant: n === null ? "error" : "success" },
     );
   }
 </script>
 
-<Popover {anchor} placement="bottom-start" {onclose} role="menu" ariaLabel="App menu" class="app-menu">
+<Popover {anchor} placement="bottom-start" {onclose} role="menu" ariaLabel="应用菜单" class="app-menu">
   {#each rows as row, i (i)}
     {#if row === null}
       <hr />
@@ -108,7 +108,7 @@
         <span>{row.label}</span>
         <span class="right">
           {#if row.id === "go.accounts" && waiting}
-            <Chip state="proposed" size="sm" title="Pairings your EVE launcher log proposes">{waiting}</Chip>
+            <Chip state="proposed" size="sm" title="EVE 启动器日志建议的配对">{waiting}</Chip>
           {/if}
           <!-- Every item shows its accelerator, per platform. That is discovery
                rule 3: people learn the shortcut at the moment they use the slow
@@ -120,9 +120,9 @@
   {/each}
   <hr />
   <button role="menuitem" disabled={namesBusy} onclick={() => void refreshNamesClick()}>
-    <span>{namesBusy ? "Refreshing character names…" : "Refresh character names"}</span>
+    <span>{namesBusy ? "正在刷新角色名称…" : "刷新角色名称"}</span>
   </button>
-  <button role="menuitem" onclick={() => void rescan()}><span>Rescan profiles</span></button>
+  <button role="menuitem" onclick={() => void rescan()}><span>重新扫描配置</span></button>
 </Popover>
 
 <style>

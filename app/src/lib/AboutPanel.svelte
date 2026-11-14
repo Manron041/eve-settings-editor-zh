@@ -16,21 +16,21 @@
   let version = $state("…");
   getVersion()
     .then((v) => (version = v))
-    .catch(() => (version = "unknown"));
+    .catch(() => (version = "未知"));
 </script>
 
-<Sheet title="About" width="min(420px, 92vw)" onclose={onClose} data-testid="about-backdrop">
+<Sheet title="关于" width="min(420px, 92vw)" onclose={onClose} data-testid="about-backdrop">
   <h2>EVE Settings Editor</h2>
-  <p class="version">Version {version}</p>
+  <p class="version">版本 {version}</p>
   <p>
     <Button variant="ghost" class="linkbtn" onclick={() => void openUrl(REPO).catch(() => {})}>
-      Source and issues on GitHub
+      GitHub 上的源码与问题反馈
     </Button>
   </p>
-  <p class="meta">MIT licensed. An unofficial tool — EVE Online is a trademark of CCP hf.</p>
+  <p class="meta">采用 MIT 许可证。非官方工具 —— EVE Online 是 CCP hf 的商标。</p>
 
   {#snippet footer()}
-    <Button onclick={onClose}>Close</Button>
+    <Button onclick={onClose}>关闭</Button>
   {/snippet}
 </Sheet>
 

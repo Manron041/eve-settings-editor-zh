@@ -46,7 +46,7 @@ function mount(over: Partial<Ctx> = {}) {
 test("all five migrated actions are here", async () => {
   calls.stub("launcher_proposals", { proposals: [], known: 0 });
   mount();
-  for (const name of [/accounts/i, /copy settings/i, /refresh character names/i, /rescan profiles/i, /about/i]) {
+  for (const name of [/账号/i, /copy settings/i, /刷新角色名称/i, /重新扫描配置/i, /about/i]) {
     expect(await screen.findByRole("menuitem", { name })).toBeTruthy();
   }
 });
@@ -109,16 +109,16 @@ test("Accounts carries a count of the pairings the launcher proposes", async () 
     known: 3,
   });
   mount();
-  const item = await screen.findByRole("menuitem", { name: /accounts/i });
+  const item = await screen.findByRole("menuitem", { name: /账号/i });
   await waitFor(() => expect(item.textContent).toMatch(/2/));
 });
 
 test("no count is drawn when nothing is proposed", async () => {
   calls.stub("launcher_proposals", { proposals: [], known: 0 });
   mount();
-  const item = await screen.findByRole("menuitem", { name: /accounts/i });
+  const item = await screen.findByRole("menuitem", { name: /账号/i });
   await waitFor(() => expect(calls.of("launcher_proposals").length).toBe(1));
-  expect(item.textContent?.trim()).toBe("Accounts");
+  expect(item.textContent?.trim()).toBe("账号");
 });
 
 /** The scan is paid for on demand — opening the menu — and never at app start.

@@ -19,7 +19,7 @@ describe("AboutPanel", () => {
     vi.mocked(getVersion).mockResolvedValue("0.29.0");
     render(AboutPanel, { onClose: () => {} });
 
-    expect(await screen.findByText("Version 0.29.0")).toBeTruthy();
+    expect(await screen.findByText("版本 0.29.0")).toBeTruthy();
   });
 
   test("a version that cannot be read says so rather than showing nothing", async () => {
@@ -28,14 +28,14 @@ describe("AboutPanel", () => {
     vi.mocked(getVersion).mockRejectedValue(new Error("no runtime"));
     render(AboutPanel, { onClose: () => {} });
 
-    expect(await screen.findByText("Version unknown")).toBeTruthy();
+    expect(await screen.findByText("版本 未知")).toBeTruthy();
   });
 
   test("the repo link opens in the system browser, not the webview", async () => {
     vi.mocked(getVersion).mockResolvedValue("0.29.0");
     render(AboutPanel, { onClose: () => {} });
 
-    await fireEvent.click(screen.getByText("Source and issues on GitHub"));
+    await fireEvent.click(screen.getByText("GitHub 上的源码与问题反馈"));
 
     expect(vi.mocked(openUrl)).toHaveBeenCalledWith(
       "https://github.com/StormDelay/eve-settings-editor",
@@ -47,7 +47,7 @@ describe("AboutPanel", () => {
     const onClose = vi.fn();
     render(AboutPanel, { onClose });
 
-    await fireEvent.click(screen.getByText("Close"));
+    await fireEvent.click(screen.getByText("关闭"));
     expect(onClose).toHaveBeenCalledTimes(1);
 
     await fireEvent.click(screen.getByTestId("about-backdrop"));

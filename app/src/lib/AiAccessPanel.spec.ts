@@ -22,7 +22,7 @@ describe("AiAccessPanel", () => {
     render(AiAccessPanel, { onClose: () => {} });
 
     expect(await screen.findByText(/"eve-settings-editor"/)).toBeTruthy();
-    await fireEvent.click(screen.getByText("Copy"));
+    await fireEvent.click(screen.getByText("复制"));
     expect(vi.mocked(writeText)).toHaveBeenCalledWith(base.snippet);
   });
 
@@ -30,8 +30,8 @@ describe("AiAccessPanel", () => {
     vi.spyOn(api, "mcpSetupInfo").mockResolvedValue(base);
     render(AiAccessPanel, { onClose: () => {} });
     await screen.findByText(/"eve-settings-editor"/);
-    expect(screen.queryByText("Register")).toBeNull();
-    expect(screen.getByText(/Claude Desktop is not installed/)).toBeTruthy();
+    expect(screen.queryByText("注册")).toBeNull();
+    expect(screen.getByText(/Claude Desktop 未安装/)).toBeTruthy();
   });
 
   test("Register calls the command and re-renders from its result", async () => {
@@ -41,10 +41,10 @@ describe("AiAccessPanel", () => {
     const set = vi.spyOn(api, "mcpSetClaudeDesktop").mockResolvedValue(on);
     render(AiAccessPanel, { onClose: () => {} });
 
-    await fireEvent.click(await screen.findByText("Register"));
+    await fireEvent.click(await screen.findByText("注册"));
     expect(set).toHaveBeenCalledWith(true);
-    expect(await screen.findByText("Unregister")).toBeTruthy();
-    expect(screen.getByText(/Registered/)).toBeTruthy();
+    expect(await screen.findByText("取消注册")).toBeTruthy();
+    expect(screen.getByText(/已注册/)).toBeTruthy();
   });
 
   test("a failed register shows the error and keeps the row", async () => {
@@ -53,9 +53,9 @@ describe("AiAccessPanel", () => {
     vi.spyOn(api, "mcpSetClaudeDesktop").mockRejectedValue({ code: "parse", message: "not JSON" });
     render(AiAccessPanel, { onClose: () => {} });
 
-    await fireEvent.click(await screen.findByText("Register"));
+    await fireEvent.click(await screen.findByText("注册"));
     expect(await screen.findByText(/not JSON/)).toBeTruthy();
-    expect(screen.getByText("Register")).toBeTruthy();
+    expect(screen.getByText("注册")).toBeTruthy();
   });
 
   test("Close dismisses it", async () => {
@@ -63,7 +63,7 @@ describe("AiAccessPanel", () => {
     const onClose = vi.fn();
     render(AiAccessPanel, { onClose });
     await screen.findByText(/"eve-settings-editor"/);
-    await fireEvent.click(screen.getByText("Close"));
+    await fireEvent.click(screen.getByText("关闭"));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

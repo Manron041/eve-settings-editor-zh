@@ -150,7 +150,7 @@ export const COMMANDS: Command[] = [
   ...VIEWS.map((v, i) => goCommand(v.id, i + 1)),
   {
     id: "go.accounts",
-    label: "Accounts",
+    label: "账号",
     group: "Go",
     keywords: "pair unpair link character launcher",
     enabled: () => true,

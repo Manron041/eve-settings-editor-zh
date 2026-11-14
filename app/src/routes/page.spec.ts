@@ -226,7 +226,7 @@ describe("saving", () => {
     subject.dirty.char = true;
     await waitFor(() => expect(save().disabled).toBe(false));
 
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => expect(screen.getByRole("heading", { name: /账号/i })).toBeTruthy());
 
     expect(save().disabled).toBe(false);
@@ -294,7 +294,7 @@ describe("saving", () => {
     calls.stub("open_file", opened("core_char_950.dat"));
     await mount([profile(file("core_char_950.dat", "char", 950))]);
     await openFile("core_char_950.dat");
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => expect(screen.getByRole("heading", { name: /账号/i })).toBeTruthy());
     await fireEvent.click(screen.getByRole("tab", { name: "原始" }));
     await waitFor(() => expect(screen.queryByRole("heading", { name: /账号/i })).toBeNull());
@@ -578,7 +578,7 @@ describe("sheets", () => {
   // destruction.
   test("the editor stays mounted while a sheet is open", async () => {
     await openChar();
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     for (const v of ["布局", "总览", "自动补全", "快捷键", "探针", "原始"]) {
       expect(screen.getByRole("tab", { name: v })).toBeTruthy();
@@ -588,7 +588,7 @@ describe("sheets", () => {
 
   test("Esc closes the sheet and returns to the editor", async () => {
     await openChar();
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await fireEvent.keyDown(window, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
@@ -610,7 +610,7 @@ describe("sheets", () => {
     await waitFor(() =>
       expect(screen.getByRole("tab", { name: "快捷键" }).getAttribute("aria-selected")).toBe("true"),
     );
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await fireEvent.keyDown(window, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
@@ -620,7 +620,7 @@ describe("sheets", () => {
   // Opening a document is a request to be in the editor, so it closes any sheet.
   test("opening a file closes an open sheet", async () => {
     await openChar();
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await openFile("core_char_950.dat");
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
@@ -628,7 +628,7 @@ describe("sheets", () => {
 
   test("a tab click also leaves the sheet", async () => {
     await openChar();
-    await menu(/accounts/i);
+    await menu(/账号/i);
     await waitFor(() => screen.getByRole("dialog", { name: "账号" }));
     await fireEvent.click(screen.getByRole("tab", { name: "原始" }));
     await waitFor(() => expect(screen.queryByRole("dialog", { name: "账号" })).toBeNull());
