@@ -193,7 +193,7 @@
       // would drop the probe the user has under the gizmo mid-edit.
       else selectedId = loaded.formations[index]?.id ?? selectedId;
     } catch (e) {
-      editorError = { text: `That formation wasn't saved — ${errText(e)}`, detail: errMessage(e) };
+      editorError = { text: `该阵型未保存 — ${errText(e)}`, detail: errMessage(e) };
       await reload();
       // `reload` only re-selects when `selectedId` vanished. On an id===null
       // failure (createNew/duplicate/copy) selectedId is still the pre-existing
@@ -278,7 +278,7 @@
   }
 
   async function createNew() {
-    draftName = "New formation";
+    draftName = "新建阵型";
     draftProbes = pinpointFormation(DEFAULT_RANGE_M);
     draftRanges = draftProbes.map(() => DEFAULT_RANGE_M);
     lastAngles = draftProbes.map((p) => { const s = toSpherical(p); return { az: s.az, el: s.el }; });
@@ -287,7 +287,7 @@
 
   async function duplicate() {
     if (!current) return;
-    draftName = `${current.name} copy`;
+    draftName = `${current.name} 副本`;
     await commit(null);
   }
 
@@ -298,7 +298,7 @@
       onUserDirty();
       select(loaded.formations[0] ?? null);
     } catch (e) {
-      listError = { text: `That formation wasn't deleted — ${errText(e)}`, detail: errMessage(e) };
+      listError = { text: `该阵型未删除 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -329,15 +329,15 @@
       // that just moved, and they must survive the move.
       if (at >= 0) selectedId = loaded.formations[at]?.id ?? null;
     } catch (e) {
-      listError = { text: `That formation wasn't moved — ${errText(e)}`, detail: errMessage(e) };
+      listError = { text: `该阵型未移动 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
   function rowMenu(i: number): MenuItem[] {
     const last = (loaded?.formations.length ?? 0) - 1;
     return [
-      { label: "Move up", run: () => reorder(i, i - 1), disabled: i === 0, hint: i === 0 ? "Already first" : undefined },
-      { label: "Move down", run: () => reorder(i, i + 1), disabled: i === last, hint: i === last ? "Already last" : undefined },
+      { label: "上移", run: () => reorder(i, i - 1), disabled: i === 0, hint: i === 0 ? "已是第一项" : undefined },
+      { label: "下移", run: () => reorder(i, i + 1), disabled: i === last, hint: i === last ? "已是最后一项" : undefined },
     ];
   }
 
@@ -354,9 +354,9 @@
       // mounts the view alone — which is a fact about the spec, not about the
       // component: `toasts` is module state, so the call is safe either way and
       // the spec asserts the queue instead of the DOM.
-      toast(`Copied “${visible[visibleIndex].name}”`, { variant: "success" });
+      toast(`已复制“${visible[visibleIndex].name}”`, { variant: "success" });
     } catch (e) {
-      listError = { text: `That formation wasn't copied — ${errText(e)}`, detail: errMessage(e) };
+      listError = { text: `该阵型未复制 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -373,12 +373,12 @@
       // is right: the clipboard is invisible, so there is no control on screen
       // that owns this failure.
       if (!specs.length) {
-        toast("That text contains no formations.", { variant: "warn" });
+        toast("该文本不包含任何阵型。", { variant: "warn" });
         return;
       }
       await addShared(specs);
     } catch (e) {
-      listError = { text: `That formation wasn't pasted — ${errText(e)}`, detail: errMessage(e) };
+      listError = { text: `该阵型未粘贴 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -396,7 +396,7 @@
       // The accelerator is rendered per platform, not written into the string:
       // "Ctrl+V" is wrong on macOS, which this app also ships to.
       pasteError = {
-        text: `The clipboard couldn't be read — press ${accel("V")} to paste a formation instead.`,
+        text: `无法读取剪贴板 — 按 ${accel("V")} 粘贴阵型。`,
         detail: "",
       };
       return;
@@ -417,9 +417,9 @@
   async function exportFormations() {
     if (!visible.length) return;
     picker = {
-      title: "Export formations",
+      title: "导出阵型",
       items: visible,
-      label: "Export",
+      label: "导出",
       confirm: async (chosen) => {
         // The file dialog comes AFTER the pick. Asking where to save first meant
         // that cancelling it — the reasonable thing to do when you have not been
@@ -427,12 +427,12 @@
         // appeared, so Export looked like it offered no choice at all.
         const path = await saveDialog({
           defaultPath: "probe-formations.yaml",
-          filters: [{ name: "Probe formations", extensions: ["yaml"] }],
+          filters: [{ name: "探针阵型", extensions: ["yaml"] }],
         });
         if (!path) return;
         await api.probeExport(path, chosen);
         toast(
-          `Exported ${chosen.length} formation${chosen.length === 1 ? "" : "s"} to ${path.split(/[\\/]/).pop()}.`,
+          `已将 ${chosen.length} 个阵型导出到 ${path.split(/[\\/]/).pop()}。`,
           { variant: "success" },
         );
       },
@@ -442,7 +442,7 @@
   async function importFormations() {
     const picked = await openDialog({
       multiple: false,
-      filters: [{ name: "Probe formations", extensions: ["yaml", "yml"] }],
+      filters: [{ name: "探针阵型", extensions: ["yaml", "yml"] }],
     });
     if (typeof picked !== "string") return;
     let items: FormationSpec[];
@@ -450,21 +450,21 @@
     try {
       items = await api.probeImport(picked);
     } catch (e) {
-      importError = { text: `Those formations weren't imported — ${errText(e)}`, detail: errMessage(e) };
+      importError = { text: `这些阵型未导入 — ${errText(e)}`, detail: errMessage(e) };
       return;
     }
     if (!items.length) {
-      importError = { text: "That file contains no formations.", detail: picked, warn: true };
+      importError = { text: "该文件不包含任何阵型。", detail: picked, warn: true };
       return;
     }
     picker = {
-      title: `Import formations from ${picked.split(/[\\/]/).pop()}`,
+      title: `从 ${picked.split(/[\\/]/).pop()} 导入阵型`,
       items,
-      label: "Import",
+      label: "导入",
       confirm: async (chosen) => {
         await addShared(chosen);
         toast(
-          `Imported ${chosen.length} formation${chosen.length === 1 ? "" : "s"}. Save to write them to the account file.`,
+          `已导入 ${chosen.length} 个阵型。保存后将其写入账号文件。`,
           { variant: "success" },
         );
       },
@@ -483,7 +483,7 @@
     } catch (e) {
       // `picker.title` stops being an error title and goes back to being only
       // the picker's heading.
-      listError = { text: `That didn't finish — ${errText(e)}`, detail: errMessage(e) };
+      listError = { text: `操作未完成 — ${errText(e)}`, detail: errMessage(e) };
     }
   }
 
@@ -528,8 +528,8 @@
 {#if !userOpen}
   <!-- Kept as a paragraph rather than an EmptyState: the sentence wraps a
        button mid-clause, which EmptyState's plain-string title cannot hold. -->
-  <EmptyState title="No account paired" description="Probe formations live in the account file.">
-    {#snippet action()}<Button onclick={onShowAccounts}>Pair this character…</Button>{/snippet}
+  <EmptyState title="未配对账号" description="探针阵型保存在账号文件中。">
+    {#snippet action()}<Button onclick={onShowAccounts}>配对此角色…</Button>{/snippet}
   </EmptyState>
 {:else if error}
   <InlineMessage variant="error">{error}</InlineMessage>
@@ -563,12 +563,12 @@
         {/each}
       </ul>
       <div class="list-actions">
-        <Button onclick={createNew}>New formation</Button>
-        <Button onclick={duplicate} disabled={!current} disabledReason="Pick a formation first">
-          Duplicate formation
+        <Button onclick={createNew}>新建阵型</Button>
+        <Button onclick={duplicate} disabled={!current} disabledReason="请先选择阵型">
+          复制阵型
         </Button>
-        <Button variant="danger" onclick={remove} disabled={!current} disabledReason="Pick a formation first">
-          Delete formation
+        <Button variant="danger" onclick={remove} disabled={!current} disabledReason="请先选择阵型">
+          删除阵型
         </Button>
       </div>
       <!-- The sharing group, kept together in its own row. Copy and Paste are a
@@ -577,15 +577,15 @@
       <div class="list-actions">
         <!-- The accelerator is a <kbd> beside the label, not text baked into the
              tooltip: "Ctrl+C" is wrong on macOS, which this app also ships to. -->
-        <Button onclick={copyFormation} disabled={!current} disabledReason="Pick a formation first"
-                title="Copy this formation to the clipboard">Copy <kbd>{accel("C")}</kbd></Button>
-        <Button onclick={pasteFormation} title="Add a formation from the clipboard">
-          Paste <kbd>{accel("V")}</kbd>
+        <Button onclick={copyFormation} disabled={!current} disabledReason="请先选择阵型"
+                title="将此阵型复制到剪贴板">复制 <kbd>{accel("C")}</kbd></Button>
+        <Button onclick={pasteFormation} title="从剪贴板添加阵型">
+          粘贴 <kbd>{accel("V")}</kbd>
         </Button>
         <Button onclick={exportFormations} disabled={!visible.length}
-                disabledReason="There are no formations to export"
-                title="Write formations out as a shareable file">Export formations…</Button>
-        <Button onclick={importFormations} title="Add formations from a shared file">Import formations…</Button>
+                disabledReason="没有可导出的阵型"
+                title="将阵型写入可分享的文件">导出阵型…</Button>
+        <Button onclick={importFormations} title="从共享文件添加阵型">导入阵型…</Button>
       </div>
       <!-- Each at the control it belongs to, in the row those controls live in. -->
       {#if listError}
@@ -608,7 +608,7 @@
         {/if}
         <div class="row">
           <Field
-            label="Name"
+            label="名称"
             layout="column"
             value={draftName}
             oninput={(e) => (draftName = (e.currentTarget as HTMLInputElement).value)}
@@ -618,14 +618,14 @@
                makes a non-positive range unwritable by construction. -->
           <Field
             kind="select"
-            label="Range (every probe)"
+            label="范围（所有探针）"
             layout="column"
-            aria-label="range for every probe"
+            aria-label="所有探针的范围"
             value={uniformRange}
             onchange={(e) => setAllRanges(Number((e.currentTarget as HTMLSelectElement).value))}
             options={RANGE_STEPS_M.map((m, i) => ({ value: m, label: `${RANGE_STEPS_AU[i]} AU` }))} />
           <span class="units">
-            <span class="meta">Probe positions in</span>
+            <span class="meta">探针位置单位</span>
             <Button size="sm" pressed={unit === "au"} onclick={() => (unit = "au")}>AU</Button>
             <Button size="sm" pressed={unit === "km"} onclick={() => (unit = "km")}>km</Button>
           </span>
@@ -636,8 +636,8 @@
             <tr>
               <th>#</th>
               <th>X</th><th>Y</th><th>Z</th>
-              <th>Distance</th><th>Azimuth</th><th>Elevation</th>
-              <th>range</th>
+              <th>距离</th><th>方位角</th><th>仰角</th>
+              <th>范围</th>
               <th></th>
             </tr>
           </thead>
@@ -648,7 +648,7 @@
                 <td>{n + 1}</td>
                 {#each [0, 1, 2] as axis}
                   <td class="u" data-unit={unitLabel}>
-                    <Field aria-label={`probe ${n + 1} ${"XYZ"[axis]}`}
+                    <Field aria-label={`探针 ${n + 1} ${"XYZ"[axis]}`}
                            value={shown(`${n}:${axis}`, formatUnit(p[axis], unit))}
                            oninput={(e) => { typeField(`${n}:${axis}`, (e.currentTarget as HTMLInputElement).value);
                              setAxis(n, axis as 0 | 1 | 2, (e.currentTarget as HTMLInputElement).value); }}
@@ -657,7 +657,7 @@
                   </td>
                 {/each}
                 <td class="u" data-unit={unitLabel}>
-                  <Field aria-label={`probe ${n + 1} distance`}
+                  <Field aria-label={`探针 ${n + 1} 距离`}
                          value={shown(`${n}:dist`, formatUnit(s.r, unit))}
                          oninput={(e) => { typeField(`${n}:dist`, (e.currentTarget as HTMLInputElement).value);
                            setDistance(n, (e.currentTarget as HTMLInputElement).value); }}
@@ -665,7 +665,7 @@
                          onblur={blurField} />
                 </td>
                 <td class="u" data-unit="°">
-                  <Field aria-label={`probe ${n + 1} azimuth`}
+                  <Field aria-label={`探针 ${n + 1} 方位角`}
                          value={shown(`${n}:az`, s.az.toFixed(1))}
                          oninput={(e) => { typeField(`${n}:az`, (e.currentTarget as HTMLInputElement).value);
                            setAngle(n, "az", (e.currentTarget as HTMLInputElement).value); }}
@@ -673,7 +673,7 @@
                          onblur={blurField} />
                 </td>
                 <td class="u" data-unit="°">
-                  <Field aria-label={`probe ${n + 1} elevation`}
+                  <Field aria-label={`探针 ${n + 1} 仰角`}
                          value={shown(`${n}:el`, s.el.toFixed(1))}
                          oninput={(e) => { typeField(`${n}:el`, (e.currentTarget as HTMLInputElement).value);
                            setAngle(n, "el", (e.currentTarget as HTMLInputElement).value); }}
@@ -686,7 +686,7 @@
                        rather than silently snapped to a neighbour. -->
                   <Field
                     kind="select"
-                    aria-label={`probe ${n + 1} range`}
+                    aria-label={`探针 ${n + 1} 范围`}
                     value={draftRanges[n]}
                     onchange={(e) => setRange(n, Number((e.currentTarget as HTMLSelectElement).value))}
                     options={[
@@ -694,16 +694,16 @@
                       ...(RANGE_STEPS_M.includes(draftRanges[n])
                         ? []
                         : [{ value: draftRanges[n],
-                             label: `${formatUnit(draftRanges[n], "au")} AU (not a slider stop)` }]),
+                             label: `${formatUnit(draftRanges[n], "au")} AU（非滑块档位）` }]),
                     ]} />
                 </td>
                 <td>
                   <!-- Was `.mini-visible`, the workaround written twice because
                        `.mini` was invisible outside a `.row`. The trap is gone,
                        so the workaround goes with it. -->
-                  <Button variant="ghost" size="sm" iconOnly title="Remove this probe"
+                  <Button variant="ghost" size="sm" iconOnly title="移除此探针"
                           disabled={draftProbes.length <= 1}
-                          disabledReason="A formation needs at least one probe"
+                          disabledReason="阵型至少需要一个探针"
                           onclick={() => { removeProbe(n); commit(); }}>×</Button>
                 </td>
               </tr>
@@ -714,10 +714,10 @@
         <div class="probe-actions">
           <Button onclick={() => { addProbe(); commit(); }}
                   disabled={draftProbes.length >= MAX_PROBES}
-                  disabledReason="A formation holds at most {MAX_PROBES} probes">
-            Add probe
+                  disabledReason="阵型最多容纳 {MAX_PROBES} 个探针">
+            添加探针
           </Button>
-          <span class="meta">{draftProbes.length} of {MAX_PROBES}</span>
+          <span class="meta">{draftProbes.length} / {MAX_PROBES}</span>
         </div>
 
         <ProbeViewer probes={draftProbes} ranges={draftRanges} formationId={selectedId}
@@ -727,14 +727,14 @@
                      onmove={moveProbe}
                      oncommit={() => { if (draftChanged()) commit(); }} />
         {#each sceneProblems as p (p)}
-          <InlineMessage variant="warn">Scene not loaded — {p}</InlineMessage>
+          <InlineMessage variant="warn">场景未加载 — {p}</InlineMessage>
         {/each}
       </section>
     {:else}
       <EmptyState
-        title="No custom formations"
-        description="EVE's built-in formations aren't stored in this file. Create one to get started.">
-        {#snippet action()}<Button onclick={createNew}>New formation</Button>{/snippet}
+        title="无自定义阵型"
+        description="EVE 内置阵型不保存在此文件中。新建一个以开始使用。">
+        {#snippet action()}<Button onclick={createNew}>新建阵型</Button>{/snippet}
       </EmptyState>
     {/if}
   </div>

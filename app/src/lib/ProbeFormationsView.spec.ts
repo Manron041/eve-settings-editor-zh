@@ -79,7 +79,7 @@ describe("editing", () => {
     await open();
     // Probe 1's distance field, doubled. Its angles must not change, so the
     // new position is the old one scaled by two.
-    const dist = await screen.findByLabelText("probe 1 distance");
+    const dist = await screen.findByLabelText("探针 1 距离");
     const before = AWKWARD;
     const r = Math.hypot(...before);
     await fireEvent.input(dist, { target: { value: String((r * 2) / 149597870700) } });
@@ -110,7 +110,7 @@ describe("editing", () => {
     // makes a zero-or-negative range — meaningless in EVE, and an invalid SVG
     // radius — unreachable by construction.
     await open();
-    const range = (await screen.findByLabelText("range for every probe")) as HTMLSelectElement;
+    const range = (await screen.findByLabelText("所有探针的范围")) as HTMLSelectElement;
     const offered = [...range.options].map((o) => o.text);
     expect(offered).toEqual([
       "0.25 AU", "0.5 AU", "1 AU", "2 AU", "4 AU", "8 AU", "16 AU", "32 AU", "64 AU",
@@ -119,7 +119,7 @@ describe("editing", () => {
 
   test("choosing a range sends that stop's metres", async () => {
     await open();
-    const range = await screen.findByLabelText("range for every probe");
+    const range = await screen.findByLabelText("所有探针的范围");
     await fireEvent.change(range, { target: { value: String(149597870700) } });
     expect(lastSet().ranges).toEqual([149597870700, 149597870700]);
   });
@@ -136,7 +136,7 @@ describe("editing", () => {
     render(ProbeFormationsView, { userOpen: true, userId: 1, onUserDirty: noop });
     await screen.findByDisplayValue("a");
 
-    await fireEvent.click(screen.getByText("New formation"));
+    await fireEvent.click(screen.getByText("新建阵型"));
 
     expect(await screen.findByDisplayValue("New formation")).toBeTruthy();
   });
@@ -209,7 +209,7 @@ describe("ordering", () => {
   test("Move down sends the whole order and the selection follows the moved formation", async () => {
     await openTwo();
     await fireEvent.click(screen.getAllByRole("button", { name: "More actions" })[0]);
-    await fireEvent.click(screen.getByRole("menuitem", { name: "Move down" }));
+    await fireEvent.click(screen.getByRole("menuitem", { name: "下移" }));
 
     expect(calls.of("reorder_probe_formations").at(-1)?.args).toEqual({ order: [1, 0] });
     // "a" is still the open formation, now under id 1 — so its next save says so.
@@ -222,9 +222,9 @@ describe("ordering", () => {
   test("Move up on the first row is present and disabled", async () => {
     await openTwo();
     await fireEvent.click(screen.getAllByRole("button", { name: "More actions" })[0]);
-    const up = screen.getByRole("menuitem", { name: "Move up" }) as HTMLButtonElement;
+    const up = screen.getByRole("menuitem", { name: "上移" }) as HTMLButtonElement;
     expect(up.disabled).toBe(true);
-    const down = screen.getByRole("menuitem", { name: "Move down" }) as HTMLButtonElement;
+    const down = screen.getByRole("menuitem", { name: "下移" }) as HTMLButtonElement;
     expect(down.disabled).toBe(false);
   });
 
@@ -244,7 +244,7 @@ describe("per-probe range", () => {
     // The client sets scan range per probe. A picker per row is the whole
     // point of dropping the old single field, so the other rows must not move.
     await open();
-    const row = (await screen.findByLabelText("probe 2 range")) as HTMLSelectElement;
+    const row = (await screen.findByLabelText("探针 2 范围")) as HTMLSelectElement;
     await fireEvent.change(row, { target: { value: String(149597870700) } });
 
     expect(lastSet().ranges).toEqual([74798935350, 149597870700]);
@@ -254,7 +254,7 @@ describe("per-probe range", () => {
     // Uniform range is still the common case; reaching it by setting eight
     // selects by hand would be a regression on the field this replaces.
     await open();
-    const all = await screen.findByLabelText("range for every probe");
+    const all = await screen.findByLabelText("所有探针的范围");
     await fireEvent.change(all, { target: { value: String(149597870700) } });
 
     expect(lastSet().ranges).toEqual([149597870700, 149597870700]);
@@ -273,7 +273,7 @@ describe("per-probe range", () => {
 
     const nameField = await screen.findByDisplayValue("close");
     expect((nameField as HTMLInputElement).disabled).toBe(false);
-    const row = (await screen.findByLabelText("probe 2 range")) as HTMLSelectElement;
+    const row = (await screen.findByLabelText("探针 2 范围")) as HTMLSelectElement;
     expect(row.disabled).toBe(false);
     expect(row.value).toBe(String(37399467675));
   });
@@ -287,9 +287,9 @@ describe("per-probe range", () => {
     calls.stub("set_probe_formation", FORMATIONS);
     render(ProbeFormationsView, { userOpen: true, userId: 1, onUserDirty: noop });
 
-    const row = (await screen.findByLabelText("probe 1 range")) as HTMLSelectElement;
+    const row = (await screen.findByLabelText("探针 1 范围")) as HTMLSelectElement;
     expect(row.value).toBe(String(odd));
-    expect(row.selectedOptions[0].text).toMatch(/not a slider stop/);
+    expect(row.selectedOptions[0].text).toMatch(/非滑块档位/);
   });
 });
 
@@ -309,10 +309,10 @@ describe("clipboard sharing", () => {
     // is the draft, and blur-commit is async (spec §5.1).
     await open();
     calls.stub("probe_yaml", SHARED);
-    const x = await screen.findByLabelText("probe 1 X");
+    const x = await screen.findByLabelText("探针 1 X");
     await fireEvent.input(x, { target: { value: "999" } });
 
-    await fireEvent.click(screen.getByRole("button", { name: /^Copy/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^复制 / }));
 
     const sent = calls.of("probe_yaml").at(-1)?.args as { formations: FormationSpec[] };
     expect(sent.formations).toHaveLength(1);
@@ -332,16 +332,16 @@ describe("clipboard sharing", () => {
     await open();
     calls.stub("probe_yaml", SHARED);
 
-    await fireEvent.click(screen.getByRole("button", { name: /^Copy/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^复制 / }));
 
-    await vi.waitFor(() => expect(toasts.map((t) => t.message)).toContainEqual(expect.stringMatching(/Copied .*close/)));
+    await vi.waitFor(() => expect(toasts.map((t) => t.message)).toContainEqual(expect.stringMatching(/已复制.*close/)));
   });
 
   test("Ctrl-C copies the formation, but not from inside a field", async () => {
     await open();
     calls.stub("probe_yaml", SHARED);
 
-    const x = await screen.findByLabelText("probe 1 X");
+    const x = await screen.findByLabelText("探针 1 X");
     await fireEvent.keyDown(x, { key: "c", ctrlKey: true });
     expect(calls.of("probe_yaml")).toHaveLength(0);
 
@@ -357,7 +357,7 @@ describe("clipboard sharing", () => {
     ] satisfies FormationSpec[]);
     calls.stub("add_probe_formations", FORMATIONS);
 
-    await fireEvent.click(screen.getByRole("button", { name: /^Paste/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^粘贴/ }));
 
     await vi.waitFor(() => expect(calls.of("add_probe_formations")).toHaveLength(1));
     const sent = calls.of("add_probe_formations")[0].args as { formations: FormationSpec[] };
@@ -374,12 +374,12 @@ describe("clipboard sharing", () => {
     calls.stub("probe_parse_yaml", [] satisfies FormationSpec[]);
 
     toasts.length = 0;
-    await fireEvent.click(screen.getByRole("button", { name: /^Paste/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^粘贴/ }));
 
     // A toast, not an inline message, and one of only two places that is right:
     // the clipboard is invisible, so no control on screen owns this failure.
     await vi.waitFor(() =>
-      expect(toasts.map((t) => t.message)).toContainEqual(expect.stringMatching(/no formations/)),
+      expect(toasts.map((t) => t.message)).toContainEqual(expect.stringMatching(/不包含任何阵型/)),
     );
     calls.never("add_probe_formations");
   });
@@ -387,7 +387,7 @@ describe("clipboard sharing", () => {
   test("a refused clipboard read does not fail silently", async () => {
     await open();
     vi.mocked(readText).mockRejectedValue(new Error("denied"));
-    await fireEvent.click(screen.getByRole("button", { name: /^Paste/ }));
+    await fireEvent.click(screen.getByRole("button", { name: /^粘贴/ }));
     // The accelerator is rendered per platform rather than written into the
     // string, so the assertion asks for whatever THIS platform prints.
     expect((await screen.findByRole("alert")).textContent).toContain(accel("V"));
@@ -451,9 +451,9 @@ describe("file sharing", () => {
     const name = await screen.findByDisplayValue("close");
     await fireEvent.input(name, { target: { value: "closer" } });
 
-    await fireEvent.click(screen.getByText("Export formations…"));
-    await screen.findByText("Export 1");
-    await fireEvent.click(screen.getByText("Export 1"));
+    await fireEvent.click(screen.getByText("导出阵型…"));
+    await screen.findByText("导出 1");
+    await fireEvent.click(screen.getByText("导出 1"));
 
     await vi.waitFor(() => expect(calls.of("probe_export")).toHaveLength(1));
     const sent = calls.of("probe_export")[0].args as { path: string; formations: FormationSpec[] };
@@ -466,17 +466,17 @@ describe("file sharing", () => {
     // when nothing has asked you what you are exporting — returned before the
     // picker ever appeared, so Export looked like it offered no choice at all.
     await open();
-    await fireEvent.click(screen.getByText("Export formations…"));
+    await fireEvent.click(screen.getByText("导出阵型…"));
 
-    expect(await screen.findByText("Export 1")).toBeTruthy();
+    expect(await screen.findByText("导出 1")).toBeTruthy();
     expect(vi.mocked(saveDialog)).not.toHaveBeenCalled();
   });
 
   test("cancelling the save dialog writes nothing", async () => {
     await open();
     vi.mocked(saveDialog).mockResolvedValueOnce(null);
-    await fireEvent.click(screen.getByText("Export formations…"));
-    await fireEvent.click(await screen.findByText("Export 1"));
+    await fireEvent.click(screen.getByText("导出阵型…"));
+    await fireEvent.click(await screen.findByText("导出 1"));
 
     await vi.waitFor(() => expect(vi.mocked(saveDialog)).toHaveBeenCalled());
     expect(screen.queryByTestId("picker-backdrop")).toBeNull();
@@ -492,10 +492,10 @@ describe("file sharing", () => {
     ] satisfies FormationSpec[]);
     calls.stub("add_probe_formations", FORMATIONS);
 
-    await fireEvent.click(screen.getByText("Import formations…"));
-    await screen.findByText("Import 2");
+    await fireEvent.click(screen.getByText("导入阵型…"));
+    await screen.findByText("导入 2");
     await fireEvent.click(screen.getByLabelText("b"));
-    await fireEvent.click(screen.getByText("Import 1"));
+    await fireEvent.click(screen.getByText("导入 1"));
 
     await vi.waitFor(() => expect(calls.of("add_probe_formations")).toHaveLength(1));
     const sent = calls.of("add_probe_formations")[0].args as { formations: FormationSpec[] };
@@ -509,8 +509,8 @@ describe("file sharing", () => {
     // paste out of date.
     await open();
     vi.mocked(saveDialog).mockResolvedValueOnce("C:/tmp/formations.yaml");
-    await fireEvent.click(screen.getByText("Export formations…"));
-    await screen.findByText("Export 1");
+    await fireEvent.click(screen.getByText("导出阵型…"));
+    await screen.findByText("导出 1");
 
     const ev = new Event("paste", { bubbles: true });
     Object.defineProperty(ev, "clipboardData", { value: { getData: () => SHARED } });
@@ -527,12 +527,12 @@ describe("file sharing", () => {
       throw { code: "not_formations", message: "This file contains no probe formations." };
     });
 
-    await fireEvent.click(screen.getByText("Import formations…"));
+    await fireEvent.click(screen.getByText("导入阵型…"));
 
     // Reported at the Import button, in the app's own error grammar, with the
     // backend's sentence after the dash and no bracketed code anywhere in it.
     const msg = await screen.findByRole("alert");
-    expect(msg.textContent).toContain("Those formations weren't imported");
+    expect(msg.textContent).toContain("这些阵型未导入");
     expect(msg.textContent).toContain("This file contains no probe formations.");
     expect(msg.textContent).not.toContain("not_formations");
     expect(screen.queryByTestId("picker-backdrop")).toBeNull();
